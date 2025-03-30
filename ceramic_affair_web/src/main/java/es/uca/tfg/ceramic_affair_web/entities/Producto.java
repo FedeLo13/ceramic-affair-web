@@ -2,6 +2,7 @@ package es.uca.tfg.ceramic_affair_web.entities;
 
 import java.util.List;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import org.hibernate.annotations.CreationTimestamp;
 

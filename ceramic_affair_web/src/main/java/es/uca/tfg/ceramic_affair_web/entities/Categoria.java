@@ -45,7 +45,7 @@ public class Categoria {
      * 
      * @return el ID de la categoría
      */
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
