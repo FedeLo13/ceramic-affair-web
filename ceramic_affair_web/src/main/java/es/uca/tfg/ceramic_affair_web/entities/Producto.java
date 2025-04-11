@@ -14,6 +14,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PreRemove;
 
 /**
  * Clase que representa un producto en el sistema
@@ -260,5 +261,16 @@ public class Producto {
      */
     public void removeImagen(String imagen) {
         this.imagenes.remove(imagen);
+    }
+
+    /**
+     * Método para eliminar el producto de la lista de productos de la categoría antes de ser eliminado.
+     */
+    @PreRemove
+    private void preRemove() {
+        if(this.categoria != null) {
+            this.categoria.getProductos().remove(this);
+            this.categoria = null;
+        }
     }
 }
