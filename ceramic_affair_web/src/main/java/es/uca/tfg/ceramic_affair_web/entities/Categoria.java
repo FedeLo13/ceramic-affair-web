@@ -74,6 +74,7 @@ public class Categoria {
      */
     public void addProducto(Producto producto) {
         productos.add(producto);
-        producto.setCategoria(this); // Establece la categoría del producto
+        // No es necesario gestionar la relación inversa aquí, ya que se gestiona en el
+        // producto
     }
 }

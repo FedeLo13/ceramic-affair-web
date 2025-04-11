@@ -196,7 +196,16 @@ public class Producto {
      * @param categoria la nueva categoría del producto
      */
     public void setCategoria(Categoria categoria) {
+        // Si el producto ya tiene una categoría, la eliminamos de la lista de productos
+        if(this.categoria != null) {
+            this.categoria.getProductos().remove(this);
+        }
+        // Establecer la nueva categoría
         this.categoria = categoria;
+        // Si la nueva categoría no es nula y no contiene al producto en su lista, lo añadimos
+        if(categoria != null && !categoria.getProductos().contains(this)) {
+            categoria.getProductos().add(this);
+        }
     }
 
     /**
