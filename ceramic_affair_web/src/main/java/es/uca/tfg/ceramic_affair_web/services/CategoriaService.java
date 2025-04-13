@@ -29,7 +29,8 @@ public class CategoriaService {
      * 
      * @param categoria la categoría a insertar
      */
-    public void insertarCategoria(Categoria categoria) {
+    public void insertarCategoria(String nombre) {
+        Categoria categoria = new Categoria(nombre);
         categoriaRepo.save(categoria);
     }
 
