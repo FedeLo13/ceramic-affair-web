@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import es.uca.tfg.ceramic_affair_web.entities.Categoria;
 import es.uca.tfg.ceramic_affair_web.entities.Producto;
+import es.uca.tfg.ceramic_affair_web.exceptions.CategoriaException;
 import es.uca.tfg.ceramic_affair_web.repositories.CategoriaRepo;
 import es.uca.tfg.ceramic_affair_web.repositories.ProductoRepo;
 
@@ -41,7 +42,7 @@ public class CategoriaService {
      */
     public Categoria obtenerPorId(Long id) {
         return categoriaRepo.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada con id: " + id));
+            .orElseThrow(() -> new CategoriaException.NoEncontrada(id));
     }
 
     /**
@@ -51,7 +52,7 @@ public class CategoriaService {
      */
     public void eliminarCategoria(Long id) {
         Categoria categoria = categoriaRepo.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada con id: " + id));
+            .orElseThrow(() -> new CategoriaException.NoEncontrada(id));
         
         // Desvincular todos los productos de la categoría antes de eliminarla
         categoria.getProductos().forEach(producto -> {
