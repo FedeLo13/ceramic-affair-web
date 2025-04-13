@@ -39,6 +39,8 @@ public class CategoriaService {
      * Método para obtener una categoría por su id
      * 
      * @param id el id de la categoría a obtener
+     * @return la categoría con el id especificado
+     * @throws CategoriaException.NoEncontrada si no se encuentra la categoría
      */
     public Categoria obtenerPorId(Long id) {
         return categoriaRepo.findById(id)
