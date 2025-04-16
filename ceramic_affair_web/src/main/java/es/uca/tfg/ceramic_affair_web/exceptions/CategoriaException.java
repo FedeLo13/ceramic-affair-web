@@ -32,4 +32,17 @@ public class CategoriaException {
             super(mensaje);
         }
     }
+
+    /**
+     * Excepción lanzada cuando ya existe una categoría con el mismo nombre.
+     */
+    public static class YaExistente extends RuntimeException {
+        /**
+         * Constructor de la excepción.
+         * @param nombre
+         */
+        public YaExistente(String nombre) {
+            super("Ya existe una categoría con el nombre: " + nombre);
+        }
+    }
 }
