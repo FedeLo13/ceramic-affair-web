@@ -28,9 +28,10 @@ public class ProductoService {
      * 
      * @param producto el producto a insertar
      */
-    public void insertarProducto(String nombre, String descripcion, BigDecimal precio) {
+    public Long insertarProducto(String nombre, String descripcion, BigDecimal precio) {
         Producto producto = new Producto(nombre, descripcion, precio);
         productoRepo.save(producto);
+        return producto.getId();
     }
 
     /**
