@@ -13,6 +13,7 @@ import es.uca.tfg.ceramic_affair_web.entities.Categoria;
  */
 @Repository
 public interface CategoriaRepo extends JpaRepository<Categoria, Long> {
-    // No se necesitan métodos adicionales por ahora, ya que JpaRepository proporciona
-    // todos los métodos CRUD necesarios.
+
+    boolean existsByNombre(String nombre); // Verifica si existe una categoría con el nombre dado
+    
 }
