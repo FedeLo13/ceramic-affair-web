@@ -29,10 +29,16 @@ public class CategoriaService {
      * Método para insertar una nueva categoría
      * 
      * @param categoria la categoría a insertar
+     * @throws CategoriaException.YaExistente si ya existe una categoría con el mismo nombre
      */
-    public void insertarCategoria(String nombre) {
+    public Long insertarCategoria(String nombre) {
+        if (categoriaRepo.existsByNombre(nombre)) {
+            throw new CategoriaException.YaExistente(nombre);
+        }
+        
         Categoria categoria = new Categoria(nombre);
         categoriaRepo.save(categoria);
+        return categoria.getId();
     }
 
     /**
