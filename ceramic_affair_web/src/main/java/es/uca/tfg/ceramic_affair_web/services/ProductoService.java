@@ -55,7 +55,7 @@ public class ProductoService {
      * @param orden el orden "viejos" para mas antiguos primero, o cualquier otro valor para más recientes primero
      * @return una lista de productos que cumplen con los filtros
      */
-    public List<Producto> obtenerProductos(String nombre, Long categoria, Boolean soloEnStock, String orden) {
+    public List<Producto> filtrarProductos(String nombre, Long categoria, Boolean soloEnStock, String orden) {
         Specification<Producto> spec = Specification
             .where(ProductoSpecifications.nombreLike(nombre))
             .and(ProductoSpecifications.conCategoria(categoria))
