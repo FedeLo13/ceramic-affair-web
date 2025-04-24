@@ -13,6 +13,9 @@ target/
 .springBeans
 .sts4-cache
 
+### Archivos de configuración de VS Code ###
+.vscode/
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
