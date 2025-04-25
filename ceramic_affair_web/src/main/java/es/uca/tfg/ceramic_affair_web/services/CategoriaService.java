@@ -1,5 +1,6 @@
 package es.uca.tfg.ceramic_affair_web.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,10 +64,11 @@ public class CategoriaService {
             .orElseThrow(() -> new CategoriaException.NoEncontrada(id));
         
         // Desvincular todos los productos de la categoría antes de eliminarla
-        categoria.getProductos().forEach(producto -> {
+        new ArrayList<>(categoria.getProductos()).forEach(producto -> {
             producto.setCategoria(null);
             productoRepo.save(producto);
         });
+
         // Eliminar la categoría
         categoriaRepo.delete(categoria);
     }
