@@ -58,6 +58,7 @@ public class CategoriaService {
      * Método para eliminar una categoría
      * 
      * @param id el id de la categoría a eliminar
+     * @throws CategoriaException.NoEncontrada si no se encuentra la categoría
      */
     public void eliminarCategoria(Long id) {
         Categoria categoria = categoriaRepo.findById(id)
