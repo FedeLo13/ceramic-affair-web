@@ -73,13 +73,13 @@ public class ProductoController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar un producto por su ID", description = "Elimina el producto correspondiente al ID proporcionado", tags = { "Productos" })
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Producto eliminado con éxito"),
+        @ApiResponse(responseCode = "204", description = "Producto eliminado con éxito"),
         @ApiResponse(responseCode = "404", description = "Producto no encontrado"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     public ResponseEntity<Void> eliminarProducto(@PathVariable Long id) {
         productoService.eliminarProducto(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/todos")
@@ -96,11 +96,11 @@ public class ProductoController {
     @DeleteMapping("/eliminarTodos")
     @Operation(summary = "Eliminar todos los productos", description = "Elimina todos los productos de la base de datos", tags = { "Productos" })
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Todos los productos eliminados con éxito"),
+        @ApiResponse(responseCode = "204", description = "Todos los productos eliminados con éxito"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     public ResponseEntity<Void> eliminarTodosLosProductos() {
         productoService.eliminarTodos();
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }
