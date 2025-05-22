@@ -45,16 +45,23 @@ public class ProductoControllerTest {
     @Test
     @DisplayName("Controlador - Crear producto")
     void testCrearProducto() throws Exception {
-        // Simular inserción de un nuevo producto
+        // Arrange: preparar valores y simulación del servicio
+        String jsonBody = """
+            {
+                "nombre": "Taza",
+                "descripcion": "Taza de cerámica",
+                "precio": 10.00
+            }
+            """;
+
         when(productoService.insertarProducto("Taza", "Taza de cerámica", new BigDecimal("10.00"))).thenReturn(1L);
 
-        // Realizar la petición POST al endpoint de creación de producto
+        // Act + Assert: realizar POST con JSON y verificar resultado
         mockMvc.perform(post("/api/productos/crear")
-                .param("nombre", "Taza")
-                .param("descripcion", "Taza de cerámica")
-                .param("precio", "10.00"))
-                .andExpect(status().isCreated())
-                .andExpect(content().string("1"));
+            .contentType("application/json")
+            .content(jsonBody))
+            .andExpect(status().isCreated())
+            .andExpect(content().string("1"));
     }   
 
     @Test

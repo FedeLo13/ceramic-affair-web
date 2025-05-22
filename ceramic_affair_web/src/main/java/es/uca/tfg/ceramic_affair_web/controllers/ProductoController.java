@@ -1,6 +1,5 @@
 package es.uca.tfg.ceramic_affair_web.controllers;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +10,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import es.uca.tfg.ceramic_affair_web.DTOs.ProductoCreateDTO;
 import es.uca.tfg.ceramic_affair_web.entities.Producto;
 import es.uca.tfg.ceramic_affair_web.services.ProductoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,12 +39,11 @@ public class ProductoController {
         @ApiResponse(responseCode = "201", description = "Producto creado con éxito"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<Long> crearProducto(@RequestParam String nombre,
-                                              @RequestParam String descripcion,
-                                              @RequestParam BigDecimal precio) {
-        Long id = productoService.insertarProducto(nombre, descripcion, precio);
+    public ResponseEntity<Long> crearProducto(@RequestBody ProductoCreateDTO dto) {
+        Long id = productoService.insertarProducto(dto.getNombre(), dto.getDescripcion(), dto.getPrecio());
         return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
+
     @GetMapping("/{id}")
     @Operation(summary = "Obtener un producto por su ID", description = "Devuelve el producto correspondiente al ID proporcionado", tags = { "Productos" })
     @ApiResponses({

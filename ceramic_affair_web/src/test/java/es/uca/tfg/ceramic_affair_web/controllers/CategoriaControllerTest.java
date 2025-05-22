@@ -41,14 +41,22 @@ public class CategoriaControllerTest {
     @Test
     @DisplayName("Controlador - Crear categoría")
     void testCrearCategoria() throws Exception {
-        // Simular inserción de una nueva categoría
-        when(categoriaService.insertarCategoria("Cerámica")).thenReturn(1L);
+        // Simula que se crea una categoría con éxito
+        when(categoriaService.insertarCategoria("Decoración")).thenReturn(42L);
 
-        // Realizar la petición POST al endpoint de creación de categoría
+        // Construye el JSON de entrada
+        String jsonBody = """
+            {
+                "nombre": "Decoración"
+            }
+            """;
+
+        // Llama al endpoint con JSON en el body
         mockMvc.perform(post("/api/categorias/crear")
-                .param("nombre", "Cerámica"))
-                .andExpect(status().isCreated())
-                .andExpect(content().string("1"));
+            .contentType("application/json")
+            .content(jsonBody))
+            .andExpect(status().isCreated())
+            .andExpect(content().string("42"));
     }
 
     @Test
@@ -109,15 +117,23 @@ public class CategoriaControllerTest {
     @Test
     @DisplayName("Controlador - Crear categoría (excepción ya existente)")
     void testCrearCategoriaYaExistente() throws Exception {
-        // Simular la inserción de una categoría ya existente
+        // Simular que se lanza una excepción de categoría ya existente
         when(categoriaService.insertarCategoria("Cerámica"))
             .thenThrow(new CategoriaException.YaExistente("Cerámica"));
 
-        // Realizar la petición POST al endpoint de creación de categoría
+        // Crear el JSON que representa el cuerpo de la petición
+        String jsonBody = """
+            {
+                "nombre": "Cerámica"
+            }
+            """;
+
+        // Ejecutar la petición POST con JSON y verificar el conflicto
         mockMvc.perform(post("/api/categorias/crear")
-                .param("nombre", "Cerámica"))
-                .andExpect(status().isConflict())
-                .andExpect(content().string("Ya existe una categoría con el nombre: Cerámica"));
+            .contentType("application/json")
+            .content(jsonBody))
+            .andExpect(status().isConflict())
+            .andExpect(content().string("Ya existe una categoría con el nombre: Cerámica"));
     }
 
     @Test
