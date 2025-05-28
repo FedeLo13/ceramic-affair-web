@@ -26,7 +26,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("/api/productos")
 @Tag(name = "Productos", description = "Controlador para la gestión de productos")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:5173")
 // TODO: Cambiar la URL de origen a la de producción cuando esté disponible
 public class ProductoController {
 
