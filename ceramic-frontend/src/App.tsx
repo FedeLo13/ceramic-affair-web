@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
 import About from "./pages/About";
-import Pieces from "./pages/Pieces";
+import Pieces from "./pages/Pieces/Pieces";
 import Contact from "./pages/Contact";
 import FindMe from "./pages/FindMe";
 
