@@ -14,3 +14,5 @@ export default function Header() {
         </header>
     );
 }
+// Este componente Header renderiza un encabezado con un logo y enlaces de navegación.
+// Utiliza NavLink de react-router-dom para manejar la navegación interna y un enlace externo a Instagram.
