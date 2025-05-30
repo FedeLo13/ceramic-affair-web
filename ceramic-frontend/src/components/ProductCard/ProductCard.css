@@ -1,0 +1,35 @@
+.product-card {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    background-color: white;
+}
+
+.product-image {
+    max-width: 100%;
+    height: auto;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.product-name{
+    font-size: 1.1rem;
+    margin-top: 10px;
+}
+
+.product-price {
+    color: #444;
+    font-weight: bold;
+}
+
+.product-sold-out {
+    display: inline-block;
+    margin-top: 5px;
+    padding: 4px 8px;
+    background-color: #000000; /* Rojo */
+    color: white;
+    border-radius: 5px;
+    font-size: 0.8rem;
+}
