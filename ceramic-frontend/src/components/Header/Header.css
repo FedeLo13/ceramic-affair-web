@@ -1,0 +1,12 @@
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+}
+
+.logo img {
+  height: 50px; /* o el tamaño que tú veas */
+  object-fit: contain;
+  display: block;
+}
