@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import type { Producto } from "../../types/producto.types";
 
 interface ProductCardProps {
@@ -6,6 +7,7 @@ interface ProductCardProps {
 
 export default function ProductCard({ producto }: ProductCardProps) {
     const {
+        id,
         nombre,
         precio,
         soldOut,
@@ -15,7 +17,7 @@ export default function ProductCard({ producto }: ProductCardProps) {
     const shownImage = imagenes.length > 0 ? imagenes[0] : "/images/1068302.png";
 
     return (
-        <div className="product-card">
+        <Link to={`/pieces/${id}`} className="product-card">
             <img
                 src={shownImage}
                 alt={nombre}
@@ -28,7 +30,7 @@ export default function ProductCard({ producto }: ProductCardProps) {
                     Sold Out
                 </span>
             )}
-        </div>
+        </Link>
     );
 }
 // Este componente ProductCard renderiza una tarjeta de producto con su imagen, nombre, precio y estado de disponibilidad.
