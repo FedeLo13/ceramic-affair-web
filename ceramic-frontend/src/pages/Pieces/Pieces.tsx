@@ -11,9 +11,21 @@ export default function Pieces() {
 
     // Estado para los filtros
     const [nombre, setNombre] = useState("");
+    const [debouncedNombre, setDebouncedNombre] = useState(nombre); // Para evitar llamadas excesivas a la API
     const [categoriaId, setCategoriaId] = useState<number | undefined>(undefined); // undefined para "Todas las categorías"
     const [soloEnStock, setSoloEnStock] = useState<boolean | undefined>(undefined); // undefined para "Todos los productos"
     const [orden, setOrden] = useState<"nuevos" | "viejos">("nuevos");
+
+    // Debounce para la búsqueda por nombre
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedNombre(nombre);
+        }, 300); // Espera 300ms antes de actualizar el nombre
+
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [nombre]);
 
     // Cargar categorías para el dropdown
     useEffect(() => {
@@ -33,7 +45,7 @@ export default function Pieces() {
         const fetchProductos = async () => {
             try {
                 const filtros: FilterProductosParams = {
-                    nombre: nombre.trim() || undefined,
+                    nombre: debouncedNombre.trim() || undefined, // Usar el nombre debounced
                     categoria: categoriaId,
                     soloEnStock,
                     orden,
@@ -45,7 +57,7 @@ export default function Pieces() {
             }
         };
         fetchProductos();
-    }, [nombre, categoriaId, soloEnStock, orden]);
+    }, [debouncedNombre, categoriaId, soloEnStock, orden]);
 
     return (
         <div className="pieces-page">
