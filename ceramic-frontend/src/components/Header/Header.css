@@ -1,12 +1,20 @@
 header {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
   padding: 1rem 2rem;
+  gap: 1rem; /* opcional: espaciado entre logo y nav */
+}
+
+nav {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap; /* por si se encogen en móvil */
 }
 
 .logo img {
-  height: 50px; /* o el tamaño que tú veas */
+  height: 150px; /* o el tamaño que tú veas */
   object-fit: contain;
   display: block;
 }
