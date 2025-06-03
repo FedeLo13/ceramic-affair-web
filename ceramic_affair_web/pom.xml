@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.4.4</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>es.uca.tfg</groupId>
+	<artifactId>ceramic_affair_web</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>ceramic_affair_web</name>
+	<description>Proyecto TFG de la UCA para Ceramic Affair</description>
+	<url/>
+	<licenses>
+		<license/>
+	</licenses>
+	<developers>
+		<developer/>
+	</developers>
+	<scm>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
+	</scm>
+	<properties>
+		<java.version>17</java.version>
+	</properties>
+	<dependencies>
+		<!-- Dependencia de Spring Boot JPA (persistencia y acceso a BD con Hibernate)-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<!-- Dependencia de H2 para los tests -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>2.3.232</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Dependencia de Spring Security (autenticación y autorización)-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<!-- Dependencia de Spring Web (APIs REST) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<!-- Dependencia de Swagger (Documentación APIs REST)-->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.8.6</version>
+		</dependency>
+		<!-- Dependencia de conexión JDBC para MySQL -->
+		<dependency>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
+			<version>9.2.0</version>
+		</dependency>
+		<!-- Dependencia de Spring Boot Test (pruebas unitarias y de integración) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- Dependencia de Spring Security Test (pruebas de seguridad) -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- Dependencia de JUnit 5 (API para testing) -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.11.4</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<!-- Plugin de Spring Boot para empaquetar y ejecutar la aplicación -->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+	<reporting>
+        <plugins>
+			<!-- Plugin de Javadoc para generar la documentación -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.11.2</version>
+            </plugin>
+        </plugins>
+    </reporting>
+
+</project>
