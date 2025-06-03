@@ -3,7 +3,7 @@ import MainLayout from "./layout/MainLayout";
 import About from "./pages/About/About";
 import Pieces from "./pages/Pieces/Pieces";
 import PieceDetail from "./pages/PieceDetail/PieceDetail";
-import Contact from "./pages/Contact";
+import Contact from "./pages/Contact/Contact";
 import FindMe from "./pages/FindMe";
 
 function App() {
