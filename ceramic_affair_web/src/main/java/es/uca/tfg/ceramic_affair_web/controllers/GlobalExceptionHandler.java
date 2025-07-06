@@ -1,7 +1,12 @@
 package es.uca.tfg.ceramic_affair_web.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -12,7 +17,7 @@ import es.uca.tfg.ceramic_affair_web.exceptions.ProductoException;
  * Clase para manejar excepciones globales en la aplicación.
  * Utiliza @RestControllerAdvice para manejar excepciones de forma centralizada.
  * 
- * @version 1.0
+ * @version 1.1
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -67,4 +72,21 @@ public class GlobalExceptionHandler {
         .status(HttpStatus.NOT_FOUND)
         .body(ex.getMessage());
     }
-}
+
+    /**
+     * Maneja las excepciones relacionadas con las validaciones
+     * 
+     * @param ex la excepción lanzada
+     * @return una respuesta con un mapa de errores de validación y el estado HTTP 400 (Bad Request)
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
+            errors.put(error.getField(), error.getDefaultMessage());
+        }
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(errors);
+    }
+}   
