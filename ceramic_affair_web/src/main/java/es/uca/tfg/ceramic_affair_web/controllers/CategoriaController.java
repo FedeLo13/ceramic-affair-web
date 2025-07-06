@@ -14,19 +14,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import es.uca.tfg.ceramic_affair_web.DTOs.CategoriaCreateDTO;
+import es.uca.tfg.ceramic_affair_web.DTOs.CategoriaDTO;
 import es.uca.tfg.ceramic_affair_web.entities.Categoria;
 import es.uca.tfg.ceramic_affair_web.services.CategoriaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 /**
  * Controlador para la entidad Categoria.
  * Proporciona endpoints para crear y gestionar categorías.
  * 
- * @version 1.0
+ * @version 1.1
  */
 @RestController
 @RequestMapping("/api/categorias")
@@ -45,7 +46,7 @@ public class CategoriaController {
         @ApiResponse(responseCode = "409", description = "Categoría ya existente"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<Long> crearCategoria(@RequestBody CategoriaCreateDTO dto) {
+    public ResponseEntity<Long> crearCategoria(@Valid @RequestBody CategoriaDTO dto) {
         Long id = categoriaService.insertarCategoria(dto.getNombre());
         return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
