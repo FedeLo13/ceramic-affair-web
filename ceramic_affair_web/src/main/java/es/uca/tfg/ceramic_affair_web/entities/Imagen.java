@@ -1,6 +1,7 @@
 package es.uca.tfg.ceramic_affair_web.entities;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,8 +17,13 @@ public class Imagen {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, length = 255)
     private String ruta;
+
+    @Column(nullable = false, length = 20)
     private String formato;
+
     private float tamano;
     private float ancho;
     private float alto;
