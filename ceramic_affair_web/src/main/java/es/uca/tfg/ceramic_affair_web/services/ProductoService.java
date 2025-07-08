@@ -170,11 +170,4 @@ public class ProductoService {
     public List<Producto> obtenerTodos() {
         return productoRepo.findAll();
     }
-
-    /**
-     * Método para eliminar todos los productos
-     */
-    public void eliminarTodos() {
-        productoRepo.deleteAll();
-    }
 }

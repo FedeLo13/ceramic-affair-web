@@ -126,15 +126,4 @@ public class ProductoController {
         List<Producto> productos = productoService.obtenerTodos();
         return ResponseEntity.ok(productos);
     }
-
-    @DeleteMapping("/eliminarTodos")
-    @Operation(summary = "Eliminar todos los productos", description = "Elimina todos los productos de la base de datos", tags = { "Productos" })
-    @ApiResponses({
-        @ApiResponse(responseCode = "204", description = "Todos los productos eliminados con éxito"),
-        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
-    })
-    public ResponseEntity<Void> eliminarTodosLosProductos() {
-        productoService.eliminarTodos();
-        return ResponseEntity.noContent().build();
-    }
 }

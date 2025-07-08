@@ -85,15 +85,4 @@ public class CategoriaController {
         List<Categoria> categorias = categoriaService.obtenerTodas();
         return ResponseEntity.ok(categorias);
     }
-
-    @DeleteMapping("/eliminarTodas")
-    @Operation(summary = "Eliminar todas las categorías", description = "Elimina todas las categorías de la base de datos", tags = { "Categorias" })
-    @ApiResponses({
-        @ApiResponse(responseCode = "204", description = "Todas las categorías eliminadas con éxito"),
-        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
-    })
-    public ResponseEntity<Void> eliminarTodasLasCategorias() {
-        categoriaService.eliminarTodas();
-        return ResponseEntity.noContent().build();
-    }
 }
