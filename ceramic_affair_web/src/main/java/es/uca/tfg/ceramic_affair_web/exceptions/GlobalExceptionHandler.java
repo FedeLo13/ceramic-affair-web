@@ -1,4 +1,4 @@
-package es.uca.tfg.ceramic_affair_web.controllers;
+package es.uca.tfg.ceramic_affair_web.exceptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,9 +9,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import es.uca.tfg.ceramic_affair_web.exceptions.CategoriaException;
-import es.uca.tfg.ceramic_affair_web.exceptions.ProductoException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 /**
  * Clase para manejar excepciones globales en la aplicación.
@@ -71,6 +69,42 @@ public class GlobalExceptionHandler {
         return ResponseEntity
         .status(HttpStatus.NOT_FOUND)
         .body(ex.getMessage());
+    }
+
+    /**
+     * Maneja la excepción de imagen no encontrada.
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler(ImagenException.NoEncontrada.class)
+    public ResponseEntity<String> handleImagenNoEncontrada(ImagenException.NoEncontrada ex) {
+        return ResponseEntity
+            .status(HttpStatus.NOT_FOUND)
+            .body(ex.getMessage());
+    }
+
+    /**
+     * Maneja la excepción de imagen no válida.
+     * @param ex la excepción lanzada
+     * @return una respuesta con el mensaje de error y el estado HTTP 400 (Bad Request)
+     */
+    @ExceptionHandler(ImagenException.NoValida.class)
+    public ResponseEntity<String> handleImagenNoValida(ImagenException.NoValida ex) {
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(ex.getMessage());
+    }
+
+    /**
+     * Maneja la excepción de límite de tamaño de archivo excedido.
+     * @param ex la excepción lanzada
+     * @return una respuesta con el mensaje de error y el estado HTTP 413 (Payload Too Large)
+     */
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<String> handleMaxUploadSizeExceeded(MaxUploadSizeExceededException ex) {
+        return ResponseEntity
+            .status(HttpStatus.PAYLOAD_TOO_LARGE)
+            .body("El archivo es demasiado grande. Por favor, suba un archivo más pequeño.");
     }
 
     /**
