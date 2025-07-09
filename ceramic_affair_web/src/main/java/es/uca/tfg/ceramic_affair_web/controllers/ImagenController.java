@@ -21,7 +21,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.persistence.EntityNotFoundException;
 
 /**
  * Controlador para la entidad Imagen.
@@ -70,14 +69,8 @@ public class ImagenController {
         @ApiResponse(responseCode = "404", description = "Imagen no encontrada"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<Void> eliminarImagen(@PathVariable Long id) {
-        try {
-            imagenService.eliminarImagen(id);
-            return ResponseEntity.noContent().build();
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Void> eliminarImagen(@PathVariable Long id) throws IOException{
+        imagenService.eliminarImagen(id);
+        return ResponseEntity.noContent().build();
     }
 }
