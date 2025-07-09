@@ -69,15 +69,4 @@ public class Categoria {
     public List<Producto> getProductos() {
         return productos;
     }
-
-    /**
-     * Método para añadir un producto a la categoría.
-     * 
-     * @param producto el producto a añadir
-     */
-    public void addProducto(Producto producto) {
-        productos.add(producto);
-        // No es necesario gestionar la relación inversa aquí, ya que se gestiona en el
-        // producto
-    }
 }
