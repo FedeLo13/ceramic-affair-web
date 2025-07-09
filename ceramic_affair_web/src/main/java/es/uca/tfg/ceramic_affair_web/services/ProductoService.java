@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import es.uca.tfg.ceramic_affair_web.DTOs.ProductoDTO;
+import es.uca.tfg.ceramic_affair_web.DTOs.ProductoMapper;
 import es.uca.tfg.ceramic_affair_web.entities.Categoria;
 import es.uca.tfg.ceramic_affair_web.entities.Imagen;
 import es.uca.tfg.ceramic_affair_web.entities.Producto;
@@ -47,20 +48,12 @@ public class ProductoService {
             .orElseThrow(() -> new CategoriaException.NoEncontrada(productoDTO.getIdCategoria()));
 
         // 2. Obtener las imágenes por sus ids
-        List<Imagen> imagenes = imagenRepo.findAllById(productoDTO.getIdsImagenes());
+        List<Imagen> imagenes = productoDTO.getIdsImagenes() != null 
+            ? imagenRepo.findAllById(productoDTO.getIdsImagenes()) 
+            : List.of();
 
         // 3. Crear el producto
-        Producto producto = new Producto(
-            productoDTO.getNombre(),
-            categoria,
-            productoDTO.getDescripcion(),
-            productoDTO.getAltura(),
-            productoDTO.getAnchura(),
-            productoDTO.getDiametro(),
-            productoDTO.getPrecio(),
-            productoDTO.isSoldOut(),
-            imagenes
-        );
+        Producto producto = ProductoMapper.fromDTO(productoDTO, categoria, imagenes);
 
         // 4. Guardar el producto y devolver su id
         productoRepo.save(producto);
@@ -84,7 +77,9 @@ public class ProductoService {
         Categoria categoria = categoriaRepo.findById(productoDTO.getIdCategoria())
             .orElseThrow(() -> new CategoriaException.NoEncontrada(productoDTO.getIdCategoria()));
 
-        List<Imagen> imagenes = imagenRepo.findAllById(productoDTO.getIdsImagenes());
+        List<Imagen> imagenes = productoDTO.getIdsImagenes() != null 
+            ? imagenRepo.findAllById(productoDTO.getIdsImagenes()) 
+            : List.of();
 
         producto.setNombre(productoDTO.getNombre());
         producto.setCategoria(categoria);
@@ -166,7 +161,7 @@ public class ProductoService {
      * Método para obtener todos los productos
      * 
      * @return una lista de todos los productos
-     */
+     */ 
     public List<Producto> obtenerTodos() {
         return productoRepo.findAll();
     }
