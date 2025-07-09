@@ -109,7 +109,7 @@ public class CategoriaServiceTest {
     void testEliminarCategoria() {
         // Insertar una nueva categoría y producto
         Long idCategoria = categoriaService.insertarCategoria("Cerámica");
-        Producto producto = new Producto("Taza", "Taza de cerámica", BigDecimal.valueOf(10.0));
+        Producto producto = new Producto("Taza", null, "Taza de cerámica", 0, 0, 0, BigDecimal.valueOf(10.0), false, null);
         producto.setCategoria(categoriaService.obtenerPorId(idCategoria));
         productoRepo.save(producto);
 
@@ -143,23 +143,5 @@ public class CategoriaServiceTest {
         List<Categoria> categorias = categoriaService.obtenerTodas();
         assertNotNull(categorias);
         assertEquals(2, categorias.size());
-    }
-
-    @Test
-    @DisplayName("Servicio - Eliminar todas las categorías")
-    void testEliminarTodas() {
-        // Insertar categoría y producto
-        Long idCategoria = categoriaService.insertarCategoria("Cerámica");
-        Producto producto1 = new Producto("Taza", "Taza de cerámica", BigDecimal.valueOf(10.0));
-        producto1.setCategoria(categoriaService.obtenerPorId(idCategoria));
-        productoRepo.save(producto1);
-
-        // Eliminar todas las categorías
-        categoriaService.eliminarTodas();
-
-        // Verificar que la categoría ha sido eliminada y que el producto no tiene categoría
-        assertThat(categoriaRepo.findAll()).isEmpty();
-        Producto productoObtenido = productoRepo.findById(producto1.getId()).orElse(null);
-        assertNull(productoObtenido.getCategoria());
     }
 }

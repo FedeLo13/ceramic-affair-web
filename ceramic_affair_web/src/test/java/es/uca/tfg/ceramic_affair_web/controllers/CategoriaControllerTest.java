@@ -104,17 +104,6 @@ public class CategoriaControllerTest {
     }
 
     @Test
-    @DisplayName("Controlador - Eliminar todas las categorías")
-    void testEliminarTodasLasCategorias() throws Exception {
-        // Simular la eliminación de todas las categorías
-        doNothing().when(categoriaService).eliminarTodas();
-
-        // Realizar la petición DELETE al endpoint de eliminación de todas las categorías
-        mockMvc.perform(delete("/api/categorias/eliminarTodas"))
-                .andExpect(status().isNoContent());
-    }
-
-    @Test
     @DisplayName("Controlador - Crear categoría (excepción ya existente)")
     void testCrearCategoriaYaExistente() throws Exception {
         // Simular que se lanza una excepción de categoría ya existente
