@@ -15,7 +15,7 @@ import es.uca.tfg.ceramic_affair_web.entities.Categoria;
  * Clase de prueba para el repositorio CategoriaRepo.
  * Proporciona pruebas de integración para las operaciones CRUD en la entidad Categoria.
  * 
- * @version 1.0
+ * @version 1.1
  */
 @DataJpaTest
 public class CategoriaRepoTest {

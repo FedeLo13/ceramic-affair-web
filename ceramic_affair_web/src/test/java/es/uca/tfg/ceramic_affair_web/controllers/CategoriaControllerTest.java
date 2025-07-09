@@ -26,7 +26,7 @@ import es.uca.tfg.ceramic_affair_web.services.CategoriaService;
  * Proporciona pruebas de capa web para las operaciones CRUD expuestas en el controlador,
  * simulando peticiones HTTP sin interactuar con la base de datos.
  * 
- * @version 1.0
+ * @version 1.1
  */
 @WebMvcTest(CategoriaController.class)
 @AutoConfigureMockMvc(addFilters = false) // Desactivar la configuración de seguridad para las pruebas

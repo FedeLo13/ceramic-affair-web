@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
  * Clase de prueba para la entidad Categoria.
  * Proporciona pruebas unitarias para verificar el correcto funcionamiento de los métodos de la clase Categoria.
  * 
- * @version 1.0
+ * @version 1.1
  */
 public class CategoriaTest {
 

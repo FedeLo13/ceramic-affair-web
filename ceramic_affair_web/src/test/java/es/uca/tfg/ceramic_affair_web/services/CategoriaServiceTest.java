@@ -28,7 +28,7 @@ import es.uca.tfg.ceramic_affair_web.repositories.ProductoRepo;
  * Clase de prueba para el servicio CategoriaService.
  * Proporciona pruebas de integración para las operaciones CRUD en la entidad Categoria.
  * 
- * @version 1.0
+ * @version 1.1
  */
 @SpringBootTest
 @Transactional

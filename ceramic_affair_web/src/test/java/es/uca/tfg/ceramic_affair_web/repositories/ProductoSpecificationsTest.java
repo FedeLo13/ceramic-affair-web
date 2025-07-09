@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Clase de prueba para las especificaciones del repositorio Producto.
  * Proporciona pruebas de integración para las operaciones de búsqueda y filtrado en la entidad Producto.
  * 
- * @version 1.0
+ * @version 1.1
  */
 @DataJpaTest
 public class ProductoSpecificationsTest {

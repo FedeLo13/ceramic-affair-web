@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
  * Clase de prueba para la entidad Producto.
  * Proporciona pruebas unitarias para los métodos de la clase Producto.
  * 
- * @version 1.0
+ * @version 1.1
  */
 public class ProductoTest {
     
