@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.uca.tfg.ceramic_affair_web.DTOs.ProductoDTO;
+import es.uca.tfg.ceramic_affair_web.DTOs.ProductoMapper;
 import es.uca.tfg.ceramic_affair_web.DTOs.ProductoStockDTO;
 import es.uca.tfg.ceramic_affair_web.entities.Producto;
 import es.uca.tfg.ceramic_affair_web.services.ProductoService;
@@ -61,9 +62,10 @@ public class ProductoController {
         @ApiResponse(responseCode = "404", description = "Producto no encontrado"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<Producto> obtenerProductoPorId(@PathVariable Long id) {
+    public ResponseEntity<ProductoDTO> obtenerProductoPorId(@PathVariable Long id) {
         Producto producto = productoService.obtenerPorId(id);
-        return ResponseEntity.ok(producto);
+        ProductoDTO dto = ProductoMapper.toDTO(producto);
+        return ResponseEntity.ok(dto);
     }
 
     @GetMapping("/filtrar")
@@ -72,12 +74,12 @@ public class ProductoController {
         @ApiResponse(responseCode = "200", description = "Lista de productos encontrada"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<List<Producto>> filtrarProductos(@RequestParam(required = false) String nombre,
+    public ResponseEntity<List<ProductoDTO>> filtrarProductos(@RequestParam(required = false) String nombre,
                                                            @RequestParam(required = false) Long categoria,
                                                            @RequestParam(required = false) Boolean soloEnStock,
                                                            @RequestParam(required = false) String orden) {
         List<Producto> productos = productoService.filtrarProductos(nombre, categoria, soloEnStock, orden);
-        return ResponseEntity.ok(productos);
+        return ResponseEntity.ok(ProductoMapper.toDTOList(productos));
     }
 
     @PutMapping("/{id}")
@@ -122,8 +124,8 @@ public class ProductoController {
         @ApiResponse(responseCode = "200", description = "Lista de productos encontrada"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<List<Producto>> obtenerTodosLosProductos() {
+    public ResponseEntity<List<ProductoDTO>> obtenerTodosLosProductos() {
         List<Producto> productos = productoService.obtenerTodos();
-        return ResponseEntity.ok(productos);
+        return ResponseEntity.ok(ProductoMapper.toDTOList(productos));
     }
 }
