@@ -41,14 +41,11 @@ public class ProductoSpecificationsTest {
         categoria2 = new Categoria("Tazas");
 
         // Crear productos
-        producto1 = new Producto("Jarrón de barro", "Un hermoso jarrón de barro", BigDecimal.valueOf(10.99));
-        producto1.setCategoria(categoria1);
+        producto1 = new Producto("Jarrón de barro", categoria1, "Un jarrón de barro hecho a mano", 0, 0, 0, BigDecimal.valueOf(12.99), false, null);
 
-        producto2 = new Producto("Taza de cerámica", "Una taza de cerámica pintada a mano", BigDecimal.valueOf(5.49));
-        producto2.setCategoria(categoria2);
+        producto2 = new Producto("Taza de cerámica", categoria2, "Una taza de cerámica pintada a mano", 0, 0, 0, BigDecimal.valueOf(5.49), false, null);
 
-        producto3 = new Producto("Cuenco de cerámica", "Un cuenco de cerámica para ensaladas", BigDecimal.valueOf(7.99));
-        producto3.setCategoria(categoria1);
+        producto3 = new Producto("Cuenco de cerámica", categoria1, "Un cuenco de cerámica esmaltado", 0, 0, 0, BigDecimal.valueOf(7.99), false, null);
 
         // Guardar categorías y productos en la base de datos
         entityManager.persist(categoria1);
@@ -100,8 +97,12 @@ public class ProductoSpecificationsTest {
         // Verificar que los productos están ordenados correctamente
         assertThat(recientes).hasSize(3);
         assertThat(viejos).hasSize(3);
-        assertThat(recientes.get(0).getNombre()).isEqualTo("Cuenco de cerámica");
-        assertThat(viejos.get(0).getNombre()).isEqualTo("Jarrón de barro");
+        
+        assertThat(recientes.get(0).getFechaCreacion()).isAfter(recientes.get(1).getFechaCreacion());
+        assertThat(recientes.get(1).getFechaCreacion()).isAfter(recientes.get(2).getFechaCreacion());
+
+        assertThat(viejos.get(0).getFechaCreacion()).isBefore(viejos.get(1).getFechaCreacion());
+        assertThat(viejos.get(1).getFechaCreacion()).isBefore(viejos.get(2).getFechaCreacion());
     }
 
     @Test
