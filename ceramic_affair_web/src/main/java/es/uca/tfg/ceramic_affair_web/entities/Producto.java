@@ -80,7 +80,7 @@ public class Producto {
     public Producto(String nombre, Categoria categoria, String descripcion, float altura, float anchura, float diametro,
             BigDecimal precio, boolean soldOut, List<Imagen> imagenes) {
         this.nombre = nombre;
-        this.categoria = categoria;
+        this.setCategoria(categoria); // Establecemos la categoría usando el setter para mantener la relación bidireccional
         this.descripcion = descripcion;
         this.altura = altura;
         this.anchura = anchura;
