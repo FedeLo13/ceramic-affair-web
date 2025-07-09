@@ -10,9 +10,10 @@ import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import es.uca.tfg.ceramic_affair_web.configuration.ImagenProperties;
 import es.uca.tfg.ceramic_affair_web.entities.Imagen;
 import es.uca.tfg.ceramic_affair_web.exceptions.ImagenException;
 import es.uca.tfg.ceramic_affair_web.repositories.ImagenRepo;
@@ -23,16 +24,16 @@ import jakarta.transaction.Transactional;
  * 
  * @version 1.0
  */
+@Service
 public class ImagenService {
-
 
     private ImagenRepo imagenRepo;
     private final Path imagenesPath;
 
-    public ImagenService(ImagenRepo imagenRepo, @Value("${ceramic.affair.images.path}") String imagenesPath) throws IOException {
+    public ImagenService(ImagenRepo imagenRepo, ImagenProperties props) throws IOException {
         this.imagenRepo = imagenRepo;
-        this.imagenesPath = Paths.get(imagenesPath).toAbsolutePath().normalize();
-        Files.createDirectories(this.imagenesPath); // Asegura que el directorio existe
+        this.imagenesPath = Paths.get(props.getPath()).toAbsolutePath().normalize();
+        Files.createDirectories(this.imagenesPath);
     }
 
     /**
