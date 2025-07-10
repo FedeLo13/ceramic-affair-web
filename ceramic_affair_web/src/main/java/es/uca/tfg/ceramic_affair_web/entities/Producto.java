@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.math.BigDecimal;
 
 import jakarta.persistence.CascadeType;
@@ -45,6 +47,7 @@ public class Producto {
     private boolean soldOut;
 
     @ManyToOne
+    @JsonBackReference
     private Categoria categoria;
 
     private float altura;
