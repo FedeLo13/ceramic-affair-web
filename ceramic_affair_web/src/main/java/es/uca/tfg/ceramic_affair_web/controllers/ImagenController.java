@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.MediaType;
 
 /**
  * Controlador para la entidad Imagen.
@@ -38,7 +39,7 @@ public class ImagenController {
     @Autowired
     private ImagenService imagenService;
 
-    @PostMapping("/crear")
+    @PostMapping(value = "/crear", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Crear una nueva imagen", description = "Inserta una nueva imagen en el sistema a partir de un archivo", tags = { "Imágenes" })
     @ApiResponses({
         @ApiResponse(responseCode = "201", description = "Imagen creada con éxito"),
