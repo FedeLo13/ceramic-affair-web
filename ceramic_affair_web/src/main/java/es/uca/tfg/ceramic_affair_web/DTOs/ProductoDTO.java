@@ -12,6 +12,8 @@ import jakarta.validation.constraints.*;
  */
 public class ProductoDTO {
 
+    private Long id;
+
     @NotBlank(message = "El nombre del producto es obligatiorio")
     private String nombre;
 
@@ -44,8 +46,26 @@ public class ProductoDTO {
         // Constructor por defecto
     }
 
+    // Constructor para crear un ProductoDTO con ID, usar este constructor para crear un productoDTO a partir de un Producto existente
+    public ProductoDTO(Long id, String nombre, Long idCategoria, String descripcion, float altura, float anchura,
+                       float diametro, BigDecimal precio, Boolean soldOut, List<Long> idsImagenes) {
+        this.id = id;
+        this.nombre = nombre;
+        this.idCategoria = idCategoria;
+        this.descripcion = descripcion;
+        this.altura = altura;
+        this.anchura = anchura;
+        this.diametro = diametro;
+        this.precio = precio;
+        this.soldOut = soldOut;
+        this.idsImagenes = idsImagenes;
+    }
+
+    // Constructor para crear un ProductoDTO sin ID, usar este constructor para crear un productoDTO nuevo con el objetivo
+    // de insertar un nuevo producto en la base de datos
     public ProductoDTO(String nombre, Long idCategoria, String descripcion, float altura, float anchura,
                        float diametro, BigDecimal precio, Boolean soldOut, List<Long> idsImagenes) {
+        this.id = null; // ID se asignará automáticamente al crear el producto (usar el otro constructor para crear un productoDTO con ID)
         this.nombre = nombre;
         this.idCategoria = idCategoria;
         this.descripcion = descripcion;
@@ -58,6 +78,15 @@ public class ProductoDTO {
     }
 
     // Getters y setters
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getNombre() {
         return nombre;
     }

@@ -26,6 +26,7 @@ public class ProductoMapper {
             : null;
         
         return new ProductoDTO(
+            producto.getId(),
             producto.getNombre(),
             producto.getCategoria() != null ? producto.getCategoria().getId() : null,
             producto.getDescripcion(),
