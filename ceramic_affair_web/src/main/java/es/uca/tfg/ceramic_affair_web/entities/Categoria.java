@@ -65,6 +65,15 @@ public class Categoria {
     }
 
     /**
+     * Método para establecer el nombre de la categoría.
+     * 
+     * @param nombre el nuevo nombre de la categoría
+     */
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    /**
      * Método para obtener la lista de productos de la categoría.
      * 
      * @return la lista de productos de la categoría
