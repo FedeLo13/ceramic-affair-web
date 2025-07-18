@@ -42,6 +42,26 @@ public class CategoriaService {
     }
 
     /**
+     * Método para modificar una categoría existente
+     * 
+     * @param id el id de la categoría a modificar
+     * @param nombre el nuevo nombre de la categoría
+     * @throws CategoriaException.NoEncontrada si no se encuentra la categoría
+     * @throws CategoriaException.YaExistente si ya existe una categoría con el nuevo nombre
+     */
+    public void modificarCategoria(Long id, String nombre) {
+        Categoria categoria = categoriaRepo.findById(id)
+            .orElseThrow(() -> new CategoriaException.NoEncontrada(id));
+        
+        if (categoriaRepo.existsByNombre(nombre)) {
+            throw new CategoriaException.YaExistente(nombre);
+        }
+        
+        categoria.setNombre(nombre);
+        categoriaRepo.save(categoria);
+    }
+
+    /**
      * Método para obtener una categoría por su id
      * 
      * @param id el id de la categoría a obtener
