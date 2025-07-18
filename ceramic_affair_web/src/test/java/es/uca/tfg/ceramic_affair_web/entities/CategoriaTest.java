@@ -40,4 +40,14 @@ public class CategoriaTest {
         assertNotNull(categoria.getProductos()); // Verifica que la lista de productos no sea nula
         assertTrue(categoria.getProductos().isEmpty()); // Verifica que la lista de productos esté vacía
     }
+
+    @Test
+    @DisplayName("Categoria - Getters y Setters")
+    public void testGettersYSetters() {
+        Categoria categoria = new Categoria();
+        categoria.setNombre("Cerámica");
+
+        assertNotNull(categoria.getNombre()); // Verifica que el nombre no sea nulo
+        assertTrue(categoria.getNombre().equals("Cerámica")); // Verifica que el nombre sea el esperado
+    }
 }

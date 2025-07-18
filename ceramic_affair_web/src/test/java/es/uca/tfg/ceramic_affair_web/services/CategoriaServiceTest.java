@@ -79,6 +79,49 @@ public class CategoriaServiceTest {
     }
 
     @Test
+    @DisplayName("Servicio - Modificar categoría")
+    void testModificarCategoria() {
+        // Insertar una nueva categoría
+        Long id = categoriaService.insertarCategoria("Cerámica");
+
+        // Modificar la categoría
+        categoriaService.modificarCategoria(id, "Cerámica Modificada");
+
+        // Obtener la categoría modificada
+        Categoria categoriaModificada = categoriaService.obtenerPorId(id);
+
+        // Verificar que la categoría se ha modificado correctamente
+        assertNotNull(categoriaModificada);
+        assertEquals("Cerámica Modificada", categoriaModificada.getNombre());
+    }
+
+    @Test
+    @DisplayName("Servicio - Modificar categoría (excepción no encontrada)")
+    void testModificarCategoriaInexistente() {
+        // Intentar modificar una categoría que no existe
+        assertThatThrownBy(() -> {
+            categoriaService.modificarCategoria(999L, "Cerámica Modificada");
+        }).isInstanceOf(CategoriaException.NoEncontrada.class)
+        .hasMessageContaining("Categoría no encontrada con id: 999");
+    }
+
+    @Test
+    @DisplayName("Servicio - Modificar categoría (excepción ya existente)")
+    void testModificarCategoriaExistente() {
+        // Insertar una nueva categoría
+        Long id = categoriaService.insertarCategoria("Cerámica");
+
+        // Insertar otra categoría para probar la excepción
+        categoriaService.insertarCategoria("Vidrio");
+
+        // Intentar modificar la categoría a un nombre ya existente
+        assertThatThrownBy(() -> {
+            categoriaService.modificarCategoria(id, "Vidrio");
+        }).isInstanceOf(CategoriaException.YaExistente.class)
+        .hasMessageContaining("Ya existe una categoría con el nombre: Vidrio");
+    }
+
+    @Test
     @DisplayName("Servicio - Obtener categoría por ID")
     void testObtenerPorId() {
         // Insertar una nueva categoria
