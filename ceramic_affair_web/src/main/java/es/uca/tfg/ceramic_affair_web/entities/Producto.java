@@ -243,6 +243,15 @@ public class Producto {
     }
 
     /**
+     * Método para establecer la fecha de creación del producto.
+     * 
+     * @param fechaCreacion la nueva fecha de creación del producto
+     */
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    /**
      * Método para establecer la altura del producto.
      * 
      * @param altura la nueva altura del producto
