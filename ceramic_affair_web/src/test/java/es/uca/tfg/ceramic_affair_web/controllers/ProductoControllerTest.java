@@ -29,10 +29,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import es.uca.tfg.ceramic_affair_web.DTOs.ProductoDTO;
 import es.uca.tfg.ceramic_affair_web.DTOs.ProductoStockDTO;
+import es.uca.tfg.ceramic_affair_web.controllers.admin.ProductoAdminController;
+import es.uca.tfg.ceramic_affair_web.controllers.common.ProductoPublicController;
 import es.uca.tfg.ceramic_affair_web.entities.Categoria;
 import es.uca.tfg.ceramic_affair_web.entities.Imagen;
 import es.uca.tfg.ceramic_affair_web.entities.Producto;
 import es.uca.tfg.ceramic_affair_web.exceptions.ProductoException;
+import es.uca.tfg.ceramic_affair_web.security.JwtAuthFilter;
+import es.uca.tfg.ceramic_affair_web.security.JwtUtils;
 import es.uca.tfg.ceramic_affair_web.services.ProductoService;
 
 /**
@@ -42,7 +46,7 @@ import es.uca.tfg.ceramic_affair_web.services.ProductoService;
  * 
  * @version 1.1
  */
-@WebMvcTest(ProductoController.class)
+@WebMvcTest(controllers = {ProductoPublicController.class, ProductoAdminController.class})
 @AutoConfigureMockMvc(addFilters = false) // Desactivar la configuración de seguridad para las pruebas
 public class ProductoControllerTest {
 
@@ -51,6 +55,12 @@ public class ProductoControllerTest {
 
     @MockitoBean
     private ProductoService productoService;
+
+    @MockitoBean
+    private JwtUtils jwtUtils;
+
+    @MockitoBean
+    private JwtAuthFilter jwtAuthFilter;
 
     @Test
     @DisplayName("Controlador - Crear producto")
@@ -76,7 +86,7 @@ public class ProductoControllerTest {
         when(productoService.insertarProducto(any(ProductoDTO.class))).thenReturn(1L);
 
         // Act + Assert: realizar POST con JSON y verificar resultado
-        mockMvc.perform(post("/api/productos/crear")
+        mockMvc.perform(post("/api/admin/productos/crear")
             .contentType("application/json")
             .content(jsonBody))
             .andExpect(status().isCreated())
@@ -95,7 +105,7 @@ public class ProductoControllerTest {
         when(productoService.obtenerPorId(id)).thenReturn(producto);
 
         // Realizar la petición GET al endpoint de obtención de producto por ID
-        mockMvc.perform(get("/api/productos/{id}", id))
+        mockMvc.perform(get("/api/public/productos/{id}", id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nombre").value(producto.getNombre()))
                 .andExpect(jsonPath("$.idCategoria").value(producto.getCategoria().getId()))
@@ -142,7 +152,7 @@ public class ProductoControllerTest {
         when(productoService.filtrarProductos(null, null, null, null)).thenReturn(productos);
 
         // Realizar la petición GET al endpoint de filtrado de productos
-        mockMvc.perform(get("/api/productos/filtrar"))
+        mockMvc.perform(get("/api/public/productos/filtrar"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].nombre").value("Taza"))
@@ -183,7 +193,7 @@ public class ProductoControllerTest {
         doNothing().when(productoService).modificarProducto(id, productoDTO);
 
         // Realizar la petición PUT al endpoint de actualización de producto
-        mockMvc.perform(put("/api/productos/{id}", id)
+        mockMvc.perform(put("/api/admin/productos/{id}", id)
                 .contentType("application/json")
                 .content(jsonBody))
                 .andExpect(status().isOk());
@@ -203,7 +213,7 @@ public class ProductoControllerTest {
         doNothing().when(productoService).establecerStock(id, stockDTO.isSoldOut());
 
         // Realizar la petición PATCH al endpoint de actualización de stock de producto
-        mockMvc.perform(patch("/api/productos/{id}/stock", id)
+        mockMvc.perform(patch("/api/admin/productos/{id}/stock", id)
                 .contentType("application/json")
                 .content(jsonBody))
                 .andExpect(status().isOk());
@@ -217,7 +227,7 @@ public class ProductoControllerTest {
         doNothing().when(productoService).eliminarProducto(id);
 
         // Realizar la petición DELETE al endpoint de eliminación de producto
-        mockMvc.perform(delete("/api/productos/{id}", id))
+        mockMvc.perform(delete("/api/admin/productos/{id}", id))
                 .andExpect(status().isNoContent());
     }
 
@@ -256,7 +266,7 @@ public class ProductoControllerTest {
         when(productoService.obtenerTodos()).thenReturn(productos);
 
         // Realizar la petición GET al endpoint de obtención de todos los productos
-        mockMvc.perform(get("/api/productos/todos"))
+        mockMvc.perform(get("/api/public/productos/todos"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].nombre").value("Taza"))
@@ -280,7 +290,7 @@ public class ProductoControllerTest {
         when(productoService.obtenerPorId(id)).thenThrow(new ProductoException.NoEncontrado(id));
 
         // Realizar la petición GET al endpoint de obtención de producto por ID
-        mockMvc.perform(get("/api/productos/{id}", id))
+        mockMvc.perform(get("/api/public/productos/{id}", id))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Producto no encontrado con id: " + id));
     }
@@ -310,7 +320,7 @@ public class ProductoControllerTest {
         doThrow(new ProductoException.NoEncontrado(id)).when(productoService).modificarProducto(eq(id), any(ProductoDTO.class));
 
         // Realizar la petición PUT al endpoint de actualización de producto
-        mockMvc.perform(put("/api/productos/{id}", id)
+        mockMvc.perform(put("/api/admin/productos/{id}", id)
                 .contentType("application/json")
                 .content(jsonBody))
                 .andExpect(status().isNotFound())
@@ -332,7 +342,7 @@ public class ProductoControllerTest {
         doThrow(new ProductoException.NoEncontrado(id)).when(productoService).establecerStock(eq(id), any(Boolean.class));
 
         // Realizar la petición PATCH al endpoint de actualización de stock de producto
-        mockMvc.perform(patch("/api/productos/{id}/stock", id)
+        mockMvc.perform(patch("/api/admin/productos/{id}/stock", id)
                 .contentType("application/json")
                 .content(jsonBody))
                 .andExpect(status().isNotFound())
@@ -347,7 +357,7 @@ public class ProductoControllerTest {
         doThrow(new ProductoException.NoEncontrado(id)).when(productoService).eliminarProducto(id);
 
         // Realizar la petición DELETE al endpoint de eliminación de producto
-        mockMvc.perform(delete("/api/productos/{id}", id))
+        mockMvc.perform(delete("/api/admin/productos/{id}", id))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Producto no encontrado con id: " + id));
     }

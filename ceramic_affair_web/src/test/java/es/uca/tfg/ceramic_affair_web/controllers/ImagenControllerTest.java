@@ -19,9 +19,12 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-
+import es.uca.tfg.ceramic_affair_web.controllers.admin.ImagenAdminController;
+import es.uca.tfg.ceramic_affair_web.controllers.common.ImagenPublicController;
 import es.uca.tfg.ceramic_affair_web.entities.Imagen;
 import es.uca.tfg.ceramic_affair_web.exceptions.ImagenException;
+import es.uca.tfg.ceramic_affair_web.security.JwtAuthFilter;
+import es.uca.tfg.ceramic_affair_web.security.JwtUtils;
 import es.uca.tfg.ceramic_affair_web.services.ImagenService;
 
 /**
@@ -31,7 +34,7 @@ import es.uca.tfg.ceramic_affair_web.services.ImagenService;
  * 
  * @version 1.0
  */
-@WebMvcTest(ImagenController.class)
+@WebMvcTest(controllers = { ImagenPublicController.class, ImagenAdminController.class })
 @AutoConfigureMockMvc(addFilters = false) // Desactivar la configuración de seguridad para las pruebas
 public class ImagenControllerTest {
 
@@ -40,6 +43,12 @@ public class ImagenControllerTest {
 
     @MockitoBean
     private ImagenService imagenService;
+
+    @MockitoBean
+    private JwtUtils jwtUtils;
+
+    @MockitoBean
+    private JwtAuthFilter jwtAuthFilter;
 
     @Test
     @DisplayName("Controlador - Crear imagen")
@@ -54,7 +63,7 @@ public class ImagenControllerTest {
         Imagen imagenMock = new Imagen("imagen.jpg", "jpg", 12345f, 100f, 100f);
         when(imagenService.insertarImagen(archivo)).thenReturn(imagenMock);
 
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/imagenes/crear")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/admin/imagenes/crear")
             .file(archivo))
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.ruta").value("imagen.jpg"));
@@ -66,7 +75,7 @@ public class ImagenControllerTest {
         Imagen imagen = new Imagen("imagen.jpg", "jpg", 12345f, 100f, 100f);
         when(imagenService.obtenerPorId(1L)).thenReturn(imagen);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/imagenes/1"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/public/imagenes/1"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.ruta").value("imagen.jpg"));
     }
@@ -76,7 +85,7 @@ public class ImagenControllerTest {
     public void testEliminarImagen() throws Exception {
         doNothing().when(imagenService).eliminarImagen(1L);
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/imagenes/1"))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/admin/imagenes/1"))
             .andExpect(status().isNoContent());
     }
 
@@ -92,7 +101,7 @@ public class ImagenControllerTest {
 
         when(imagenService.insertarImagen(any())).thenThrow(new ImagenException.NoValida("El archivo no es válido."));
 
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/imagenes/crear")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/admin/imagenes/crear")
             .file(archivo))
             .andExpect(status().isBadRequest());
     }
@@ -102,7 +111,7 @@ public class ImagenControllerTest {
     public void testObtenerImagenExcepcionNoEncontrada() throws Exception {
         when(imagenService.obtenerPorId(1L)).thenThrow(new ImagenException.NoEncontrada(1L));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/imagenes/1"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/public/imagenes/1"))
             .andExpect(status().isNotFound());
     }
 
@@ -111,7 +120,7 @@ public class ImagenControllerTest {
     public void testEliminarImagenExcepcionNoEncontrada() throws Exception {
         doThrow(new ImagenException.NoEncontrada(1L)).when(imagenService).eliminarImagen(1L);
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/imagenes/1"))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/admin/imagenes/1"))
             .andExpect(status().isNotFound());
     }
 
@@ -120,7 +129,7 @@ public class ImagenControllerTest {
     public void testEliminarImagenExcepcionIO() throws Exception {
         doThrow(new IOException("Error al borrar")).when(imagenService).eliminarImagen(1L);
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/imagenes/1"))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/admin/imagenes/1"))
             .andExpect(status().isInternalServerError());
     }
 }
