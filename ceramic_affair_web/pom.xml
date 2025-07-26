@@ -106,7 +106,18 @@
 			<artifactId>jjwt-jackson</artifactId>
 			<version>0.12.6</version>
 		</dependency>
-	</dependencies>
+		<!-- Dependencia de Spring Boot Mail (envío de correos electrónicos) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+			<version>3.5.3</version>
+		</dependency>
+		<!-- Dependencia de Spring Boot WebFlux -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+ </dependencies>
 
 	<build>
 		<plugins>
