@@ -121,6 +121,30 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Maneja las excepciones de reCAPTCHA inválido.
+     * @param ex la excepción lanzada
+     * @return una respuesta con el mensaje de error y el estado HTTP 400 (Bad Request)
+     */
+    @ExceptionHandler(RecaptchaException.Invalido.class)
+    public ResponseEntity<String> handleRecaptchaInvalido(RecaptchaException.Invalido ex) {
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(ex.getMessage());
+    }
+
+    /**
+     * Maneja las excepciones de envío de correo electrónico fallido.
+     * @param ex la excepción lanzada
+     * @return una respuesta con el mensaje de error y el estado HTTP 500 (Internal Server Error)
+     */
+    @ExceptionHandler(EmailException.EnvioFallido.class)
+    public ResponseEntity<String> handleEmailEnvioFallido(EmailException.EnvioFallido ex) {
+        return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(ex.getMessage());
+    }
+
+    /**
      * Maneja las excepciones relacionadas con las validaciones
      * 
      * @param ex la excepción lanzada
