@@ -17,7 +17,6 @@ import jakarta.persistence.GenerationType;
  * 
  * @version 1.0
  */
-
  @Entity
 public class Categoria {
     @Id
