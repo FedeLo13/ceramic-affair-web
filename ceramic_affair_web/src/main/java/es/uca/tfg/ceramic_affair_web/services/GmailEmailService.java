@@ -1,8 +1,11 @@
 package es.uca.tfg.ceramic_affair_web.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import jakarta.mail.internet.MimeMessage;
@@ -16,6 +19,8 @@ import jakarta.mail.internet.MimeMessage;
 @Primary
 public class GmailEmailService implements EmailService {
 
+    private static final Logger logger = LoggerFactory.getLogger(GmailEmailService.class.getName());
+
     private final JavaMailSender mailSender;
 
     public GmailEmailService(JavaMailSender mailSender) {
@@ -23,6 +28,7 @@ public class GmailEmailService implements EmailService {
     }
 
     @Override
+    @Async
     public void sendEmail(String to, String subject, String body) {
         MimeMessage message = mailSender.createMimeMessage();
 
@@ -35,6 +41,7 @@ public class GmailEmailService implements EmailService {
 
             mailSender.send(message);
         } catch (Exception e) {
+            logger.error("Error al enviar el correo electrónico a {}: {}", to, e.getMessage());
             throw new RuntimeException("Error al enviar el correo electrónico", e);
         }
     }
