@@ -1,9 +1,14 @@
 package es.uca.tfg.ceramic_affair_web.exceptions;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -11,6 +16,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.server.ResponseStatusException;
+
+import es.uca.tfg.ceramic_affair_web.payload.ApiError;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Clase para manejar excepciones globales en la aplicación.
@@ -21,79 +29,37 @@ import org.springframework.web.server.ResponseStatusException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class.getName());
+
     /**
      * Maneja cualquier excepción no controlada en la aplicación.
      * @param ex
      * @return una respuesta con el mensaje de error y el estado HTTP 500 (Internal Server Error)
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGlobalException(Exception ex) {
-        return ResponseEntity
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .body("Error interno del servidor. Por favor, inténtelo de nuevo más tarde o contacte con el soporte técnico.");
+    public ResponseEntity<ApiError> handleGlobalException(Exception ex, HttpServletRequest request) {
+        logger.error("Error interno del servidor: ", ex);
+        return createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR,
+            "Error interno del servidor",
+            "Por favor, inténtelo de nuevo más tarde o contacte con el soporte técnico.", 
+            request.getRequestURI(), 
+            null);
     }
 
     /**
-     * Maneja la excepción de categoría no encontrada.
+     * Maneja todo tipo de excepción de negocio.
      * 
      * @param ex la excepción lanzada
-     * @return una respuesta con el mensaje de error y el estado HTTP 404 (Not Found)
+     * @return una respuesta con el mensaje de error específico y el estado HTTP correspondiente
      */
-    @ExceptionHandler(CategoriaException.NoEncontrada.class)
-    public ResponseEntity<String> handleCategoriaNoEncontrada(CategoriaException.NoEncontrada ex) {
-        return ResponseEntity
-        .status(HttpStatus.NOT_FOUND)
-        .body(ex.getMessage());
-    }
-
-    /**
-     * Maneja la excepción de categoría ya existente.
-     * 
-     * @param ex la excepción lanzada
-     * @return una respuesta con el mensaje de error y el estado HTTP 409 (Conflict)
-     */
-    @ExceptionHandler(CategoriaException.YaExistente.class)
-    public ResponseEntity<String> handleCategoriaYaExistente(CategoriaException.YaExistente ex) {
-        return ResponseEntity
-        .status(HttpStatus.CONFLICT)
-        .body(ex.getMessage());
-    }
-
-    /**
-     * Maneja la excepción de producto no encontrado.
-     * 
-     * @param ex la excepción lanzada
-     * @return una respuesta con el mensaje de error y el estado HTTP 404 (Not Found)
-     */
-    @ExceptionHandler(ProductoException.NoEncontrado.class)
-    public ResponseEntity<String> handleProductoNoEncontrado(ProductoException.NoEncontrado ex) {
-        return ResponseEntity
-        .status(HttpStatus.NOT_FOUND)
-        .body(ex.getMessage());
-    }
-
-    /**
-     * Maneja la excepción de imagen no encontrada.
-     * @param ex
-     * @return
-     */
-    @ExceptionHandler(ImagenException.NoEncontrada.class)
-    public ResponseEntity<String> handleImagenNoEncontrada(ImagenException.NoEncontrada ex) {
-        return ResponseEntity
-            .status(HttpStatus.NOT_FOUND)
-            .body(ex.getMessage());
-    }
-
-    /**
-     * Maneja la excepción de imagen no válida.
-     * @param ex la excepción lanzada
-     * @return una respuesta con el mensaje de error y el estado HTTP 400 (Bad Request)
-     */
-    @ExceptionHandler(ImagenException.NoValida.class)
-    public ResponseEntity<String> handleImagenNoValida(ImagenException.NoValida ex) {
-        return ResponseEntity
-            .status(HttpStatus.BAD_REQUEST)
-            .body(ex.getMessage());
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ApiError> handleBusinessException(BusinessException ex, HttpServletRequest request) {
+        logger.warn("Excepción de negocio: {}", ex.getMessage());
+        return createErrorResponse(ex.getStatus(),
+            "Excepción de negocio",
+            ex.getMessage(),
+            request.getRequestURI(),
+            null);
     }
 
     /**
@@ -102,10 +68,13 @@ public class GlobalExceptionHandler {
      * @return una respuesta con el mensaje de error y el estado HTTP 413 (Payload Too Large)
      */
     @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public ResponseEntity<String> handleMaxUploadSizeExceeded(MaxUploadSizeExceededException ex) {
-        return ResponseEntity
-            .status(HttpStatus.PAYLOAD_TOO_LARGE)
-            .body("El archivo es demasiado grande. Por favor, suba un archivo más pequeño.");
+    public ResponseEntity<ApiError> handleMaxUploadSizeExceeded(MaxUploadSizeExceededException ex, HttpServletRequest request) {
+        logger.warn("Tamaño de archivo excedido: {}", ex.getMessage());
+        return createErrorResponse(HttpStatus.PAYLOAD_TOO_LARGE,
+            "Tamaño de archivo excedido",
+            ex.getMessage(),
+            request.getRequestURI(),
+            null);
     }
 
     /**
@@ -114,10 +83,13 @@ public class GlobalExceptionHandler {
      * @return una respuesta con el mensaje de error y el estado HTTP correspondiente
      */
     @ExceptionHandler(ResponseStatusException.class)
-    public ResponseEntity<String> handleResponseStatusException(ResponseStatusException ex) {
-        return ResponseEntity
-            .status(ex.getStatusCode())
-            .body(ex.getReason());
+    public ResponseEntity<ApiError> handleResponseStatusException(ResponseStatusException ex, HttpServletRequest request) {
+        logger.warn("Excepción de estado de respuesta: {}", ex.getReason());
+        return createErrorResponse(ex.getStatusCode(),
+            "Excepción de estado de respuesta",
+            ex.getReason(),
+            request.getRequestURI(),
+            null);
     }
 
     /**
@@ -126,10 +98,13 @@ public class GlobalExceptionHandler {
      * @return una respuesta con el mensaje de error y el estado HTTP 400 (Bad Request)
      */
     @ExceptionHandler(RecaptchaException.Invalido.class)
-    public ResponseEntity<String> handleRecaptchaInvalido(RecaptchaException.Invalido ex) {
-        return ResponseEntity
-            .status(HttpStatus.BAD_REQUEST)
-            .body(ex.getMessage());
+    public ResponseEntity<ApiError> handleRecaptchaInvalido(RecaptchaException.Invalido ex, HttpServletRequest request) {
+        logger.warn("reCAPTCHA inválido: {}", ex.getMessage());
+        return createErrorResponse(HttpStatus.BAD_REQUEST,
+            "reCAPTCHA inválido",
+            ex.getMessage(),
+            request.getRequestURI(),
+            null);
     }
 
     /**
@@ -138,10 +113,28 @@ public class GlobalExceptionHandler {
      * @return una respuesta con el mensaje de error y el estado HTTP 500 (Internal Server Error)
      */
     @ExceptionHandler(EmailException.EnvioFallido.class)
-    public ResponseEntity<String> handleEmailEnvioFallido(EmailException.EnvioFallido ex) {
-        return ResponseEntity
-            .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(ex.getMessage());
+    public ResponseEntity<ApiError> handleEmailEnvioFallido(EmailException.EnvioFallido ex, HttpServletRequest request) {
+        logger.error("Error al enviar el correo electrónico: ", ex);
+        return createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR,
+            "Error al enviar el correo electrónico",
+            ex.getMessage(),
+            request.getRequestURI(),
+            null);
+    }
+
+    /**
+     * Maneja la excepción de violación de la integridad de la base de datos.
+     * @param ex la excepción lanzada
+     * @return una respuesta con el mensaje de error y el estado HTTP 409 (Conflict)
+     */
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ApiError> handleDataIntegrityViolation(DataIntegrityViolationException ex, HttpServletRequest request) {
+        logger.warn("Violación de integridad de datos: {}", ex.getMessage());
+        return createErrorResponse(HttpStatus.CONFLICT,
+            "Violación de integridad de datos",
+            ex.getMessage(),
+            request.getRequestURI(),
+            null);
     }
 
     /**
@@ -151,13 +144,36 @@ public class GlobalExceptionHandler {
      * @return una respuesta con un mapa de errores de validación y el estado HTTP 400 (Bad Request)
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ApiError> handleValidationExceptions(MethodArgumentNotValidException ex, HttpServletRequest request) {
         Map<String, String> errors = new HashMap<>();
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
             errors.put(error.getField(), error.getDefaultMessage());
         }
-        return ResponseEntity
-            .status(HttpStatus.BAD_REQUEST)
-            .body(errors);
+        logger.warn("Errores de validación: {}", errors);
+        return createErrorResponse(HttpStatus.BAD_REQUEST,
+            "Errores de validación",
+            "Por favor, revise los campos marcados.",
+            request.getRequestURI(),
+            errors);
     }
-}   
+
+    /**
+     * Método helper para crear una respuesta de error genérica.
+     * 
+     * @param status el estado HTTP de la respuesta
+     * @param error el mensaje de error
+     * @param message el mensaje detallado del error
+     * @param path la ruta de la solicitud que causó el error
+     * @param validationErrors un mapa de errores de validación (opcional)
+     * @return una instancia de ApiError con los detalles del error
+     */
+    private ResponseEntity<ApiError> createErrorResponse(HttpStatusCode status, String error, String message, String path, Map<String, String> validationErrors) {
+        ApiError apiError = new ApiError(LocalDateTime.now(), status.value(), error, message, path);
+        if (validationErrors != null && !validationErrors.isEmpty()) {
+            apiError.setValidationErrors(validationErrors);
+        }
+        return ResponseEntity
+            .status(status)
+            .body(apiError);
+    }
+}
