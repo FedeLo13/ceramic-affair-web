@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.uca.tfg.ceramic_affair_web.DTOs.ProductoDTO;
@@ -50,6 +51,12 @@ public class ProductoServiceTest {
 
     @Autowired
     private ImagenRepo imagenRepo;
+
+    @MockitoBean
+    private GmailEmailService gmailEmailService;
+
+    @MockitoBean
+    private RecaptchaService recaptchaService;
 
     @BeforeEach
     void setUp() {
@@ -97,7 +104,7 @@ public class ProductoServiceTest {
         assertThatThrownBy(() -> {
             productoService.insertarProducto(productoDTO);
         }).isInstanceOf(CategoriaException.NoEncontrada.class)
-          .hasMessageContaining("Categoría no encontrada con id: 999");
+          .hasMessageContaining("Categoría no encontrada con ID: 999");
     }
 
     @Test
@@ -154,7 +161,7 @@ public class ProductoServiceTest {
         assertThatThrownBy(() -> {
             productoService.modificarProducto(id, dtoConCategoriaInexistente); // ID de categoría que no existe
         }).isInstanceOf(CategoriaException.NoEncontrada.class)
-          .hasMessageContaining("Categoría no encontrada con id: 999");
+          .hasMessageContaining("Categoría no encontrada con ID: 999");
     }
 
     @Test

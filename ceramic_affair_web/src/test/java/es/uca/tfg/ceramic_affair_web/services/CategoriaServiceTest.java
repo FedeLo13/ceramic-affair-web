@@ -16,6 +16,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.uca.tfg.ceramic_affair_web.entities.Categoria;
@@ -43,6 +44,12 @@ public class CategoriaServiceTest {
 
     @Autowired
     private ProductoRepo productoRepo;
+
+    @MockitoBean
+    private GmailEmailService gmailEmailService;
+
+    @MockitoBean
+    private RecaptchaService recaptchaService;
 
     @BeforeEach
     void setUp() {
@@ -102,7 +109,7 @@ public class CategoriaServiceTest {
         assertThatThrownBy(() -> {
             categoriaService.modificarCategoria(999L, "Cerámica Modificada");
         }).isInstanceOf(CategoriaException.NoEncontrada.class)
-        .hasMessageContaining("Categoría no encontrada con id: 999");
+        .hasMessageContaining("Categoría no encontrada con ID: 999");
     }
 
     @Test
@@ -144,7 +151,7 @@ public class CategoriaServiceTest {
         assertThatThrownBy(() -> {
             categoriaService.obtenerPorId(999L);
         }).isInstanceOf(CategoriaException.NoEncontrada.class)
-        .hasMessageContaining("Categoría no encontrada con id: 999");
+        .hasMessageContaining("Categoría no encontrada con ID: 999");
     }
 
     @Test
@@ -172,7 +179,7 @@ public class CategoriaServiceTest {
         assertThatThrownBy(() -> {
             categoriaService.eliminarCategoria(999L);
         }).isInstanceOf(CategoriaException.NoEncontrada.class)
-        .hasMessageContaining("Categoría no encontrada con id: 999");
+        .hasMessageContaining("Categoría no encontrada con ID: 999");
     }
 
     @Test
