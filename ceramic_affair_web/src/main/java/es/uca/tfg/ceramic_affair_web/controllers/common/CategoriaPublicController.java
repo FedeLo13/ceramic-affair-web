@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.uca.tfg.ceramic_affair_web.entities.Categoria;
+import es.uca.tfg.ceramic_affair_web.payload.ApiResponseType;
 import es.uca.tfg.ceramic_affair_web.services.CategoriaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -39,9 +40,9 @@ public class CategoriaPublicController {
         @ApiResponse(responseCode = "404", description = "Categoría no encontrada"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<Categoria> obtenerCategoriaPorId(@PathVariable Long id) {
+    public ResponseEntity<ApiResponseType<Categoria>> obtenerCategoriaPorId(@PathVariable Long id) {
         Categoria categoria = categoriaService.obtenerPorId(id);
-        return ResponseEntity.ok(categoria);
+        return ResponseEntity.ok(new ApiResponseType<>(true, "Categoría encontrada", categoria));
     }
 
     @GetMapping("/todas")
@@ -50,8 +51,8 @@ public class CategoriaPublicController {
         @ApiResponse(responseCode = "200", description = "Lista de categorías encontrada"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<List<Categoria>> obtenerTodasLasCategorias() {
+    public ResponseEntity<ApiResponseType<List<Categoria>>> obtenerTodasLasCategorias() {
         List<Categoria> categorias = categoriaService.obtenerTodas();
-        return ResponseEntity.ok(categorias);
+        return ResponseEntity.ok(new ApiResponseType<>(true, "Lista de categorías encontrada", categorias));
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import es.uca.tfg.ceramic_affair_web.DTOs.LoginDTO;
 import es.uca.tfg.ceramic_affair_web.entities.Usuario;
+import es.uca.tfg.ceramic_affair_web.payload.ApiResponseType;
 import es.uca.tfg.ceramic_affair_web.repositories.UsuarioRepo;
 import es.uca.tfg.ceramic_affair_web.security.JwtUtils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,10 +50,11 @@ public class LoginController {
     @Operation(summary = "Iniciar sesión", description = "Permite a un usuario iniciar sesión con su email y contraseña", tags = { "Login" })
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Inicio de sesión exitoso"),
+        @ApiResponse(responseCode = "400", description = "Datos inválidos proporcionados"),
         @ApiResponse(responseCode = "401", description = "Credenciales inválidas"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<Map<String, String>> login(@Valid @RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<ApiResponseType<Map<String, String>>> login(@Valid @RequestBody LoginDTO loginDTO) {
         Usuario usuario = usuarioRepo.findByEmail(loginDTO.getEmail())
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciales inválidas"));
 
@@ -61,6 +63,6 @@ public class LoginController {
         }
 
         String token = jwtUtils.generateToken(usuario);
-        return ResponseEntity.ok(Map.of("token", token));
+        return ResponseEntity.ok(new ApiResponseType<>(true, "Inicio de sesión exitoso", Map.of("token", token)));
     }
 }

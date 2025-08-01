@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import es.uca.tfg.ceramic_affair_web.entities.Imagen;
+import es.uca.tfg.ceramic_affair_web.payload.ApiResponseType;
 import es.uca.tfg.ceramic_affair_web.services.ImagenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -45,9 +46,10 @@ public class ImagenAdminController {
         @ApiResponse(responseCode = "400", description = "Solicitud incorrecta, el archivo no es una imagen válida"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<Imagen> crearImagen(@RequestParam("archivo") MultipartFile archivo) throws IOException {
+    public ResponseEntity<ApiResponseType<Imagen>> crearImagen(@RequestParam("archivo") MultipartFile archivo) throws IOException {
         Imagen imagen = imagenService.insertarImagen(archivo);
-        return new ResponseEntity<>(imagen, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ApiResponseType<>(true, "Imagen creada con éxito", imagen));
     }
 
     @DeleteMapping("/{id}")
@@ -57,7 +59,7 @@ public class ImagenAdminController {
         @ApiResponse(responseCode = "404", description = "Imagen no encontrada"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<Void> eliminarImagen(@PathVariable Long id) throws IOException{
+    public ResponseEntity<ApiResponseType<Void>> eliminarImagen(@PathVariable Long id) throws IOException{
         imagenService.eliminarImagen(id);
         return ResponseEntity.noContent().build();
     }

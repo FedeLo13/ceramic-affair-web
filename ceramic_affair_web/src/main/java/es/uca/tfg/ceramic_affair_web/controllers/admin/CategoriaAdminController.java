@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.uca.tfg.ceramic_affair_web.DTOs.CategoriaDTO;
+import es.uca.tfg.ceramic_affair_web.payload.ApiResponseType;
 import es.uca.tfg.ceramic_affair_web.services.CategoriaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -41,25 +42,28 @@ public class CategoriaAdminController {
     @Operation(summary = "Crear una nueva categoría", description = "Crea una nueva categoría con el nombre proporcionado", tags = { "Categorias Admin" })
     @ApiResponses({
         @ApiResponse(responseCode = "201", description = "Categoría creada con éxito"),
+        @ApiResponse(responseCode = "400", description = "Datos inválidos proporcionados"),
         @ApiResponse(responseCode = "409", description = "Categoría ya existente"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<Long> crearCategoria(@Valid @RequestBody CategoriaDTO dto) {
+    public ResponseEntity<ApiResponseType<Long>> crearCategoria(@Valid @RequestBody CategoriaDTO dto) {
         Long id = categoriaService.insertarCategoria(dto.getNombre());
-        return ResponseEntity.status(HttpStatus.CREATED).body(id);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ApiResponseType<>(true, "Categoría creada con éxito", id));
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Modificar una categoría existente", description = "Modifica el nombre de una categoría existente", tags = { "Categorias Admin" })
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Categoría modificada con éxito"),
+        @ApiResponse(responseCode = "400", description = "Datos inválidos proporcionados"),
         @ApiResponse(responseCode = "404", description = "Categoría no encontrada"),
         @ApiResponse(responseCode = "409", description = "Nombre de categoría ya existente"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<Void> modificarCategoria(@PathVariable Long id, @Valid @RequestBody CategoriaDTO dto) {
+    public ResponseEntity<ApiResponseType<Void>> modificarCategoria(@PathVariable Long id, @Valid @RequestBody CategoriaDTO dto) {
         categoriaService.modificarCategoria(id, dto.getNombre());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(new ApiResponseType<>(true, "Categoría modificada con éxito", null));
     }
 
     @DeleteMapping("/{id}")
@@ -69,7 +73,7 @@ public class CategoriaAdminController {
         @ApiResponse(responseCode = "404", description = "Categoría no encontrada"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<Void> eliminarCategoria(@PathVariable Long id) {
+    public ResponseEntity<ApiResponseType<Void>> eliminarCategoria(@PathVariable Long id) {
         categoriaService.eliminarCategoria(id);
         return ResponseEntity.noContent().build();
     }

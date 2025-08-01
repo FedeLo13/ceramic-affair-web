@@ -13,6 +13,7 @@ import es.uca.tfg.ceramic_affair_web.DTOs.ContactoFormDTO;
 import es.uca.tfg.ceramic_affair_web.entities.ContactoForm;
 import es.uca.tfg.ceramic_affair_web.exceptions.EmailException;
 import es.uca.tfg.ceramic_affair_web.exceptions.RecaptchaException;
+import es.uca.tfg.ceramic_affair_web.payload.ApiResponseType;
 import es.uca.tfg.ceramic_affair_web.repositories.ContactoFormRepo;
 import es.uca.tfg.ceramic_affair_web.services.EmailService;
 import es.uca.tfg.ceramic_affair_web.services.RecaptchaService;
@@ -54,7 +55,7 @@ public class ContactoFormController {
         @ApiResponse(responseCode = "400", description = "Error en los datos del formulario o reCAPTCHA inválido"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor o al enviar el correo electrónico")
     })
-    public ResponseEntity<?> enviarFormulario(@Valid @RequestBody ContactoFormDTO dto) {
+    public ResponseEntity<ApiResponseType<String>> enviarFormulario(@Valid @RequestBody ContactoFormDTO dto) {
         // Validar el reCAPTCHA
         boolean isRecaptchaValid = recaptchaService.verifyRecaptcha(dto.getRecaptchaToken());
         if (!isRecaptchaValid) {
@@ -86,7 +87,7 @@ public class ContactoFormController {
         }
 
         // Retornar respuesta exitosa 
-        return ResponseEntity.ok("Formulario enviado correctamente");
+        return ResponseEntity.ok(new ApiResponseType<>(true, "Formulario enviado correctamente", null));
     }
 
 }

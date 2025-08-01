@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.uca.tfg.ceramic_affair_web.entities.Imagen;
+import es.uca.tfg.ceramic_affair_web.payload.ApiResponseType;
 import es.uca.tfg.ceramic_affair_web.services.ImagenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -38,8 +39,8 @@ public class ImagenPublicController {
         @ApiResponse(responseCode = "404", description = "Imagen no encontrada"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<Imagen> obtenerImagen(@PathVariable Long id) {
+    public ResponseEntity<ApiResponseType<Imagen>> obtenerImagen(@PathVariable Long id) {
         Imagen imagen = imagenService.obtenerPorId(id);
-        return ResponseEntity.ok(imagen);
+        return ResponseEntity.ok(new ApiResponseType<>(true, "Imagen encontrada", imagen));
     }
 }
