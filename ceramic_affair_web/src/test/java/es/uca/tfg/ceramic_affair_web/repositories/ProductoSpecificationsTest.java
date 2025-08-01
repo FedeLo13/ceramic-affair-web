@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,13 +44,13 @@ public class ProductoSpecificationsTest {
 
         // Crear productos
         producto1 = new Producto("Jarrón de barro", categoria1, "Un jarrón de barro hecho a mano", 0, 0, 0, BigDecimal.valueOf(12.99), false, null);
-        producto1.setFechaCreacion(LocalDateTime.now().minusDays(3));
+        producto1.setFechaCreacion(LocalDateTime.of(2025, 8, 1, 10, 0, 0));
 
         producto2 = new Producto("Taza de cerámica", categoria2, "Una taza de cerámica pintada a mano", 0, 0, 0, BigDecimal.valueOf(5.49), false, null);
-        producto2.setFechaCreacion(LocalDateTime.now().minusDays(2));
+        producto2.setFechaCreacion(LocalDateTime.of(2025, 8, 2, 10, 0, 0));
 
         producto3 = new Producto("Cuenco de cerámica", categoria1, "Un cuenco de cerámica esmaltado", 0, 0, 0, BigDecimal.valueOf(7.99), false, null);
-        producto3.setFechaCreacion(LocalDateTime.now().minusDays(1));
+        producto3.setFechaCreacion(LocalDateTime.of(2025, 8, 3, 10, 0, 0));
 
         // Guardar categorías y productos en la base de datos
         entityManager.persist(categoria1);
@@ -59,6 +60,12 @@ public class ProductoSpecificationsTest {
         entityManager.persist(producto3);
         entityManager.flush();
     }
+
+    @AfterEach
+    void cleanUp() {
+        productoRepo.deleteAll();
+    }
+
 
     @Test
     @DisplayName("Especificación - Filtrar por categoría")
