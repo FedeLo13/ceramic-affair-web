@@ -82,6 +82,11 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- Dependencia de Spring Boot Validation (validación de datos) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
 		<!-- Dependencia de JUnit 5 (API para testing) -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
