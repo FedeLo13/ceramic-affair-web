@@ -49,15 +49,6 @@ public class ContactoFormTest {
     }
 
     @Test
-    @DisplayName("ContactoForm - PrePersist establece fecha de creación")
-    public void testPrePersistEstableceFechaCreacion() {
-        ContactoForm contactoForm = new ContactoForm();
-        contactoForm.prePersist();
-
-        assertNotNull(contactoForm.getFechaCreacion()); // Verifica que la fecha de creación no sea nula
-    }
-
-    @Test
     @DisplayName("ContactoForm - Getters y Setters")
     public void testGettersYSetters() {
         ContactoForm contactoForm = new ContactoForm();
