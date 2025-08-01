@@ -2,10 +2,12 @@ package es.uca.tfg.ceramic_affair_web.entities;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
+import jakarta.persistence.Lob;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
@@ -34,8 +36,11 @@ public class ContactoForm {
     private String asunto;
 
     @Column(columnDefinition = "TEXT")
+    @Lob
     private String mensaje;
 
+    @Column(nullable = false)
+    @CreationTimestamp
     private LocalDateTime fechaCreacion;
 
     /**
@@ -185,10 +190,5 @@ public class ContactoForm {
      */
     public void setMensaje(String mensaje) {
         this.mensaje = mensaje;
-    }
-
-    @PrePersist
-    public void prePersist() {
-        this.fechaCreacion = LocalDateTime.now();
     }
 }
