@@ -3,7 +3,6 @@ package es.uca.tfg.ceramic_affair_web.controllers;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import java.util.Optional;
@@ -79,7 +78,9 @@ public class LoginControllerTest {
                 .contentType("application/json")
                 .content(jsonBody))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.token").value("mocked-jwt-token"));
+            .andExpect(jsonPath("success").value(true))
+            .andExpect(jsonPath("message").value("Inicio de sesión exitoso"))
+            .andExpect(jsonPath("data.token").value("mocked-jwt-token"));
     }
 
     @Test
@@ -98,7 +99,10 @@ public class LoginControllerTest {
                 .contentType("application/json")
                 .content(jsonBody))
             .andExpect(status().isUnauthorized())
-            .andExpect(content().string("Credenciales inválidas"));
+            .andExpect(jsonPath("$.status").value(401))
+            .andExpect(jsonPath("$.error").value("Excepción de estado de respuesta"))
+            .andExpect(jsonPath("$.message").value("Credenciales inválidas"))
+            .andExpect(jsonPath("$.path").value("/api/public/login/login"));
     }
 
     // Configuración para desactivar la seguridad correctamente

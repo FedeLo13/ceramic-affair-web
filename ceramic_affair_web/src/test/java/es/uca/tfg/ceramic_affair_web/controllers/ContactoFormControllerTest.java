@@ -5,7 +5,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -70,7 +70,9 @@ public class ContactoFormControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
             .andExpect(status().isOk())
-            .andExpect(content().string("Formulario enviado correctamente"));
+            .andExpect(jsonPath("$.success").value(true))
+            .andExpect(jsonPath("$.message").value("Formulario enviado correctamente"))
+            .andExpect(jsonPath("$.data").doesNotExist());
     }
 
     @Test
@@ -91,7 +93,10 @@ public class ContactoFormControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
             .andExpect(status().isBadRequest())
-            .andExpect(content().string("El token de reCAPTCHA es inválido o ha expirado. Por favor, inténtelo de nuevo."));
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.error").value("reCAPTCHA inválido"))
+            .andExpect(jsonPath("$.message").value("El token de reCAPTCHA es inválido o ha expirado. Por favor, inténtelo de nuevo."))
+            .andExpect(jsonPath("$.path").value("/api/public/contacto/enviar"));
     }
 
     @Test
@@ -114,7 +119,10 @@ public class ContactoFormControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
             .andExpect(status().isInternalServerError())
-            .andExpect(content().string("Error al enviar el correo electrónico"));
+            .andExpect(jsonPath("$.status").value(500))
+            .andExpect(jsonPath("$.error").value("Error al enviar el correo electrónico"))
+            .andExpect(jsonPath("$.message").value("Error al enviar el correo electrónico"))
+            .andExpect(jsonPath("$.path").value("/api/public/contacto/enviar"));
     }
 
     @TestConfiguration

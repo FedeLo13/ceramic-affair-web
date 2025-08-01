@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -90,8 +89,10 @@ public class ProductoControllerTest {
             .contentType("application/json")
             .content(jsonBody))
             .andExpect(status().isCreated())
-            .andExpect(content().string("1"));
-    }   
+            .andExpect(jsonPath("$.success").value(true))
+            .andExpect(jsonPath("$.message").value("Producto creado con éxito"))
+            .andExpect(jsonPath("$.data").value(1L));
+    }
 
     @Test
     @DisplayName("Controlador - Obtener producto por ID")
@@ -107,14 +108,17 @@ public class ProductoControllerTest {
         // Realizar la petición GET al endpoint de obtención de producto por ID
         mockMvc.perform(get("/api/public/productos/{id}", id))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.nombre").value(producto.getNombre()))
-                .andExpect(jsonPath("$.idCategoria").value(producto.getCategoria().getId()))
-                .andExpect(jsonPath("$.descripcion").value(producto.getDescripcion()))
-                .andExpect(jsonPath("$.precio").value(producto.getPrecio().doubleValue()))
-                .andExpect(jsonPath("$.altura").value(producto.getAltura()))
-                .andExpect(jsonPath("$.anchura").value(producto.getAnchura()))
-                .andExpect(jsonPath("$.diametro").value(producto.getDiametro()))
-                .andExpect(jsonPath("$.soldOut").value(producto.isSoldOut()));
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Producto encontrado"))
+                .andExpect(jsonPath("$.data.id").value(producto.getId()))
+                .andExpect(jsonPath("$.data.nombre").value(producto.getNombre()))
+                .andExpect(jsonPath("$.data.idCategoria").value(producto.getCategoria().getId()))
+                .andExpect(jsonPath("$.data.descripcion").value(producto.getDescripcion()))
+                .andExpect(jsonPath("$.data.precio").value(producto.getPrecio().doubleValue()))
+                .andExpect(jsonPath("$.data.altura").value(producto.getAltura()))
+                .andExpect(jsonPath("$.data.anchura").value(producto.getAnchura()))
+                .andExpect(jsonPath("$.data.diametro").value(producto.getDiametro()))
+                .andExpect(jsonPath("$.data.soldOut").value(producto.isSoldOut()));
     }
 
     @Test
@@ -154,18 +158,20 @@ public class ProductoControllerTest {
         // Realizar la petición GET al endpoint de filtrado de productos
         mockMvc.perform(get("/api/public/productos/filtrar"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].nombre").value("Taza"))
-                .andExpect(jsonPath("$[0].descripcion").value("Taza de cerámica"))
-                .andExpect(jsonPath("$[0].precio").value(10.00))
-                .andExpect(jsonPath("$[0].soldOut").value(false))
-                .andExpect(jsonPath("$[0].idCategoria").value(categoria.getId()))
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Lista de productos encontrada"))
+                .andExpect(jsonPath("$.data.length()").value(2))
+                .andExpect(jsonPath("$.data[0].nombre").value("Taza"))
+                .andExpect(jsonPath("$.data[0].descripcion").value("Taza de cerámica"))
+                .andExpect(jsonPath("$.data[0].precio").value(10.00))
+                .andExpect(jsonPath("$.data[0].soldOut").value(false))
+                .andExpect(jsonPath("$.data[0].idCategoria").value(categoria.getId()))
 
-                .andExpect(jsonPath("$[1].nombre").value("Plato"))
-                .andExpect(jsonPath("$[1].descripcion").value("Plato de cerámica"))
-                .andExpect(jsonPath("$[1].precio").value(15.00))
-                .andExpect(jsonPath("$[1].soldOut").value(false))
-                .andExpect(jsonPath("$[1].idCategoria").value(categoria.getId()));
+                .andExpect(jsonPath("$.data[1].nombre").value("Plato"))
+                .andExpect(jsonPath("$.data[1].descripcion").value("Plato de cerámica"))
+                .andExpect(jsonPath("$.data[1].precio").value(15.00))
+                .andExpect(jsonPath("$.data[1].soldOut").value(false))
+                .andExpect(jsonPath("$.data[1].idCategoria").value(categoria.getId()));
     }
 
     @Test
@@ -196,7 +202,10 @@ public class ProductoControllerTest {
         mockMvc.perform(put("/api/admin/productos/{id}", id)
                 .contentType("application/json")
                 .content(jsonBody))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Producto actualizado con éxito"))
+                .andExpect(jsonPath("$.data").doesNotExist());
     }
 
     @Test
@@ -216,7 +225,10 @@ public class ProductoControllerTest {
         mockMvc.perform(patch("/api/admin/productos/{id}/stock", id)
                 .contentType("application/json")
                 .content(jsonBody))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Stock del producto actualizado con éxito"))
+                .andExpect(jsonPath("$.data").doesNotExist());
     }
 
     @Test
@@ -268,18 +280,20 @@ public class ProductoControllerTest {
         // Realizar la petición GET al endpoint de obtención de todos los productos
         mockMvc.perform(get("/api/public/productos/todos"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].nombre").value("Taza"))
-                .andExpect(jsonPath("$[0].descripcion").value("Taza de cerámica"))
-                .andExpect(jsonPath("$[0].precio").value(10.00))
-                .andExpect(jsonPath("$[0].soldOut").value(false))
-                .andExpect(jsonPath("$[0].idCategoria").value(categoria.getId()))
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Lista de productos encontrada"))
+                .andExpect(jsonPath("$.data.length()").value(2))
+                .andExpect(jsonPath("$.data[0].nombre").value("Taza"))
+                .andExpect(jsonPath("$.data[0].descripcion").value("Taza de cerámica"))
+                .andExpect(jsonPath("$.data[0].precio").value(10.00))
+                .andExpect(jsonPath("$.data[0].soldOut").value(false))
+                .andExpect(jsonPath("$.data[0].idCategoria").value(categoria.getId()))
 
-                .andExpect(jsonPath("$[1].nombre").value("Plato"))
-                .andExpect(jsonPath("$[1].descripcion").value("Plato de cerámica"))
-                .andExpect(jsonPath("$[1].precio").value(15.00))
-                .andExpect(jsonPath("$[1].soldOut").value(false))
-                .andExpect(jsonPath("$[1].idCategoria").value(categoria.getId()));
+                .andExpect(jsonPath("$.data[1].nombre").value("Plato"))
+                .andExpect(jsonPath("$.data[1].descripcion").value("Plato de cerámica"))
+                .andExpect(jsonPath("$.data[1].precio").value(15.00))
+                .andExpect(jsonPath("$.data[1].soldOut").value(false))
+                .andExpect(jsonPath("$.data[1].idCategoria").value(categoria.getId()));
     }
 
     @Test
@@ -292,7 +306,10 @@ public class ProductoControllerTest {
         // Realizar la petición GET al endpoint de obtención de producto por ID
         mockMvc.perform(get("/api/public/productos/{id}", id))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("Producto no encontrado con id: " + id));
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.error").value("Excepción de negocio"))
+                .andExpect(jsonPath("$.message").value("Producto no encontrado con id: " + id))
+                .andExpect(jsonPath("$.path").value("/api/public/productos/" + id));
     }
 
     @Test
@@ -324,7 +341,10 @@ public class ProductoControllerTest {
                 .contentType("application/json")
                 .content(jsonBody))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("Producto no encontrado con id: " + id));
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.error").value("Excepción de negocio"))
+                .andExpect(jsonPath("$.message").value("Producto no encontrado con id: " + id))
+                .andExpect(jsonPath("$.path").value("/api/admin/productos/" + id));
 
     }
 
@@ -346,7 +366,10 @@ public class ProductoControllerTest {
                 .contentType("application/json")
                 .content(jsonBody))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("Producto no encontrado con id: " + id));
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.error").value("Excepción de negocio"))
+                .andExpect(jsonPath("$.message").value("Producto no encontrado con id: " + id))
+                .andExpect(jsonPath("$.path").value("/api/admin/productos/" + id + "/stock"));
     }
 
     @Test
@@ -359,6 +382,9 @@ public class ProductoControllerTest {
         // Realizar la petición DELETE al endpoint de eliminación de producto
         mockMvc.perform(delete("/api/admin/productos/{id}", id))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("Producto no encontrado con id: " + id));
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.error").value("Excepción de negocio"))
+                .andExpect(jsonPath("$.message").value("Producto no encontrado con id: " + id))
+                .andExpect(jsonPath("$.path").value("/api/admin/productos/" + id));
     }
 }

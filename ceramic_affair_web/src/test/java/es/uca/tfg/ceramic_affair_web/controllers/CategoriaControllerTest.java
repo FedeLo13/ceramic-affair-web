@@ -66,7 +66,9 @@ public class CategoriaControllerTest {
             .contentType("application/json")
             .content(jsonBody))
             .andExpect(status().isCreated())
-            .andExpect(content().string("42"));
+            .andExpect(jsonPath("$.success").value(true))
+            .andExpect(jsonPath("$.message").value("Categoría creada con éxito"))
+            .andExpect(jsonPath("$.data").value(42));
     }
 
     @Test
@@ -81,7 +83,9 @@ public class CategoriaControllerTest {
         // Realizar la petición GET al endpoint de obtención de categoría por ID
         mockMvc.perform(get("/api/public/categorias/{id}", id))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.nombre").value(categoria.getNombre()));
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Categoría encontrada"))
+                .andExpect(jsonPath("$.data.nombre").value(categoria.getNombre()));
     }
 
     @Test
@@ -130,8 +134,11 @@ public class CategoriaControllerTest {
         // Realizar la petición GET al endpoint de obtención de todas las categorías
         mockMvc.perform(get("/api/public/categorias/todas"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].nombre").value("Cerámica"))
-                .andExpect(jsonPath("$[1].nombre").value("Porcelana"));
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Lista de categorías encontrada"))
+                .andExpect(jsonPath("$.data").isArray())
+                .andExpect(jsonPath("$.data[0].nombre").value("Cerámica"))
+                .andExpect(jsonPath("$.data[1].nombre").value("Porcelana"));
     }
 
     @Test
@@ -153,7 +160,10 @@ public class CategoriaControllerTest {
             .contentType("application/json")
             .content(jsonBody))
             .andExpect(status().isConflict())
-            .andExpect(content().string("Ya existe una categoría con el nombre: Cerámica"));
+            .andExpect(jsonPath("$.status").value(409))
+            .andExpect(jsonPath("$.error").value("Excepción de negocio"))
+            .andExpect(jsonPath("$.message").value("Ya existe una categoría con el nombre: Cerámica"))
+            .andExpect(jsonPath("$.path").value("/api/admin/categorias/crear"));
     }
 
     @Test
@@ -162,12 +172,15 @@ public class CategoriaControllerTest {
         // Simular la obtención de una categoría por ID que no existe
         Long id = 999L;
         when(categoriaService.obtenerPorId(id))
-            .thenThrow(new CategoriaException.NoEncontrada("Categoría no encontrada"));
+            .thenThrow(new CategoriaException.NoEncontrada(id));
 
         // Realizar la petición GET al endpoint de obtención de categoría por ID
         mockMvc.perform(get("/api/public/categorias/{id}", id))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("Categoría no encontrada"));
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.error").value("Excepción de negocio"))
+                .andExpect(jsonPath("$.message").value("Categoría no encontrada con ID: 999"))
+                .andExpect(jsonPath("$.path").value("/api/public/categorias/999"));
     }
 
     @Test
@@ -181,7 +194,10 @@ public class CategoriaControllerTest {
         // Realizar la petición DELETE al endpoint de eliminación de categoría
         mockMvc.perform(delete("/api/admin/categorias/{id}", id))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("Categoría no encontrada"));
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.error").value("Excepción de negocio"))
+                .andExpect(jsonPath("$.message").value("Categoría no encontrada"))
+                .andExpect(jsonPath("$.path").value("/api/admin/categorias/999"));
     }
 
     @Test
@@ -189,7 +205,7 @@ public class CategoriaControllerTest {
     void testModificarCategoriaNoEncontrada() throws Exception {
         // Simular la modificación de una categoría que no existe
         Long id = 999L;
-        doThrow(new CategoriaException.NoEncontrada("Categoría no encontrada"))
+        doThrow(new CategoriaException.NoEncontrada(id))
             .when(categoriaService).modificarCategoria(id, "Cerámica Moderna");
 
         // Crear el JSON que representa el cuerpo de la petición
@@ -204,7 +220,10 @@ public class CategoriaControllerTest {
             .contentType("application/json")
             .content(jsonBody))
             .andExpect(status().isNotFound())
-            .andExpect(content().string("Categoría no encontrada"));
+            .andExpect(jsonPath("$.status").value(404))
+            .andExpect(jsonPath("$.error").value("Excepción de negocio"))
+            .andExpect(jsonPath("$.message").value("Categoría no encontrada con ID: 999"))
+            .andExpect(jsonPath("$.path").value("/api/admin/categorias/999"));
     }
 
     @Test
@@ -227,6 +246,9 @@ public class CategoriaControllerTest {
             .contentType("application/json")
             .content(jsonBody))
             .andExpect(status().isConflict())
-            .andExpect(content().string("Ya existe una categoría con el nombre: Cerámica Moderna"));
+            .andExpect(jsonPath("$.status").value(409))
+            .andExpect(jsonPath("$.error").value("Excepción de negocio"))
+            .andExpect(jsonPath("$.message").value("Ya existe una categoría con el nombre: Cerámica Moderna"))
+            .andExpect(jsonPath("$.path").value("/api/admin/categorias/1"));
     }
 }
