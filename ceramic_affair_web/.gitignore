@@ -35,3 +35,6 @@ build/
 ### Upload directory ###
 /uploads-test/
 /uploads/
+
+### Logs ###
+logs/
