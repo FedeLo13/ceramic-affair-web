@@ -44,20 +44,26 @@ public class ProductoSpecificationsTest {
 
         // Crear productos
         producto1 = new Producto("Jarrón de barro", categoria1, "Un jarrón de barro hecho a mano", 0, 0, 0, BigDecimal.valueOf(12.99), false, null);
-        producto1.setFechaCreacion(LocalDateTime.of(2025, 8, 1, 10, 0, 0));
-
         producto2 = new Producto("Taza de cerámica", categoria2, "Una taza de cerámica pintada a mano", 0, 0, 0, BigDecimal.valueOf(5.49), false, null);
-        producto2.setFechaCreacion(LocalDateTime.of(2025, 8, 2, 10, 0, 0));
-
         producto3 = new Producto("Cuenco de cerámica", categoria1, "Un cuenco de cerámica esmaltado", 0, 0, 0, BigDecimal.valueOf(7.99), false, null);
-        producto3.setFechaCreacion(LocalDateTime.of(2025, 8, 3, 10, 0, 0));
-
+        
         // Guardar categorías y productos en la base de datos
         entityManager.persist(categoria1);
         entityManager.persist(categoria2);
         entityManager.persist(producto1);
         entityManager.persist(producto2);
         entityManager.persist(producto3);
+        entityManager.flush();
+        entityManager.clear();
+
+        //Sobreescribir manualmente la fecha de creación para asegurar consistencia
+        producto1.setFechaCreacion(LocalDateTime.of(2025, 8, 1, 10, 0, 0));
+        producto2.setFechaCreacion(LocalDateTime.of(2025, 8, 2, 10, 0, 0));
+        producto3.setFechaCreacion(LocalDateTime.of(2025, 8, 3, 10, 0, 0));
+
+        entityManager.merge(producto1);
+        entityManager.merge(producto2);
+        entityManager.merge(producto3);
         entityManager.flush();
     }
 
@@ -85,8 +91,7 @@ public class ProductoSpecificationsTest {
     void testFiltrarEnStock() {
         // Crear un producto en stock
         producto2.setSoldOut(true);
-        entityManager.persist(producto2);
-        entityManager.flush();
+        productoRepo.save(producto2);
 
         // Filtrar productos en stock
         Specification<Producto> spec = ProductoSpecifications.enStock(true);
