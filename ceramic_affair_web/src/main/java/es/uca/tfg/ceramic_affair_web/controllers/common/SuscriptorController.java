@@ -105,7 +105,7 @@ public class SuscriptorController {
         @ApiResponse(responseCode = "410", description = "Token de verificación expirado"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<ApiResponseType<String>> verificarSuscriptor(@RequestParam String token) {
+    public ResponseEntity<ApiResponseType<Void>> verificarSuscriptor(@RequestParam String token) {
         // Buscar el suscriptor por el token de verificación
         Optional<Suscriptor> optionalSuscriptor = suscriptorRepo.findByTokenVerificacion(token);
 

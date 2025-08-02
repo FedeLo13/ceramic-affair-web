@@ -55,7 +55,7 @@ public class ContactoFormController {
         @ApiResponse(responseCode = "400", description = "Error en los datos del formulario o reCAPTCHA inválido"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor o al enviar el correo electrónico")
     })
-    public ResponseEntity<ApiResponseType<String>> enviarFormulario(@Valid @RequestBody ContactoFormDTO dto) {
+    public ResponseEntity<ApiResponseType<Void>> enviarFormulario(@Valid @RequestBody ContactoFormDTO dto) {
         // Validar el reCAPTCHA
         boolean isRecaptchaValid = recaptchaService.verifyRecaptcha(dto.getRecaptchaToken());
         if (!isRecaptchaValid) {

@@ -83,7 +83,7 @@ public class NewsletterControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value("Newsletter enviada correctamente"))
-                .andExpect(jsonPath("$.data").isEmpty());
+                .andExpect(jsonPath("$.data").value("Newsletter enviada a 2 suscriptores."));
 
         // Verificar que se guardó la newsletter en la base de datos
         ArgumentCaptor<Newsletter> newsletterCaptor = ArgumentCaptor.forClass(Newsletter.class);

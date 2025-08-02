@@ -65,6 +65,6 @@ public class NewsletterController {
             emailService.sendEmail(suscriptor.getEmail(), newsletterDTO.getAsunto(), newsletterDTO.getMensaje());
         }
 
-        return ResponseEntity.ok(new ApiResponseType<>(true, "Newsletter enviada correctamente", null));
+        return ResponseEntity.ok(new ApiResponseType<>(true, "Newsletter enviada correctamente", "Newsletter enviada a " + suscriptores.size() + " suscriptores."));
     }
 }
