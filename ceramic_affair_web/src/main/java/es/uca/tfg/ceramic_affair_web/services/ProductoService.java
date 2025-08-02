@@ -149,6 +149,7 @@ public class ProductoService {
      * Método para eliminar un producto
      * 
      * @param id el id del producto a eliminar
+     * @throws ProductoException.NoEncontrado si no se encuentra el producto
      */
     public void eliminarProducto(Long id) {
         Producto producto = productoRepo.findById(id)
