@@ -19,11 +19,11 @@ export interface ProductoInputDTO {
   descripcion: string;
   precio: number;
   soldOut?: boolean;
-  categoriaId: number;
+  idCategoria: number;
   altura: number;
   anchura: number;
   diametro: number;
-  imagenes: number[];
+  idsImagenes: number[]; // IDs de las imágenes asociadas
 }
 
 export interface ProductoOutputDTO {
@@ -32,12 +32,12 @@ export interface ProductoOutputDTO {
   descripcion: string;
   precio: number;
   soldOut?: boolean;
-  categoriaId: number;
-  categoriaNombre: string;
+  idCategoria: number;
+  nombreCategoria: string;
   altura: number;
   anchura: number;
   diametro: number;
-  imagenes: number[];
+  idsImagenes: number[];
 }
 
 export interface ProductoStockDTO {

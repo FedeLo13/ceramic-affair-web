@@ -4,5 +4,5 @@ export interface ContactoFormDTO {
     email: string;
     asunto: string;
     mensaje: string;
-    recaptcha: string;
+    recaptchaToken: string;
 }
