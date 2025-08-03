@@ -62,7 +62,18 @@ public class NewsletterController {
 
         // Enviar la newsletter a cada suscriptor
         for (Suscriptor suscriptor : suscriptores) {
-            emailService.sendEmail(suscriptor.getEmail(), newsletterDTO.getAsunto(), newsletterDTO.getMensaje());
+            String enlaceDesuscripcion = "http://localhost:8080/api/public/suscriptores/desuscribir?token=" + suscriptor.getTokenDesuscripcion();
+
+            String mensaje = "<html><body>"
+                + "<div>" + newsletterDTO.getMensaje() + "</div>"
+                + "<hr>"
+                + "<p style='font-size:12px;color:gray;'>"
+                + "Si no deseas recibir más newsletters, "
+                + "<a href=\"" + enlaceDesuscripcion + "\">haz clic aquí para darte de baja</a>."
+                + "</p>"
+                + "</body></html>";
+            
+            emailService.sendEmail(suscriptor.getEmail(), newsletterDTO.getAsunto(), mensaje);
         }
 
         return ResponseEntity.ok(new ApiResponseType<>(true, "Newsletter enviada correctamente", "Newsletter enviada a " + suscriptores.size() + " suscriptores."));

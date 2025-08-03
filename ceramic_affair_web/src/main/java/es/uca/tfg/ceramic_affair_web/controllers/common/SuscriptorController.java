@@ -121,10 +121,32 @@ public class SuscriptorController {
         }
 
         // Verificar el suscriptor
-        suscriptor.verificar();
+        suscriptor.verificar(); // Establece el suscriptor como verificado y genera un token de desuscripción
         suscriptorRepo.save(suscriptor);
         //TODO : Hacer que redirija a una página de éxito o similar
         return ResponseEntity.ok(new ApiResponseType<>(true, "Suscriptor verificado correctamente", null));
+    }
+
+    @GetMapping("/desuscribir")
+    @Operation(summary = "Desuscribir un suscriptor", description = "Desuscribe a un suscriptor a partir de su token", tags = { "Suscriptores" })
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Suscriptor desuscrito correctamente"),
+        @ApiResponse(responseCode = "404", description = "Suscriptor no encontrado"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    public ResponseEntity<ApiResponseType<Void>> desuscribirSuscriptor(@RequestParam String token) {
+        // Buscar el suscriptor por el token de desuscripción
+        Optional<Suscriptor> optionalSuscriptor = suscriptorRepo.findByTokenDesuscripcion(token);
+
+        // Si no se encuentra el suscriptor, lanzar una excepción
+        if (optionalSuscriptor.isEmpty()) {
+            throw new SuscriptorException.NoEncontrado();
+        }
+
+        // Desuscribir al suscriptor
+        suscriptorRepo.delete(optionalSuscriptor.get());
+        // TODO : Hacer que redirija a una página de éxito o similar
+        return ResponseEntity.ok(new ApiResponseType<>(true, "Suscriptor desuscrito correctamente", null));
     }
 
     private void enviarCorreoVerificacion(Suscriptor suscriptor) {

@@ -30,6 +30,9 @@ public class Suscriptor {
     @Column(unique = true)
     private String tokenVerificacion;
 
+    @Column(nullable = true)
+    private String tokenDesuscripcion;
+
     @Column(nullable = false)
     private LocalDateTime fechaCreacionToken;
 
@@ -50,6 +53,7 @@ public class Suscriptor {
     public Suscriptor(String email) {
         this.email = email;
         this.verificado = false;
+        this.tokenDesuscripcion = null;
         generarNuevoTokenVerificacion();
     }
 
@@ -99,6 +103,15 @@ public class Suscriptor {
     }
 
     /**
+     * Método para obtener el token de desuscripción del suscriptor.
+     * 
+     * @return el token de desuscripción del suscriptor
+     */
+    public String getTokenDesuscripcion() {
+        return tokenDesuscripcion;
+    }
+
+    /**
      * Método para obtener la fecha de creación del token de verificación del suscriptor.
      * 
      * @return la fecha de creación del token de verificación del suscriptor
@@ -144,6 +157,15 @@ public class Suscriptor {
     }
 
     /**
+     * Método para establecer el token de desuscripción del suscriptor.
+     * 
+     * @param tokenDesuscripcion el nuevo token de desuscripción del suscriptor
+     */
+    public void setTokenDesuscripcion(String tokenDesuscripcion) {
+        this.tokenDesuscripcion = tokenDesuscripcion;
+    }
+
+    /**
      * Método para establecer la fecha de creación del suscriptor.
      * 
      * @param fechaCreacion la nueva fecha de creación del suscriptor
@@ -166,6 +188,7 @@ public class Suscriptor {
      */
     public void verificar() {
         this.verificado = true;
+        this.tokenDesuscripcion = UUID.randomUUID().toString(); // Generar un nuevo token de desuscripción
     }
 
     /**

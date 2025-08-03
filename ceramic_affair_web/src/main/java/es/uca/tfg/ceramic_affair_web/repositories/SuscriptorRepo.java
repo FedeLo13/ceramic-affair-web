@@ -27,6 +27,14 @@ public interface SuscriptorRepo extends JpaRepository<Suscriptor, Long> {
     Optional<Suscriptor> findByTokenVerificacion(String tokenVerificacion);
 
     /**
+     * Busca un suscriptor por su token de desuscripción.
+     * 
+     * @param tokenDesuscripcion El token de desuscripción del suscriptor.
+     * @return Un Optional que contiene el suscriptor si se encuentra, o vacío si no existe.
+     */
+    Optional<Suscriptor> findByTokenDesuscripcion(String tokenDesuscripcion);
+
+    /**
      * Busca un suscriptor por su correo electrónico.
      * 
      * @param email El correo electrónico del suscriptor.
