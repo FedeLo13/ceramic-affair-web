@@ -68,6 +68,20 @@ public class SuscriptorRepoTest {
     }
 
     @Test
+    @DisplayName("Repositorio - Buscar suscriptor por token de desuscripción")
+    void testBuscarSuscriptorPorTokenDesuscripcion() {
+        // Crear y guardar un nuevo suscriptor con un token de desuscripción
+        Suscriptor suscriptor = new Suscriptor("test@example.com");
+        suscriptor.setTokenDesuscripcion("tokenDesuscripcion");
+        suscriptorRepo.save(suscriptor);
+
+        // Buscar el suscriptor por el token de desuscripción
+        Optional<Suscriptor> suscriptorEncontrado = suscriptorRepo.findByTokenDesuscripcion("tokenDesuscripcion");
+        assertTrue(suscriptorEncontrado.isPresent());
+        assertEquals(suscriptor.getEmail(), suscriptorEncontrado.get().getEmail());
+    }
+
+    @Test
     @DisplayName("Repositorio - Buscar suscriptor por email")
     void testBuscarSuscriptorPorEmail() {
         // Crear y guardar un nuevo suscriptor

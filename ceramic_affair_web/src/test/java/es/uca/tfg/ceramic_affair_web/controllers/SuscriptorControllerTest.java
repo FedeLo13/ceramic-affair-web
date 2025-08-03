@@ -181,6 +181,39 @@ public class SuscriptorControllerTest {
     }
 
     @Test
+    @DisplayName("Controlador - Desuscribir un suscriptor")
+    void testDesuscribirSuscriptor() throws Exception {
+        Suscriptor suscriptor = new Suscriptor("test@example.com");
+        suscriptor.setTokenDesuscripcion("desuscripcion-token");
+
+        when(suscriptorRepo.findByTokenDesuscripcion("desuscripcion-token")).thenReturn(Optional.of(suscriptor));
+
+        mockMvc.perform(get("/api/public/suscriptores/desuscribir")
+                    .param("token", "desuscripcion-token"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Suscriptor desuscrito correctamente"))
+                .andExpect(jsonPath("$.data").doesNotExist());
+
+        // Verificar que el suscriptor fue eliminado
+        verify(suscriptorRepo).delete(suscriptor);
+    }
+
+    @Test
+    @DisplayName("Controlador - Desuscribir un suscriptor con token no encontrado")
+    void testDesuscribirSuscriptorConTokenNoEncontrado() throws Exception {
+        when(suscriptorRepo.findByTokenDesuscripcion("invalid-token")).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/api/public/suscriptores/desuscribir")
+                    .param("token", "invalid-token"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.error").value("Excepción de negocio"))
+                .andExpect(jsonPath("$.message").value("Suscriptor no encontrado"))
+                .andExpect(jsonPath("$.path").value("/api/public/suscriptores/desuscribir"));
+    }
+
+    @Test
     @DisplayName("Controlador - Verificar un suscriptor con token válido")
     void testVerificarSuscriptorConTokenValido() throws Exception {
         Suscriptor suscriptor = new Suscriptor("test@example.com");

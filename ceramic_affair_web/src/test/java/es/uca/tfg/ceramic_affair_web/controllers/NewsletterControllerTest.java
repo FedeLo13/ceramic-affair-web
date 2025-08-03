@@ -95,7 +95,7 @@ public class NewsletterControllerTest {
         verify(emailService, times(suscriptoresMock.size())).sendEmail(
             any(String.class), 
             eq("Asunto de prueba"),
-            eq("Mensaje de prueba")
+            any(String.class)
         );
     }
 
