@@ -1,5 +1,5 @@
 import { handleFetch } from "./utils";
-import type { Producto, ProductoInputDTO, ProductoStockDTO } from "../types/producto.types";
+import type { ProductoInputDTO, ProductoOutputDTO, ProductoStockDTO } from "../types/producto.types";
 import type { PageResponse } from "./page.response";
 
 const API_PUBLIC = 'http://localhost:8080/api/public/productos';
@@ -9,16 +9,16 @@ const API_ADMIN = 'http://localhost:8080/api/admin/productos';
 
 //------------------ PÚBLICOS ------------------//
 
-export const getProductoById = async (id: number): Promise<Producto> => {
+export const getProductoById = async (id: number): Promise<ProductoOutputDTO> => {
     const response = await fetch(`${API_PUBLIC}/${id}`);
 
-    return await handleFetch<Producto>(response, 'Error al obtener el producto por ID');
+    return await handleFetch<ProductoOutputDTO>(response, 'Error al obtener el producto por ID');
 };
 
-export const getAllProductos = async (page = 0, size = 10): Promise<PageResponse<Producto>> => {
+export const getAllProductos = async (page = 0, size = 10): Promise<PageResponse<ProductoOutputDTO>> => {
     const response = await fetch(`${API_PUBLIC}/todos?page=${page}&size=${size}`);
 
-    return await handleFetch<PageResponse<Producto>>(response, 'Error al obtener todos los productos');
+    return await handleFetch<PageResponse<ProductoOutputDTO>>(response, 'Error al obtener todos los productos');
 };
 
 export interface FilterProductosParams {
@@ -28,7 +28,7 @@ export interface FilterProductosParams {
     orden?: 'viejos' | 'nuevos'; // Ordenamiento por fecha de creación
 }
 
-export const filterProductos = async (params:FilterProductosParams & {page?: number, size?: number}): Promise<PageResponse<Producto>> => {
+export const filterProductos = async (params:FilterProductosParams & {page?: number, size?: number}): Promise<PageResponse<ProductoOutputDTO>> => {
     const query = new URLSearchParams();
 
     if (params.nombre) query.append('nombre', params.nombre);
@@ -40,7 +40,7 @@ export const filterProductos = async (params:FilterProductosParams & {page?: num
 
     const response = await fetch(`${API_PUBLIC}/filtrar?${query.toString()}`);
 
-    return await handleFetch<PageResponse<Producto>>(response, 'Error al filtrar productos');
+    return await handleFetch<PageResponse<ProductoOutputDTO>>(response, 'Error al filtrar productos');
 }
 
 //------------------ ADMINISTRATIVOS ------------------//
