@@ -33,6 +33,7 @@ export interface ProductoOutputDTO {
   precio: number;
   soldOut?: boolean;
   categoriaId: number;
+  categoriaNombre: string;
   altura: number;
   anchura: number;
   diametro: number;

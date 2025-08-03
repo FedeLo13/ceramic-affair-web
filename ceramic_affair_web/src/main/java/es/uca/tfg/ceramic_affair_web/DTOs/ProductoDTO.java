@@ -19,6 +19,8 @@ public class ProductoDTO {
 
     private Long idCategoria;
 
+    private String nombreCategoria;
+
     private String descripcion;
 
     @NotNull(message = "La altura del producto es obligatoria")
@@ -47,11 +49,12 @@ public class ProductoDTO {
     }
 
     // Constructor para crear un ProductoDTO con ID, usar este constructor para crear un productoDTO a partir de un Producto existente
-    public ProductoDTO(Long id, String nombre, Long idCategoria, String descripcion, float altura, float anchura,
+    public ProductoDTO(Long id, String nombre, Long idCategoria, String nombreCategoria, String descripcion, float altura, float anchura,
                        float diametro, BigDecimal precio, Boolean soldOut, List<Long> idsImagenes) {
         this.id = id;
         this.nombre = nombre;
         this.idCategoria = idCategoria;
+        this.nombreCategoria = nombreCategoria;
         this.descripcion = descripcion;
         this.altura = altura;
         this.anchura = anchura;
@@ -63,11 +66,12 @@ public class ProductoDTO {
 
     // Constructor para crear un ProductoDTO sin ID, usar este constructor para crear un productoDTO nuevo con el objetivo
     // de insertar un nuevo producto en la base de datos
-    public ProductoDTO(String nombre, Long idCategoria, String descripcion, float altura, float anchura,
+    public ProductoDTO(String nombre, Long idCategoria, String nombreCategoria, String descripcion, float altura, float anchura,
                        float diametro, BigDecimal precio, Boolean soldOut, List<Long> idsImagenes) {
         this.id = null; // ID se asignará automáticamente al crear el producto (usar el otro constructor para crear un productoDTO con ID)
         this.nombre = nombre;
         this.idCategoria = idCategoria;
+        this.nombreCategoria = nombreCategoria;
         this.descripcion = descripcion;
         this.altura = altura;
         this.anchura = anchura;
@@ -101,6 +105,14 @@ public class ProductoDTO {
 
     public void setIdCategoria(Long idCategoria) {
         this.idCategoria = idCategoria;
+    }
+
+    public String getNombreCategoria() {
+        return nombreCategoria;
+    }
+
+    public void setNombreCategoria(String nombreCategoria) {
+        this.nombreCategoria = nombreCategoria;
     }
 
     public String getDescripcion() {

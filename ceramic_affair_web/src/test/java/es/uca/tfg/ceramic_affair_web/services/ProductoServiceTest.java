@@ -75,7 +75,7 @@ public class ProductoServiceTest {
         Categoria categoria = categoriaRepo.save(new Categoria("Cerámica"));
         Imagen imagen1 = imagenRepo.save(new Imagen("ruta/imagen1.jpg", "jpg", 1024, 800, 600));
         List<Long> idsImagenes = List.of(imagen1.getId());
-        ProductoDTO productoDTO = new ProductoDTO("Taza", categoria.getId(), "Taza de cerámica", 10.0f, 8.0f, 0.0f,
+        ProductoDTO productoDTO = new ProductoDTO("Taza", categoria.getId(), categoria.getNombre(), "Taza de cerámica", 10.0f, 8.0f, 0.0f,
                 BigDecimal.valueOf(10.99), false, idsImagenes);
         Long id = productoService.insertarProducto(productoDTO);
 
@@ -101,7 +101,7 @@ public class ProductoServiceTest {
     @DisplayName("Servicio - Insertar Producto (excepción categoría no encontrada)")
     void testInsertarProductoCategoriaNoEncontrada() {
         // Intentar insertar un producto con una categoría que no existe
-        ProductoDTO productoDTO = new ProductoDTO("Taza", 999L, "Taza de cerámica", 10.0f, 8.0f, 0.0f,
+        ProductoDTO productoDTO = new ProductoDTO("Taza", 999L, "Cerámica", "Taza de cerámica", 10.0f, 8.0f, 0.0f,
                 BigDecimal.valueOf(10.99), false, List.of());
 
         assertThatThrownBy(() -> {
@@ -117,11 +117,11 @@ public class ProductoServiceTest {
         Categoria categoria = categoriaRepo.save(new Categoria("Cerámica"));
 
         // Insertar un nuevo producto
-        Long id = productoService.insertarProducto(new ProductoDTO("Taza", categoria.getId(), "Taza de cerámica", 10.0f, 8.0f, 0.0f,
+        Long id = productoService.insertarProducto(new ProductoDTO("Taza", categoria.getId(), categoria.getNombre(), "Taza de cerámica", 10.0f, 8.0f, 0.0f,
                 BigDecimal.valueOf(10.99), false, List.of()));
 
         // Modificar el producto
-        ProductoDTO productoModificado = new ProductoDTO("Taza Grande", categoria.getId(), "Taza de cerámica grande", 12.0f, 9.0f, 0.0f,
+        ProductoDTO productoModificado = new ProductoDTO("Taza Grande", categoria.getId(), categoria.getNombre(), "Taza de cerámica grande", 12.0f, 9.0f, 0.0f,
                 BigDecimal.valueOf(12.99), true, List.of());
         productoService.modificarProducto(id, productoModificado);
 
@@ -142,7 +142,7 @@ public class ProductoServiceTest {
     @DisplayName("Servicio - Modificar Producto (excepción no encontrado)")
     void testModificarProductoNoEncontrado() {
         // Intentar modificar un producto que no existe
-        ProductoDTO productoModificado = new ProductoDTO("Taza Modificada", 1L, "Taza de cerámica modificada", 10.0f, 8.0f, 0.0f,
+        ProductoDTO productoModificado = new ProductoDTO("Taza Modificada", 1L, "Cerámica", "Taza de cerámica modificada", 10.0f, 8.0f, 0.0f,
                 BigDecimal.valueOf(10.99), false, List.of());
 
         assertThatThrownBy(() -> {
@@ -155,10 +155,10 @@ public class ProductoServiceTest {
     @DisplayName("Servicio - Modificar Producto (excepción categoría no encontrada)")
     void testModificarProductoCategoriaNoEncontrada() {
         Categoria categoria = categoriaRepo.save(new Categoria("Cerámica"));
-        Long id = productoService.insertarProducto(new ProductoDTO("Taza", categoria.getId(), "Taza de cerámica", 10.0f, 8.0f, 0.0f,
+        Long id = productoService.insertarProducto(new ProductoDTO("Taza", categoria.getId(), "Cerámica", "Taza de cerámica", 10.0f, 8.0f, 0.0f,
                 BigDecimal.valueOf(10.99), false, List.of()));
 
-        ProductoDTO dtoConCategoriaInexistente = new ProductoDTO("Taza Modificada", 999L, "Taza de cerámica modificada", 10.0f, 8.0f, 0.0f,
+        ProductoDTO dtoConCategoriaInexistente = new ProductoDTO("Taza Modificada", 999L, "Cerámica", "Taza de cerámica modificada", 10.0f, 8.0f, 0.0f,
                 BigDecimal.valueOf(10.99), false, List.of());
 
         assertThatThrownBy(() -> {
@@ -174,7 +174,7 @@ public class ProductoServiceTest {
         Categoria categoria = categoriaRepo.save(new Categoria("Cerámica"));
 
         // Insertar un nuevo producto
-        Long id = productoService.insertarProducto(new ProductoDTO("Taza", categoria.getId(), "Taza de cerámica", 10.0f, 8.0f, 0.0f,
+        Long id = productoService.insertarProducto(new ProductoDTO("Taza", categoria.getId(), "Cerámica", "Taza de cerámica", 10.0f, 8.0f, 0.0f,
                 BigDecimal.valueOf(10.99), false, List.of()));
 
         // Establecer el stock del producto a agotado (soldOut = true)
@@ -205,7 +205,7 @@ public class ProductoServiceTest {
         Categoria categoria = categoriaRepo.save(new Categoria("Cerámica"));
 
         // Insertar un nuevo producto
-        ProductoDTO productoDTO = new ProductoDTO("Taza", categoria.getId(), "Taza de cerámica", 10.0f, 8.0f, 0.0f,
+        ProductoDTO productoDTO = new ProductoDTO("Taza", categoria.getId(), "Cerámica", "Taza de cerámica", 10.0f, 8.0f, 0.0f,
                 BigDecimal.valueOf(10.99), false, List.of());
         Long id = productoService.insertarProducto(productoDTO);
 
@@ -233,9 +233,9 @@ public class ProductoServiceTest {
         Categoria categoria = categoriaRepo.save(new Categoria("Cerámica"));
 
         // Productos
-        ProductoDTO productoDTO1 = new ProductoDTO("Taza", categoria.getId(), "Taza de cerámica", 10.0f, 8.0f, 0.0f,
+        ProductoDTO productoDTO1 = new ProductoDTO("Taza", categoria.getId(), "Cerámica", "Taza de cerámica", 10.0f, 8.0f, 0.0f,
                 BigDecimal.valueOf(10.99), false, List.of());
-        ProductoDTO productoDTO2 = new ProductoDTO("Plato", categoria.getId(), "Plato de cerámica", 12.0f, 10.0f, 0.0f,
+        ProductoDTO productoDTO2 = new ProductoDTO("Plato", categoria.getId(), "Cerámica", "Plato de cerámica", 12.0f, 10.0f, 0.0f,
                 BigDecimal.valueOf(15.99), true, List.of());
         productoService.insertarProducto(productoDTO1);
         productoService.insertarProducto(productoDTO2);
@@ -259,9 +259,9 @@ public class ProductoServiceTest {
         Categoria categoria = categoriaRepo.save(new Categoria("Cerámica"));
 
         // Productos
-        productoService.insertarProducto(new ProductoDTO("Botella azul", categoria.getId(), "Botella de cerámica", 10f, 8f, 0f, BigDecimal.valueOf(10.99), false, List.of()));
-        productoService.insertarProducto(new ProductoDTO("Botella roja", categoria.getId(), "Botella histórica", 10f, 8f, 0f, BigDecimal.valueOf(15.99), false, List.of()));
-        productoService.insertarProducto(new ProductoDTO("Cuenco", categoria.getId(), "Cuenco", 10f, 8f, 0f, BigDecimal.valueOf(12.99), false, List.of()));
+        productoService.insertarProducto(new ProductoDTO("Botella azul", categoria.getId(), "Cerámica", "Botella de cerámica", 10f, 8f, 0f, BigDecimal.valueOf(10.99), false, List.of()));
+        productoService.insertarProducto(new ProductoDTO("Botella roja", categoria.getId(), "Cerámica", "Botella histórica", 10f, 8f, 0f, BigDecimal.valueOf(15.99), false, List.of()));
+        productoService.insertarProducto(new ProductoDTO("Cuenco", categoria.getId(), "Cerámica", "Cuenco de cerámica", 10f, 8f, 0f, BigDecimal.valueOf(12.99), false, List.of()));
 
         // Página de paginación
         Pageable pageable = PageRequest.of(0, 10);
@@ -282,7 +282,7 @@ public class ProductoServiceTest {
         Categoria categoria = categoriaRepo.save(new Categoria("Cerámica"));
 
         // Productos
-        productoService.insertarProducto(new ProductoDTO("Botella azul", categoria.getId(), "Botella de cerámica", 10f, 8f, 0f, BigDecimal.valueOf(10.99), false, List.of()));
+        productoService.insertarProducto(new ProductoDTO("Botella azul", categoria.getId(), "Cerámica", "Botella de cerámica", 10f, 8f, 0f, BigDecimal.valueOf(10.99), false, List.of()));
 
         // Pequeña pausa para asegurar el orden por fecha
         try {
@@ -291,7 +291,7 @@ public class ProductoServiceTest {
             Thread.currentThread().interrupt();
         }
 
-        productoService.insertarProducto(new ProductoDTO("Botella roja", categoria.getId(), "Botella histórica de cerámica", 10f, 8f, 0f, BigDecimal.valueOf(15.99), false, List.of()));
+        productoService.insertarProducto(new ProductoDTO("Botella roja", categoria.getId(), "Cerámica", "Botella histórica de cerámica", 10f, 8f, 0f, BigDecimal.valueOf(15.99), false, List.of()));
 
         // Página de paginación
         Pageable pageable = PageRequest.of(0, 10);
@@ -312,8 +312,8 @@ public class ProductoServiceTest {
         Categoria categoria = categoriaRepo.save(new Categoria("Cerámica"));
 
         // Productos
-        productoService.insertarProducto(new ProductoDTO("Taza", categoria.getId(), "Taza de cerámica", 10f, 8f, 0f, BigDecimal.valueOf(10.99), false, List.of()));
-        productoService.insertarProducto(new ProductoDTO("Plato", categoria.getId(), "Plato de cerámica", 12f, 10f, 0f, BigDecimal.valueOf(15.99), true, List.of()));
+        productoService.insertarProducto(new ProductoDTO("Taza", categoria.getId(), "Cerámica", "Taza de cerámica", 10f, 8f, 0f, BigDecimal.valueOf(10.99), false, List.of()));
+        productoService.insertarProducto(new ProductoDTO("Plato", categoria.getId(), "Cerámica", "Plato de cerámica", 12f, 10f, 0f, BigDecimal.valueOf(15.99), true, List.of()));
 
         // Página de paginación
         Pageable pageable = PageRequest.of(0, 10);
@@ -334,8 +334,8 @@ public class ProductoServiceTest {
         Categoria categoria = categoriaRepo.save(new Categoria("Cerámica"));
 
         // Productos
-        productoService.insertarProducto(new ProductoDTO("Taza", categoria.getId(), "Taza de cerámica", 10f, 8f, 0f, BigDecimal.valueOf(10.99), false, List.of()));
-        productoService.insertarProducto(new ProductoDTO("Plato", categoria.getId(), "Plato de cerámica", 12f, 10f, 0f, BigDecimal.valueOf(15.99), true, List.of()));
+        productoService.insertarProducto(new ProductoDTO("Taza", categoria.getId(), "Cerámica", "Taza de cerámica", 10f, 8f, 0f, BigDecimal.valueOf(10.99), false, List.of()));
+        productoService.insertarProducto(new ProductoDTO("Plato", categoria.getId(), "Cerámica", "Plato de cerámica", 12f, 10f, 0f, BigDecimal.valueOf(15.99), true, List.of()));
 
         // Filtro: nombre = null, categoría = null, soloEnStock = null, orden = null
         Page<Producto> productosFiltrados = productoService.filtrarProductos(null, null, null, null, Pageable.unpaged());
@@ -352,7 +352,7 @@ public class ProductoServiceTest {
         Categoria categoria = categoriaRepo.save(new Categoria("Cerámica"));
 
         // Insertar un nuevo producto
-        Long id = productoService.insertarProducto(new ProductoDTO("Taza", categoria.getId(), "Taza de cerámica", 10.0f, 8.0f, 0.0f,
+        Long id = productoService.insertarProducto(new ProductoDTO("Taza", categoria.getId(), "Cerámica", "Taza de cerámica", 10.0f, 8.0f, 0.0f,
                 BigDecimal.valueOf(10.99), false, List.of()));
 
         // Eliminar el producto
@@ -379,11 +379,11 @@ public class ProductoServiceTest {
         Categoria categoria = categoriaRepo.save(new Categoria("Cerámica"));
 
         // Insertar varios productos
-        productoService.insertarProducto(new ProductoDTO("Taza", categoria.getId(), "Taza de cerámica", 10.0f, 8.0f, 0.0f,
+        productoService.insertarProducto(new ProductoDTO("Taza", categoria.getId(), "Cerámica", "Taza de cerámica", 10.0f, 8.0f, 0.0f,
                 BigDecimal.valueOf(10.99), false, List.of()));
-        productoService.insertarProducto(new ProductoDTO("Plato", categoria.getId(), "Plato de cerámica", 12.0f, 10.0f, 0.0f,
+        productoService.insertarProducto(new ProductoDTO("Plato", categoria.getId(), "Cerámica", "Plato de cerámica", 12.0f, 10.0f, 0.0f,
                 BigDecimal.valueOf(15.99), true, List.of()));
-        productoService.insertarProducto(new ProductoDTO("Cuenco", categoria.getId(), "Cuenco de cerámica", 8.0f, 6.0f, 0.0f,
+        productoService.insertarProducto(new ProductoDTO("Cuenco", categoria.getId(), "Cerámica", "Cuenco de cerámica", 8.0f, 6.0f, 0.0f,
                 BigDecimal.valueOf(8.99), false, List.of()));
 
         // Pagina de paginación

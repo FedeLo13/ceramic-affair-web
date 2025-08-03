@@ -72,6 +72,7 @@ public class ProductoControllerTest {
         ProductoDTO productoDTO = new ProductoDTO(
             "Taza", 
             1L, // ID de categoría simulado
+            "Cerámica",
             "Taza de cerámica", 
             10.0f, 
             8.0f, 
@@ -194,6 +195,7 @@ public class ProductoControllerTest {
         ProductoDTO productoDTO = new ProductoDTO(
             "Taza Actualizada", 
             1L, // ID de categoría simulado
+            "Cerámica Actualizada",
             "Taza de cerámica actualizada", 
             12.0f, 
             9.0f, 
@@ -340,6 +342,7 @@ public class ProductoControllerTest {
         ProductoDTO productoDTO = new ProductoDTO(
             "Taza Actualizada", 
             1L, 
+            "Cerámica Actualizada",
             "Taza de cerámica actualizada", 
             12.0f, 
             9.0f, 

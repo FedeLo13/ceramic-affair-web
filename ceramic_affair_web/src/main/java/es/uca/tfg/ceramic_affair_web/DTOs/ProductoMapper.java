@@ -29,6 +29,7 @@ public class ProductoMapper {
             producto.getId(),
             producto.getNombre(),
             producto.getCategoria() != null ? producto.getCategoria().getId() : null,
+            producto.getCategoria() != null ? producto.getCategoria().getNombre() : null,
             producto.getDescripcion(),
             producto.getAltura(),
             producto.getAnchura(),
