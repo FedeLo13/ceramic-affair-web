@@ -1,44 +1,24 @@
 import { handleFetch } from "./utils";
-import type { Producto, ProductoInput, ProductoCreateDTO } from "../types/producto.types";
-const API_URL = 'http://localhost:8080/api/productos';
+import type { Producto, ProductoInputDTO, ProductoStockDTO } from "../types/producto.types";
+
+const API_PUBLIC = 'http://localhost:8080/api/public/productos';
+const API_ADMIN = 'http://localhost:8080/api/admin/productos';
 
 // Funciones para manejar los productos
 
-//------------------ CREAR ------------------//
-
-export const newProducto = async (producto: ProductoInput): Promise<Producto> => {
-    const productoDTO: ProductoCreateDTO = {
-        nombre: producto.nombre,
-        descripcion: producto.descripcion,
-        precio: producto.precio,
-    };
-
-    const response = await fetch(`${API_URL}/crear`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(productoDTO),
-    });
-
-    return await handleFetch(response, 'Error creating product');
-}
-
-//------------------ LEER ------------------//
+//------------------ PÚBLICOS ------------------//
 
 export const getProductoById = async (id: number): Promise<Producto> => {
-    const response = await fetch(`${API_URL}/${id}`);
+    const response = await fetch(`${API_PUBLIC}/${id}`);
 
-    return await handleFetch(response, 'Error fetching product by ID');
-}
+    return await handleFetch<Producto>(response, 'Error al obtener el producto por ID');
+};
 
 export const getAllProductos = async (): Promise<Producto[]> => {
-    const response = await fetch(`${API_URL}/todas`);
+    const response = await fetch(`${API_PUBLIC}/todos`);
 
-    return await handleFetch(response, 'Error fetching all products');
-}
-
-//------------------ FILTRAR ------------------//
+    return await handleFetch<Producto[]>(response, 'Error al obtener todos los productos');
+};
 
 export interface FilterProductosParams {
     nombre?: string;
@@ -47,38 +27,62 @@ export interface FilterProductosParams {
     orden?: 'viejos' | 'nuevos'; // Ordenamiento por fecha de creación
 }
 
-export const filterProductos = async ({ nombre, categoria, soloEnStock, orden}:FilterProductosParams): Promise<Producto[]> => {
+export const filterProductos = async (params:FilterProductosParams): Promise<Producto[]> => {
     const query = new URLSearchParams();
 
-    if (nombre) query.append('nombre', nombre);
-    if (categoria !== undefined) query.append('categoria', categoria.toString());
-    if (soloEnStock !== undefined) query.append('soloEnStock', soloEnStock.toString());
-    if (orden) query.append('orden', orden);
+    if (params.nombre) query.append('nombre', params.nombre);
+    if (params.categoria !== undefined) query.append('categoria', params.categoria.toString());
+    if (params.soloEnStock !== undefined) query.append('soloEnStock', params.soloEnStock.toString());
+    if (params.orden) query.append('orden', params.orden);
 
-    const response = await fetch(`${API_URL}/filtrar?${query.toString()}`);
+    const response = await fetch(`${API_PUBLIC}/filtrar?${query.toString()}`);
 
-    return await handleFetch(response, 'Error filtering products');
+    return await handleFetch<Producto[]>(response, 'Error al filtrar productos');
 }
 
-//------------------ ELIMINAR ------------------//
+//------------------ ADMINISTRATIVOS ------------------//
 
-export const deleteProducto = async (id: number): Promise<void> => {
-    const response = await fetch(`${API_URL}/${id}`, {
-        method: 'DELETE',
+export const newProducto = async (producto: ProductoInputDTO): Promise<number> => {
+    const response = await fetch(`${API_ADMIN}/crear`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(producto),
     });
 
-    if (response.status === 204) return;
+    return await handleFetch<number>(response, 'Error al crear producto');
+}
 
-    return await handleFetch(response, 'Error deleting product');
+export const updateProducto = async (id: number, producto: ProductoInputDTO): Promise<void> => {
+    const response = await fetch(`${API_ADMIN}/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(producto),
+    });
+
+    return await handleFetch<void>(response, 'Error al actualizar producto');
 };
 
-export const deleteAllProductos = async (): Promise<void> => {
-    const response = await fetch(`${API_URL}/eliminarTodas`, {
+export const updateStockProducto = async (id: number, stock: ProductoStockDTO): Promise<void> => {
+    const response = await fetch(`${API_ADMIN}/${id}/stock`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(stock),
+    });
+
+    return await handleFetch<void>(response, 'Error al actualizar stock del producto');
+}
+
+export const deleteProducto = async (id: number): Promise<void> => {
+    const response = await fetch(`${API_ADMIN}/${id}`, {
         method: 'DELETE',
     });
 
-    if (response.status === 204) return;
-
-    return await handleFetch(response, 'Error deleting all products');
-}
+    return await handleFetch<void>(response, 'Error al eliminar producto');
+};
 
