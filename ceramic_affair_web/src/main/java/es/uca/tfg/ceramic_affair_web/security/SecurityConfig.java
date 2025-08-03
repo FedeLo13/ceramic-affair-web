@@ -51,6 +51,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/api/public/**", // Endpoints públicos
+                    "/uploads/**", // Archivos subidos
                     "/swagger-ui/**", // Swagger UI
                     "/v3/api-docs/**", // Documentación de la API
                     "swagger-ui.html" // Página principal de Swagger UI
