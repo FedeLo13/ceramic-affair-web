@@ -1,5 +1,6 @@
 import { handleFetch } from "./utils";
 import type { Producto, ProductoInputDTO, ProductoStockDTO } from "../types/producto.types";
+import type { PageResponse } from "./page.response";
 
 const API_PUBLIC = 'http://localhost:8080/api/public/productos';
 const API_ADMIN = 'http://localhost:8080/api/admin/productos';
@@ -14,10 +15,10 @@ export const getProductoById = async (id: number): Promise<Producto> => {
     return await handleFetch<Producto>(response, 'Error al obtener el producto por ID');
 };
 
-export const getAllProductos = async (): Promise<Producto[]> => {
-    const response = await fetch(`${API_PUBLIC}/todos`);
+export const getAllProductos = async (page = 0, size = 10): Promise<PageResponse<Producto>> => {
+    const response = await fetch(`${API_PUBLIC}/todos?page=${page}&size=${size}`);
 
-    return await handleFetch<Producto[]>(response, 'Error al obtener todos los productos');
+    return await handleFetch<PageResponse<Producto>>(response, 'Error al obtener todos los productos');
 };
 
 export interface FilterProductosParams {
@@ -27,17 +28,19 @@ export interface FilterProductosParams {
     orden?: 'viejos' | 'nuevos'; // Ordenamiento por fecha de creación
 }
 
-export const filterProductos = async (params:FilterProductosParams): Promise<Producto[]> => {
+export const filterProductos = async (params:FilterProductosParams & {page?: number, size?: number}): Promise<PageResponse<Producto>> => {
     const query = new URLSearchParams();
 
     if (params.nombre) query.append('nombre', params.nombre);
     if (params.categoria !== undefined) query.append('categoria', params.categoria.toString());
     if (params.soloEnStock !== undefined) query.append('soloEnStock', params.soloEnStock.toString());
     if (params.orden) query.append('orden', params.orden);
+    if (params.page !== undefined) query.append('page', params.page.toString());
+    if (params.size !== undefined) query.append('size', params.size.toString());
 
     const response = await fetch(`${API_PUBLIC}/filtrar?${query.toString()}`);
 
-    return await handleFetch<Producto[]>(response, 'Error al filtrar productos');
+    return await handleFetch<PageResponse<Producto>>(response, 'Error al filtrar productos');
 }
 
 //------------------ ADMINISTRATIVOS ------------------//

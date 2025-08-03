@@ -16,6 +16,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -237,13 +240,16 @@ public class ProductoServiceTest {
         productoService.insertarProducto(productoDTO1);
         productoService.insertarProducto(productoDTO2);
 
+        // Página de paginación
+        Pageable pageable = PageRequest.of(0, 10);
+
         // Filtro: nombre = "Taza", categoría = "Cerámica", soloEnStock = true, orden = "viejos"
-        List<Producto> productosFiltrados = productoService.filtrarProductos("Taza", categoria.getId(), true, "viejos");
+        Page<Producto> productosFiltrados = productoService.filtrarProductos("Taza", categoria.getId(), true, "viejos", pageable);
 
         // Verificar que se han filtrado correctamente los productos
         assertNotNull(productosFiltrados);
-        assertEquals(1, productosFiltrados.size());
-        assertEquals("Taza", productosFiltrados.get(0).getNombre());
+        assertEquals(1, productosFiltrados.getTotalElements());
+        assertEquals("Taza", productosFiltrados.getContent().get(0).getNombre());
     }
 
     @Test
@@ -257,13 +263,16 @@ public class ProductoServiceTest {
         productoService.insertarProducto(new ProductoDTO("Botella roja", categoria.getId(), "Botella histórica", 10f, 8f, 0f, BigDecimal.valueOf(15.99), false, List.of()));
         productoService.insertarProducto(new ProductoDTO("Cuenco", categoria.getId(), "Cuenco", 10f, 8f, 0f, BigDecimal.valueOf(12.99), false, List.of()));
 
+        // Página de paginación
+        Pageable pageable = PageRequest.of(0, 10);
+
         // Filtro: nombre = "Botella", categoría = "Cerámica", soloEnStock = null, orden = null
-        List<Producto> productosFiltrados = productoService.filtrarProductos("Botella", categoria.getId(), null, null);
+        Page<Producto> productosFiltrados = productoService.filtrarProductos("Botella", categoria.getId(), null, null, pageable);
 
         // Verificar que se han filtrado correctamente los productos
         assertNotNull(productosFiltrados);
-        assertEquals(2, productosFiltrados.size());
-        assertThat(productosFiltrados).extracting(Producto::getNombre).containsExactlyInAnyOrder("Botella azul", "Botella roja");
+        assertEquals(2, productosFiltrados.getTotalElements());
+        assertThat(productosFiltrados.getContent()).extracting(Producto::getNombre).containsExactlyInAnyOrder("Botella azul", "Botella roja");
     }
 
     @Test
@@ -284,13 +293,16 @@ public class ProductoServiceTest {
 
         productoService.insertarProducto(new ProductoDTO("Botella roja", categoria.getId(), "Botella histórica de cerámica", 10f, 8f, 0f, BigDecimal.valueOf(15.99), false, List.of()));
 
+        // Página de paginación
+        Pageable pageable = PageRequest.of(0, 10);
+
         // Filtro: nombre = "Botella", categoría = null, soloEnStock = null, orden = "recientes"
-        List<Producto> productosFiltrados = productoService.filtrarProductos("Botella", null, null, "recientes");
+        Page<Producto> productosFiltrados = productoService.filtrarProductos("Botella", null, null, "recientes", pageable);
 
         // Verificar que se han filtrado correctamente los productos
         assertNotNull(productosFiltrados);
-        assertEquals(2, productosFiltrados.size());
-        assertEquals("Botella roja", productosFiltrados.get(0).getNombre());
+        assertEquals(2, productosFiltrados.getTotalElements());
+        assertEquals("Botella roja", productosFiltrados.getContent().get(0).getNombre());
     }
 
     @Test
@@ -303,13 +315,16 @@ public class ProductoServiceTest {
         productoService.insertarProducto(new ProductoDTO("Taza", categoria.getId(), "Taza de cerámica", 10f, 8f, 0f, BigDecimal.valueOf(10.99), false, List.of()));
         productoService.insertarProducto(new ProductoDTO("Plato", categoria.getId(), "Plato de cerámica", 12f, 10f, 0f, BigDecimal.valueOf(15.99), true, List.of()));
 
+        // Página de paginación
+        Pageable pageable = PageRequest.of(0, 10);
+
         // Filtro: nombre = null, categoría = "Cerámica", soloEnStock = true, orden = null
-        List<Producto> productosFiltrados = productoService.filtrarProductos(null, categoria.getId(), true, null);
+        Page<Producto> productosFiltrados = productoService.filtrarProductos(null, categoria.getId(), true, null, pageable);
 
         // Verificar que se han filtrado correctamente los productos
         assertNotNull(productosFiltrados);
-        assertEquals(1, productosFiltrados.size());
-        assertEquals("Taza", productosFiltrados.get(0).getNombre());
+        assertEquals(1, productosFiltrados.getTotalElements());
+        assertEquals("Taza", productosFiltrados.getContent().get(0).getNombre());
     }
 
     @Test
@@ -323,11 +338,11 @@ public class ProductoServiceTest {
         productoService.insertarProducto(new ProductoDTO("Plato", categoria.getId(), "Plato de cerámica", 12f, 10f, 0f, BigDecimal.valueOf(15.99), true, List.of()));
 
         // Filtro: nombre = null, categoría = null, soloEnStock = null, orden = null
-        List<Producto> productosFiltrados = productoService.filtrarProductos(null, null, null, null);
+        Page<Producto> productosFiltrados = productoService.filtrarProductos(null, null, null, null, Pageable.unpaged());
 
         // Verificar que se han filtrado correctamente los productos
         assertNotNull(productosFiltrados);
-        assertEquals(2, productosFiltrados.size());
+        assertEquals(2, productosFiltrados.getTotalElements());
     }
 
     @Test
@@ -371,11 +386,14 @@ public class ProductoServiceTest {
         productoService.insertarProducto(new ProductoDTO("Cuenco", categoria.getId(), "Cuenco de cerámica", 8.0f, 6.0f, 0.0f,
                 BigDecimal.valueOf(8.99), false, List.of()));
 
+        // Pagina de paginación
+        Pageable pageable = PageRequest.of(0, 10);
+
         // Obtener todos los productos
-        List<Producto> productos = productoService.obtenerTodos();
+        Page<Producto> productos = productoService.obtenerTodos(pageable);
 
         // Verificar que se han obtenido todos los productos
         assertNotNull(productos);
-        assertEquals(3, productos.size());
+        assertEquals(3, productos.getTotalElements());
     }
 }

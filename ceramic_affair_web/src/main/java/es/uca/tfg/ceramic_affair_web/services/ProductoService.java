@@ -3,6 +3,8 @@ package es.uca.tfg.ceramic_affair_web.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -133,16 +135,17 @@ public class ProductoService {
      * @param categoria el id de la categoría a aplicar como filtro
      * @param soloEnStock true si se desean solo productos en stock, false/null si no se desea filtrar por stock
      * @param orden el orden "viejos" para mas antiguos primero, o cualquier otro valor para más recientes primero
+     * @param pageable objeto Pageable para la paginación
      * @return una lista de productos que cumplen con los filtros
      */
-    public List<Producto> filtrarProductos(String nombre, Long categoria, Boolean soloEnStock, String orden) {
+    public Page<Producto> filtrarProductos(String nombre, Long categoria, Boolean soloEnStock, String orden, Pageable pageable) {
         Specification<Producto> spec = Specification
             .where(ProductoSpecifications.nombreLike(nombre))
             .and(ProductoSpecifications.conCategoria(categoria))
             .and(ProductoSpecifications.enStock(soloEnStock))
             .and(ProductoSpecifications.ordenarPorFecha(orden));
 
-        return productoRepo.findAll(spec);
+        return productoRepo.findAll(spec, pageable);
     }
 
     /**
@@ -161,9 +164,10 @@ public class ProductoService {
     /**
      * Método para obtener todos los productos
      * 
+     * @param pageable objeto Pageable para la paginación
      * @return una lista de todos los productos
      */ 
-    public List<Producto> obtenerTodos() {
-        return productoRepo.findAll();
+    public Page<Producto> obtenerTodos(Pageable pageable) {
+        return productoRepo.findAll(pageable);
     }
 }

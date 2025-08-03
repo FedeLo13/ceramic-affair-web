@@ -1,8 +1,9 @@
 package es.uca.tfg.ceramic_affair_web.controllers.common;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,12 +57,19 @@ public class ProductoPublicController {
         @ApiResponse(responseCode = "200", description = "Lista de productos encontrada"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<ApiResponseType<List<ProductoDTO>>> filtrarProductos(@RequestParam(required = false) String nombre,
+    public ResponseEntity<ApiResponseType<Page<ProductoDTO>>> filtrarProductos(@RequestParam(required = false) String nombre,
                                                            @RequestParam(required = false) Long categoria,
                                                            @RequestParam(required = false) Boolean soloEnStock,
-                                                           @RequestParam(required = false) String orden) {
-        List<Producto> productos = productoService.filtrarProductos(nombre, categoria, soloEnStock, orden);
-        return ResponseEntity.ok(new ApiResponseType<>(true, "Lista de productos encontrada", ProductoMapper.toDTOList(productos)));
+                                                           @RequestParam(required = false) String orden,
+                                                           @RequestParam(defaultValue = "0") int page,
+                                                           @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Producto> productos = productoService.filtrarProductos(nombre, categoria, soloEnStock, orden, pageable);
+
+        // Mapeamos la lista de productos a DTOs
+        Page<ProductoDTO> productoDTOs = productos.map(ProductoMapper::toDTO);
+
+        return ResponseEntity.ok(new ApiResponseType<>(true, "Lista de productos encontrada", productoDTOs));
     }
 
     @GetMapping("/todos")
@@ -70,8 +78,16 @@ public class ProductoPublicController {
         @ApiResponse(responseCode = "200", description = "Lista de productos encontrada"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<ApiResponseType<List<ProductoDTO>>> obtenerTodosLosProductos() {
-        List<Producto> productos = productoService.obtenerTodos();
-        return ResponseEntity.ok(new ApiResponseType<>(true, "Lista de productos encontrada", ProductoMapper.toDTOList(productos)));
+    public ResponseEntity<ApiResponseType<Page<ProductoDTO>>> obtenerTodosLosProductos(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Producto> productos = productoService.obtenerTodos(pageable);
+
+        // Mapeamos la lista de productos a DTOs
+        Page<ProductoDTO> productoDTOs = productos.map(ProductoMapper::toDTO);
+
+        return ResponseEntity.ok(new ApiResponseType<>(true, "Lista de productos encontrada", productoDTOs));
     }
 }

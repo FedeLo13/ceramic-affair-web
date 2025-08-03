@@ -21,6 +21,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -153,25 +157,33 @@ public class ProductoControllerTest {
 
         List<Producto> productos = List.of(producto1, producto2);
 
-        when(productoService.filtrarProductos(null, null, null, null)).thenReturn(productos);
+        // Página de paginación
+        Page<Producto> productosPage = new PageImpl<>(productos, PageRequest.of(0, 10), productos.size());
+        
+        when(productoService.filtrarProductos(any(), any(), any(), any(), any(Pageable.class)))
+                .thenReturn(productosPage);
 
         // Realizar la petición GET al endpoint de filtrado de productos
-        mockMvc.perform(get("/api/public/productos/filtrar"))
+        mockMvc.perform(get("/api/public/productos/filtrar")
+                    .param("page", "0")
+                    .param("size", "10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value("Lista de productos encontrada"))
-                .andExpect(jsonPath("$.data.length()").value(2))
-                .andExpect(jsonPath("$.data[0].nombre").value("Taza"))
-                .andExpect(jsonPath("$.data[0].descripcion").value("Taza de cerámica"))
-                .andExpect(jsonPath("$.data[0].precio").value(10.00))
-                .andExpect(jsonPath("$.data[0].soldOut").value(false))
-                .andExpect(jsonPath("$.data[0].idCategoria").value(categoria.getId()))
+                // Acceder al contenido de la página
+                .andExpect(jsonPath("$.data.content.length()").value(2))
 
-                .andExpect(jsonPath("$.data[1].nombre").value("Plato"))
-                .andExpect(jsonPath("$.data[1].descripcion").value("Plato de cerámica"))
-                .andExpect(jsonPath("$.data[1].precio").value(15.00))
-                .andExpect(jsonPath("$.data[1].soldOut").value(false))
-                .andExpect(jsonPath("$.data[1].idCategoria").value(categoria.getId()));
+                .andExpect(jsonPath("$.data.content[0].nombre").value("Taza"))
+                .andExpect(jsonPath("$.data.content[0].descripcion").value("Taza de cerámica"))
+                .andExpect(jsonPath("$.data.content[0].precio").value(10.00))
+                .andExpect(jsonPath("$.data.content[0].soldOut").value(false))
+                .andExpect(jsonPath("$.data.content[0].idCategoria").value(categoria.getId()))
+
+                .andExpect(jsonPath("$.data.content[1].nombre").value("Plato"))
+                .andExpect(jsonPath("$.data.content[1].descripcion").value("Plato de cerámica"))
+                .andExpect(jsonPath("$.data.content[1].precio").value(15.00))
+                .andExpect(jsonPath("$.data.content[1].soldOut").value(false))
+                .andExpect(jsonPath("$.data.content[1].idCategoria").value(categoria.getId()));
     }
 
     @Test
@@ -275,25 +287,33 @@ public class ProductoControllerTest {
 
         List<Producto> productos = List.of(producto1, producto2);
 
-        when(productoService.obtenerTodos()).thenReturn(productos);
+        // Página de paginación
+        Page<Producto> productosPage = new PageImpl<>(productos, PageRequest.of(0, 10), productos.size());
+
+        when(productoService.obtenerTodos(any(Pageable.class)))
+                .thenReturn(productosPage);
 
         // Realizar la petición GET al endpoint de obtención de todos los productos
-        mockMvc.perform(get("/api/public/productos/todos"))
+        mockMvc.perform(get("/api/public/productos/todos")
+                .param("page", "0")
+                .param("size", "10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value("Lista de productos encontrada"))
-                .andExpect(jsonPath("$.data.length()").value(2))
-                .andExpect(jsonPath("$.data[0].nombre").value("Taza"))
-                .andExpect(jsonPath("$.data[0].descripcion").value("Taza de cerámica"))
-                .andExpect(jsonPath("$.data[0].precio").value(10.00))
-                .andExpect(jsonPath("$.data[0].soldOut").value(false))
-                .andExpect(jsonPath("$.data[0].idCategoria").value(categoria.getId()))
+                // Acceder al contenido de la página
+                .andExpect(jsonPath("$.data.content.length()").value(2))
 
-                .andExpect(jsonPath("$.data[1].nombre").value("Plato"))
-                .andExpect(jsonPath("$.data[1].descripcion").value("Plato de cerámica"))
-                .andExpect(jsonPath("$.data[1].precio").value(15.00))
-                .andExpect(jsonPath("$.data[1].soldOut").value(false))
-                .andExpect(jsonPath("$.data[1].idCategoria").value(categoria.getId()));
+                .andExpect(jsonPath("$.data.content[0].nombre").value("Taza"))
+                .andExpect(jsonPath("$.data.content[0].descripcion").value("Taza de cerámica"))
+                .andExpect(jsonPath("$.data.content[0].precio").value(10.00))
+                .andExpect(jsonPath("$.data.content[0].soldOut").value(false))
+                .andExpect(jsonPath("$.data.content[0].idCategoria").value(categoria.getId()))
+
+                .andExpect(jsonPath("$.data.content[1].nombre").value("Plato"))
+                .andExpect(jsonPath("$.data.content[1].descripcion").value("Plato de cerámica"))
+                .andExpect(jsonPath("$.data.content[1].precio").value(15.00))
+                .andExpect(jsonPath("$.data.content[1].soldOut").value(false))
+                .andExpect(jsonPath("$.data.content[1].idCategoria").value(categoria.getId()));
     }
 
     @Test
