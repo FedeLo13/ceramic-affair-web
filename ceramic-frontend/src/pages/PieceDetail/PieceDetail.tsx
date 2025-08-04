@@ -1,11 +1,11 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getProductoById } from "../../api/productos";
-import type { Producto } from "../../types/producto.types";
+import type { ProductoOutputDTO } from "../../types/producto.types";
 
 export default function PieceDetail() {
     const { id } = useParams();
-    const [producto, setProducto] = useState<Producto | null>(null);
+    const [producto, setProducto] = useState<ProductoOutputDTO | null>(null);
 
     useEffect(() => {
         const fetchProducto = async () => {
@@ -33,7 +33,7 @@ export default function PieceDetail() {
                     <p><strong>Height:</strong> {producto.altura} cm</p>
                     <p><strong>Width:</strong> {producto.anchura} cm</p>
                     <p><strong>Diameter:</strong> {producto.diametro} cm</p>
-                    <p><strong>Category:</strong> {producto.categoria?.nombre || "No category"}</p>
+                    <p><strong>Category:</strong> {producto.nombreCategoria || "Uncategorized"}</p>
                 </>
             ) : (
                 <p>Loading...</p>
