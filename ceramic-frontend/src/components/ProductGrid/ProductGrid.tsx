@@ -1,18 +1,38 @@
 import ProductCard from "../ProductCard/ProductCard";
-import type { Producto } from "../../types/producto.types";
+import type { ProductoOutputDTO } from "../../types/producto.types";
+import { motion } from "framer-motion";
 import "./ProductGrid.css";
 
 interface ProductGridProps {
-  productos: Producto[];
+  productos: ProductoOutputDTO[];
+  isLoading?: boolean;
 }
 
-export default function ProductGrid({ productos }: ProductGridProps) {
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+};
+
+export default function ProductGrid({ productos, isLoading }: ProductGridProps) {
     return (
-        <div className="product-grid">
-            {productos.map((producto) => (
+        <motion.div
+            className="product-grid"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+        >
+           {productos.map((producto) => (
                 <ProductCard key={producto.id} producto={producto} />
             ))}
-        </div>
+
+            {isLoading && (
+                <>
+                    <div className="skeleton-card"></div>
+                    <div className="skeleton-card"></div>
+                    <div className="skeleton-card"></div>
+                </>
+            )}
+        </motion.div>
     );
 }
 // Este componente renderiza una cuadrícula de productos utilizando el componente ProductCard para cada producto.
