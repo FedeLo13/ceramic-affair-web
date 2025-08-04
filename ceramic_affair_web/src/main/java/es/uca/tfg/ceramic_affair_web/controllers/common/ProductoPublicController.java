@@ -62,7 +62,7 @@ public class ProductoPublicController {
                                                            @RequestParam(required = false) Boolean soloEnStock,
                                                            @RequestParam(required = false) String orden,
                                                            @RequestParam(defaultValue = "0") int page,
-                                                           @RequestParam(defaultValue = "10") int size) {
+                                                           @RequestParam(defaultValue = "3") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Producto> productos = productoService.filtrarProductos(nombre, categoria, soloEnStock, orden, pageable);
 
@@ -80,7 +80,7 @@ public class ProductoPublicController {
     })
     public ResponseEntity<ApiResponseType<Page<ProductoDTO>>> obtenerTodosLosProductos(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "3") int size) {
         
         Pageable pageable = PageRequest.of(page, size);
         Page<Producto> productos = productoService.obtenerTodos(pageable);
