@@ -54,7 +54,7 @@ public class SecurityConfig {
                     "/uploads/**", // Archivos subidos
                     "/swagger-ui/**", // Swagger UI
                     "/v3/api-docs/**", // Documentación de la API
-                    "swagger-ui.html" // Página principal de Swagger UI
+                    "/swagger-ui.html" // Página principal de Swagger UI
                 ).permitAll() // Permitir acceso a los endpoints públicos
                 .requestMatchers("/api/admin/**").hasRole("ADMIN") // Requerir rol ADMIN para los endpoints de administración
                 .anyRequest().authenticated() // Requerir autenticación para cualquier otra solicitud
