@@ -2,7 +2,6 @@ package es.uca.tfg.ceramic_affair_web.controllers.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,8 +26,6 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/admin/plantilla")
 @Tag(name = "Plantilla Newsletter Admin", description = "Controlador para la gestión de la plantilla de newsletter en el panel de administración")
-@CrossOrigin(origins = "http://localhost:5173")
-// TODO: Cambiar la URL de origen a la de producción cuando esté disponible
 public class PlantillaNewsletterController {
 
     @Autowired

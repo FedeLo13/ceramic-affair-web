@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,8 +31,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("/api/admin/imagenes")
 @Tag(name = "Imágenes Admin", description = "Controlador para la gestión de imágenes en el panel de administración")
-@CrossOrigin(origins = "http://localhost:5173")
-// TODO: Cambiar la URL de origen a la de producción cuando esté disponible
 public class ImagenAdminController {
 
     @Autowired

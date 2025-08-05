@@ -3,7 +3,6 @@ package es.uca.tfg.ceramic_affair_web.controllers.admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,8 +29,6 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/admin/find-me-posts")
 @Tag(name = "FindMePosts Admin", description = "Operaciones administrativas para las publicaciones 'Encuéntrame'")
-@CrossOrigin(origins = "http://localhost:5173")
-// TODO: Cambiar la URL de origen a la de producción cuando esté disponible
 public class FindMePostAdminController {
 
     @Autowired

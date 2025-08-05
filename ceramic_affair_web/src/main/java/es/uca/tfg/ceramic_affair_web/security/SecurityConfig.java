@@ -1,5 +1,7 @@
 package es.uca.tfg.ceramic_affair_web.security;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,6 +11,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /**
  * Configuración de seguridad de la aplicación.
@@ -31,6 +36,27 @@ public class SecurityConfig {
     }
 
     /**
+     * Configuración del CORS
+     * Permite solicitudes desde el frontend en desarrollo y define los métodos HTTP permitidos.
+     * 
+     * @return UrlBasedCorsConfigurationSource configurado.
+     */
+    // TODO: Cambiar la URL de origen a la de producción cuando esté disponible
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // Permitir solicitudes desde el frontend en desarrollo
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")); // Permitir todos los métodos HTTP
+        configuration.setAllowedHeaders(List.of("*")); // Permitir todos los encabezados
+        configuration.setAllowCredentials(true); // Permitir credenciales
+        
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // Aplicar la configuración a todas las rutas
+        return source;
+    }
+
+
+    /**
      * Configuración del filtro de seguridad.
      * Define las reglas de autorización y desactiva CSRF para simplificar las pruebas.
      * 
@@ -42,6 +68,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable()) // Desactivar CSRF para simplificar las pruebas
+            .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Configurar CORS
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Usar sesiones sin estado
             )

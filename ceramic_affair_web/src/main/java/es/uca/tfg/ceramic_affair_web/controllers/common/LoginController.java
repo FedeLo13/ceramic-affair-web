@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,8 +32,6 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/public/login")
 @Tag(name = "Login", description = "Controlador para la gestión de inicio de sesión")
-@CrossOrigin(origins = "http://localhost:5173")
-// TODO: Cambiar la URL de origen a la de producción cuando esté disponible
 public class LoginController {
 
     @Autowired

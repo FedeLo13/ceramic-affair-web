@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,8 +31,6 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/admin/newsletter")
 @Tag(name = "Newsletter Admin", description = "Controlador para la gestión de newsletters en el panel de administración")
-@CrossOrigin(origins = "http://localhost:5173")
-// TODO: Cambiar la URL de origen a la de producción cuando esté disponible
 public class NewsletterController {
 
     @Autowired

@@ -2,7 +2,6 @@ package es.uca.tfg.ceramic_affair_web.controllers.common;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,8 +24,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("/api/public/imagenes")
 @Tag(name = "Imágenes Public", description = "Controlador para la gestión de imágenes")
-@CrossOrigin(origins = "http://localhost:5173")
-//TODO: Cambiar la URL de origen a la de producción cuando esté disponible
 public class ImagenPublicController {
 
     @Autowired
