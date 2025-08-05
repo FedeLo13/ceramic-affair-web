@@ -54,3 +54,15 @@
 .product-card:not(:has(.product-sold-out)) {
     padding-top: 10px;
 }
+
+.product-card.selectable {
+  cursor: pointer;
+}
+
+.product-card.selected-delete {
+  border: 2px solid red;
+}
+
+.product-card.selected-soldout {
+  border: 2px solid yellow;
+}

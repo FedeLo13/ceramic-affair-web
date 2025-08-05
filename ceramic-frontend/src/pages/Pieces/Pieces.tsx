@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { filterProductos, type FilterProductosParams } from "../../api/productos";
+import { filterProductos, updateStockProducto, deleteProducto, type FilterProductosParams } from "../../api/productos";
 import { getAllCategorias } from "../../api/categorias";
-import type { ProductoOutputDTO } from "../../types/producto.types";
+import type { ProductoOutputDTO, ProductoStockDTO } from "../../types/producto.types";
 import type { Categoria } from "../../types/categoria.types";
 import ProductGrid from "../../components/ProductGrid/ProductGrid";
 import "./Pieces.css";
+import { useAuth } from "../../context/AuthContext";
+import { FaCrown } from "react-icons/fa";
 
 export default function Pieces() {
     const [productos, setProductos] = useState<ProductoOutputDTO[]>([]);
@@ -15,6 +17,8 @@ export default function Pieces() {
     const [categorias, setCategorias] = useState<Categoria[]>([]);
     const [loading, setLoading] = useState(false);
     const [isFetching, setIsFetching] = useState(false);
+    const [adminDropdownOpen, setAdminDropdownOpen] = useState(false);
+    const { isAuthenticated } = useAuth(); // Importa el hook de autenticación si es necesario
 
     // Estado para los filtros
     const [nombre, setNombre] = useState("");
@@ -22,6 +26,11 @@ export default function Pieces() {
     const [categoriaId, setCategoriaId] = useState<number | undefined>(undefined); // undefined para "Todas las categorías"
     const [soloEnStock, setSoloEnStock] = useState<boolean | undefined>(undefined); // undefined para "Todos los productos"
     const [orden, setOrden] = useState<"nuevos" | "viejos">("nuevos");
+
+    // Estados para el modo edición del administrador
+    const [selectedProductos, setSelectedProductos] = useState<number[]>([]); // IDs de productos seleccionados
+    const [selectionMode, setSelectionMode] = useState<"delete" | "soldout" | null>(null);
+    const isSoldOutSelectionMode = selectionMode === "soldout";
 
     // Ref para manejar la paginación con lazy loading
     const loader = useRef<HTMLDivElement | null>(null);
@@ -113,6 +122,15 @@ export default function Pieces() {
         };
     }, [isFetching, pageInfo.currentPage, pageInfo.totalPages]);
 
+    // Forzar filtro de stock en el modo de selección para establecer el stock
+    useEffect(() => {
+        if (isSoldOutSelectionMode) {
+            setSoloEnStock(true); // Solo mostrar productos en stock
+            setProductos([]); // Limpiar productos al cambiar a modo sold out
+            setPageInfo({ totalPages: 0, currentPage: 0 }); // Reiniciar paginación
+        }
+    }, [isSoldOutSelectionMode]);
+
     // Handlers para los filtros
     const handleNombreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setProductos([]); // Limpiar productos al cambiar el nombre
@@ -138,6 +156,45 @@ export default function Pieces() {
         const value = e.target.value;
         setSoloEnStock(value === "" ? undefined : value === "true");
     };
+
+    // Handlers para el modo edición del administrador
+    const handleProductClick = (productoId: number) => {
+        if(!selectionMode) return; // No hacer nada si no hay modo de selección
+
+        setSelectedProductos((prev) => 
+          prev.includes(productoId)
+            ? prev.filter(id => id !== productoId) // Desmarcar si ya está seleccionado
+            : [...prev, productoId] // Marcar si no está seleccionado  
+        );
+    }
+
+    const handleConfirmAction = async () => {
+        if (selectedProductos.length === 0 || !selectionMode) return;
+
+        try {
+            if (selectionMode === "delete") {
+                await Promise.all(selectedProductos.map(id => deleteProducto(id)));
+            } else if (selectionMode === "soldout") {
+                const soldOutPayload: ProductoStockDTO = { soldOut: true };
+                await Promise.all(selectedProductos.map(id => updateStockProducto(id, soldOutPayload)));
+            }
+
+            // Actualizar la lista de productos después de la acción
+            setProductos((prev) => 
+                selectionMode === "delete"
+                    ? prev.filter((p) => !selectedProductos.includes(p.id))
+                    : prev.map((p) =>
+                        selectedProductos.includes(p.id) ? { ...p, soldOut: true } : p
+                    )
+            );
+
+            // Limpiar selección y modo
+            setSelectedProductos([]);
+            setSelectionMode(null);
+        } catch (error) {
+            console.error("Error performing action on products:", error);
+        }
+    }
 
     const hasMore = pageInfo.totalPages === 0 || pageInfo.currentPage < pageInfo.totalPages - 1;
 
@@ -184,20 +241,72 @@ export default function Pieces() {
                     value={soloEnStock === undefined ? "" : soloEnStock ? "true" : "false"}
                     onChange={handleSoloEnStockChange}
                     className="select-stock"
+                    disabled={isSoldOutSelectionMode} // Deshabilitar si estamos en modo sold out
                 >
                     <option value="">All products</option>
                     <option value="true">In stock</option>
                 </select>
             </div>
 
+            {/* Admin Dropdown (solo visible si está logueado) */}
+            {isAuthenticated && (
+                <div className="admin-menu">
+                    <button
+                        className="admin-toggle" 
+                        onClick={() => setAdminDropdownOpen(!adminDropdownOpen)}>
+                            <FaCrown size={24} /> Admin Menu
+                    </button>
+                    {adminDropdownOpen && (
+                        <div className="admin-dropdown">
+                            <button className="delete-btn" onClick={() => {
+                                setSelectionMode("delete");
+                                setSelectedProductos([]);
+                                setAdminDropdownOpen(false);
+                            }}>
+                                Delete products
+                            </button>
+                            <button className="soldout-btn" onClick={() => {
+                                setSelectionMode("soldout");
+                                setSelectedProductos([]);
+                                setAdminDropdownOpen(false);
+                            }}>
+                                Mark as sold out
+                            </button>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {/* Grid de productos */}
             {productos.length === 0 ? (
                 <p className="text-no-products">No products found.</p>
             ) : (
-                <ProductGrid productos={productos} isLoading={loading} />
+                <ProductGrid 
+                    productos={productos} 
+                    isLoading={loading}
+                    selectionMode={selectionMode}
+                    selectedProductos={selectedProductos}
+                    onProductClick={handleProductClick}
+                />
             )}
 
             {/* Loader para lazy loading */}
             {hasMore && <div ref={loader} style = {{ height: "20px" }}></div>}
+
+            {/* Botones de confirmar y cancelar para el modo edición */}
+            {selectionMode && (
+                <div className="floating-action-buttons">
+                    <button className="confirm-selection-btn" disabled={selectedProductos.length === 0} onClick={handleConfirmAction}>
+                        Confirm
+                    </button>
+                    <button className="cancel-selection-btn" onClick={() => {
+                        setSelectionMode(null);
+                        setSelectedProductos([]);
+                    }}>
+                        Cancel
+                    </button>
+                </div>
+            )}  
         </div>
     );
 }

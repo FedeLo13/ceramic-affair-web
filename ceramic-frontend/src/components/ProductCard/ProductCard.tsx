@@ -7,9 +7,12 @@ import "./ProductCard.css";
 
 interface ProductCardProps {
   producto: ProductoOutputDTO;
+  selectionMode?: "delete" | "soldout" | null; // Modo de selección para administrador
+  selected?: boolean; // Indica si el producto está seleccionado en modo edición
+  onClick?: () => void; // Función para manejar el clic en el producto
 }
 
-export default function ProductCard({ producto }: ProductCardProps) {
+export default function ProductCard({ producto, selectionMode, selected = false, onClick }: ProductCardProps) {
     const {
         id,
         nombre,
@@ -39,26 +42,47 @@ export default function ProductCard({ producto }: ProductCardProps) {
         fetchImage();
     }, [idsImagenes]);
 
+    const cardClass = `
+        product-card 
+        ${selectionMode ? "selectable" : ""} 
+        ${selected && selectionMode === "delete" ? "selected-delete" : ""}
+        ${selected && selectionMode === "soldout" ? "selected-soldout" : ""}
+    `;
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
+            onClick={selectionMode ? onClick : undefined} // Maneja el clic solo si hay un modo de selección
         >
-            <Link to={`/pieces/${id}`} className="product-card">
-                <img
-                    src={imageURL}
-                    alt={nombre}
-                    className="product-image"
-                />
-                <h3 className="product-name">{nombre}</h3>
-                <p className="product-price">€{precio.toFixed(2)}</p>
-                {soldOut && (
-                    <span className="product-sold-out">
-                        Sold Out
-                    </span>
-                )}
-            </Link>
+            {selectionMode ? (
+                <div className={cardClass}>
+                    <img src={imageURL} alt={nombre} className="product-image" />
+                    <h3 className="product-name">{nombre}</h3>
+                    <p className="product-price">€{precio.toFixed(2)}</p>
+                    {soldOut && (
+                        <span className="product-sold-out">
+                            Sold Out
+                        </span>
+                    )}
+                </div>
+            ) : (
+                <Link to={`/pieces/${id}`} className="product-card">
+                    <img
+                        src={imageURL}
+                        alt={nombre}
+                        className="product-image"
+                    />
+                    <h3 className="product-name">{nombre}</h3>
+                    <p className="product-price">€{precio.toFixed(2)}</p>
+                    {soldOut && (
+                        <span className="product-sold-out">
+                            Sold Out
+                        </span>
+                    )}
+                </Link>
+            )}
         </motion.div>
     );
 }
