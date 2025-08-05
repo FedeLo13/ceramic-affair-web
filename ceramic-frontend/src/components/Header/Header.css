@@ -2,19 +2,166 @@ header {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   padding: 1rem 2rem;
   gap: 1rem; /* opcional: espaciado entre logo y nav */
 }
 
-nav {
-  display: flex;
-  gap: 1.5rem;
-  justify-content: center;
-  flex-wrap: wrap; /* por si se encogen en móvil */
+.left-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebar-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit; /* hereda el color del texto */
+  position: fixed;
+  z-index: 1000; /* para que esté por encima de otros elementos */
+  left: 20px;
+}
+
+header nav a,
+header nav .active {
+  color: inherit; /* hereda el color del texto padre */
+  text-decoration: none; /* quita el subrayado */
+}
+
+header nav a:hover {
+  color: #555; /* color al pasar el mouse, opcional */
 }
 
 .logo img {
   height: 150px; /* o el tamaño que tú veas */
   object-fit: contain;
   display: block;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a,
+.nav-links .instagram-icon {
+  color: inherit;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.nav-links a:hover,
+.instagram-icon:hover {
+  opacity: 0.7;
+}
+
+/* Sidebar oculto inicialmente */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 250px;
+    height: 100%;
+    background: #fff;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transition: left 0.3s ease;
+    z-index: 1001;
+}
+
+/* Sidebar visible */
+.sidebar.open {
+    left: 0;
+}
+
+/* Botón de cerrar */
+.close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    align-self: flex-end;
+    color: inherit; /* hereda el color del texto */
+    padding: 5px;
+    transition: color 0.2s;
+}
+
+/* Overlay */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+/* Ajustes de navegación dentro del sidebar */
+.sidebar a {
+    text-decoration: none;
+    color: #333;
+}
+
+/* Evitar estilos de link predeterminados */
+.sidebar a:hover {
+    color: #000;
+}
+
+.admin-menu {
+    position: relative;
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.admin-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: inherit; /* hereda el color del texto */
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.admin-dropdown {
+  position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    color: black;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    min-width: 180px;
+    z-index: 999;
+}
+
+.admin-dropdown a,
+.admin-menu .logout-btn {
+  padding: 8px 10px;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+}
+
+.admin-dropdown a:hover,
+.admin-menu .logout-btn:hover {
+  background: #f0f0f0;
+}
+
+.logout-btn {
+  color: inherit;
+  font-weight: bold;
 }
