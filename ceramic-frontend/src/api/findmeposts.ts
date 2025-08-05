@@ -1,5 +1,5 @@
 import type { FindMePostInputDTO, FindMePostOutputDTO } from "../types/findmepost.types";
-import { handleFetch } from "./utils";
+import { fetchWithAuth, handleFetch } from "./utils";
 
 const API_PUBLIC = 'http://localhost:8080/api/public/find-me-posts';
 const API_ADMIN = 'http://localhost:8080/api/admin/find-me-posts';
@@ -23,7 +23,7 @@ export const getAllFindMePosts = async (): Promise<FindMePostOutputDTO[]> => {
 //------------------ ADMINISTRATIVOS ------------------//
 
 export const newFindMePost = async (post: FindMePostInputDTO): Promise<number> => {
-    const response = await fetch(`${API_ADMIN}/crear`, {
+    const response = await fetchWithAuth(`${API_ADMIN}/crear`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ export const newFindMePost = async (post: FindMePostInputDTO): Promise<number> =
 };
 
 export const updateFindMePost = async (id: number, post: FindMePostInputDTO): Promise<void> => {
-    const response = await fetch(`${API_ADMIN}/${id}`, {
+    const response = await fetchWithAuth(`${API_ADMIN}/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ export const updateFindMePost = async (id: number, post: FindMePostInputDTO): Pr
 };
 
 export const deleteFindMePost = async (id: number): Promise<void> => {
-    const response = await fetch(`${API_ADMIN}/${id}`, {
+    const response = await fetchWithAuth(`${API_ADMIN}/${id}`, {
         method: 'DELETE',
     });
 

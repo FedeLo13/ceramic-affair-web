@@ -1,4 +1,4 @@
-import { handleFetch } from "./utils";
+import { fetchWithAuth, handleFetch } from "./utils";
 import type { Categoria, CategoriaInputDTO } from "../types/categoria.types";
 
 const API_PUBLIC = 'http://localhost:8080/api/public/categorias';
@@ -23,7 +23,7 @@ export const getAllCategorias = async (): Promise<Categoria[]> => {
 //------------------ ADMINISTRATIVOS ------------------//
 
 export const newCategoria = async (categoria: CategoriaInputDTO): Promise<number> => {
-    const response = await fetch(`${API_ADMIN}/crear`, {
+    const response = await fetchWithAuth(`${API_ADMIN}/crear`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ export const newCategoria = async (categoria: CategoriaInputDTO): Promise<number
 };
 
 export const updateCategoria = async (id: number, categoria: CategoriaInputDTO): Promise<void> => {
-    const response = await fetch(`${API_ADMIN}/${id}`, {
+    const response = await fetchWithAuth(`${API_ADMIN}/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ export const updateCategoria = async (id: number, categoria: CategoriaInputDTO):
 };
 
 export const deleteCategoria = async (id: number): Promise<void> => {
-    const response = await fetch(`${API_ADMIN}/${id}`, {
+    const response = await fetchWithAuth(`${API_ADMIN}/${id}`, {
         method: 'DELETE',
     });
     return await handleFetch<void>(response, 'Error al eliminar categoría');

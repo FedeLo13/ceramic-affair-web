@@ -13,6 +13,17 @@ export class ValidationError extends Error {
     }
 }
 
+export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
+    const token = localStorage.getItem('token');
+    
+    const headers= {
+        ...options.headers,
+        'Authorization': token ? `Bearer ${token}` : '',
+    };
+
+    return fetch(url, { ...options, headers });
+}
+
 export const handleFetch = async <T>(response: Response, errorPrefix = 'Error'): Promise<T> => {
 
     const text = await response.text();

@@ -1,4 +1,4 @@
-import { handleFetch } from "./utils";
+import { fetchWithAuth, handleFetch } from "./utils";
 import type { ProductoInputDTO, ProductoOutputDTO, ProductoStockDTO } from "../types/producto.types";
 import type { PageResponse } from "./page.response";
 
@@ -46,7 +46,7 @@ export const filterProductos = async (params:FilterProductosParams & {page?: num
 //------------------ ADMINISTRATIVOS ------------------//
 
 export const newProducto = async (producto: ProductoInputDTO): Promise<number> => {
-    const response = await fetch(`${API_ADMIN}/crear`, {
+    const response = await fetchWithAuth(`${API_ADMIN}/crear`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ export const newProducto = async (producto: ProductoInputDTO): Promise<number> =
 }
 
 export const updateProducto = async (id: number, producto: ProductoInputDTO): Promise<void> => {
-    const response = await fetch(`${API_ADMIN}/${id}`, {
+    const response = await fetchWithAuth(`${API_ADMIN}/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ export const updateProducto = async (id: number, producto: ProductoInputDTO): Pr
 };
 
 export const updateStockProducto = async (id: number, stock: ProductoStockDTO): Promise<void> => {
-    const response = await fetch(`${API_ADMIN}/${id}/stock`, {
+    const response = await fetchWithAuth(`${API_ADMIN}/${id}/stock`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ export const updateStockProducto = async (id: number, stock: ProductoStockDTO): 
 }
 
 export const deleteProducto = async (id: number): Promise<void> => {
-    const response = await fetch(`${API_ADMIN}/${id}`, {
+    const response = await fetchWithAuth(`${API_ADMIN}/${id}`, {
         method: 'DELETE',
     });
 

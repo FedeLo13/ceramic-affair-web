@@ -1,5 +1,5 @@
 import type { NewsletterDTO } from "../types/newsletter.types";
-import { handleFetch } from "./utils";
+import { fetchWithAuth, handleFetch } from "./utils";
 
 const API_NEWSLETTER = 'http://localhost:8080/api/admin/newsletter';
 const API_PLANTILLA = 'http://localhost:8080/api/admin/plantilla';
@@ -23,13 +23,13 @@ export const sendNewsletter = async (newsletter: NewsletterDTO): Promise<string>
 //------------------ PLANTILLAS ------------------//
 
 export const getPlantilla = async (): Promise<NewsletterDTO> => {
-    const response = await fetch(`${API_PLANTILLA}/obtener`);
+    const response = await fetchWithAuth(`${API_PLANTILLA}/obtener`);
 
     return await handleFetch<NewsletterDTO>(response, 'Error al obtener plantilla');
 };
 
 export const updatePlantilla = async (plantilla: NewsletterDTO): Promise<void> => {
-    const response = await fetch(`${API_PLANTILLA}/modificar`, {
+    const response = await fetchWithAuth(`${API_PLANTILLA}/modificar`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

@@ -1,5 +1,5 @@
 import type { Imagen } from "../types/imagen.types";
-import { handleFetch } from "./utils";
+import { fetchWithAuth, handleFetch } from "./utils";
 
 const API_PUBLIC = 'http://localhost:8080/api/public/imagenes';
 const API_ADMIN = 'http://localhost:8080/api/admin/imagenes';
@@ -20,7 +20,7 @@ export const newImagen = async (archivo: File): Promise<Imagen> => {
     const formData = new FormData();
     formData.append('archivo', archivo);
 
-    const response = await fetch(`${API_ADMIN}/crear`, {
+    const response = await fetchWithAuth(`${API_ADMIN}/crear`, {
         method: 'POST',
         body: formData,
     });
@@ -29,7 +29,7 @@ export const newImagen = async (archivo: File): Promise<Imagen> => {
 };
 
 export const deleteImagen = async (id: number): Promise<void> => {
-    const response = await fetch(`${API_ADMIN}/${id}`, {
+    const response = await fetchWithAuth(`${API_ADMIN}/${id}`, {
         method: 'DELETE',
     });
 
