@@ -27,7 +27,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     }, []);
 
-    // 👇 Este useEffect es el que te dice si estás logueado o no
+    // Use effect para verificar el estado del token (temporal para desarrollo)
     useEffect(() => {
         if (token && !isTokenExpired(token)) {
             console.log("✅ Admin logueado");
