@@ -6,6 +6,9 @@ import PieceDetail from "./pages/PieceDetail/PieceDetail";
 import Contact from "./pages/Contact/Contact";
 import FindMe from "./pages/FindMe";
 import AdminLogin from "./pages/AdminLogin/AdminLogin";
+import AdminProductNew from "./pages/Admin/AdminProductNew";
+import AdminProductEdit from "./pages/Admin/AdminProductEdit";
+import ProtectedRoute from "./components/ProtectedRoutes/ProtectedRoute";
 
 function App() {
   return (
@@ -18,7 +21,17 @@ function App() {
         <Route path="contact" element={<Contact />} />
         <Route path="find-me" element={<FindMe />} />
         <Route path="admin-login" element={<AdminLogin />} />
-        {/* Añadir más rutas aquí según sea necesario */}
+        {/* Rutas protegidas para administración */}
+        <Route path="admin/products/new" element={
+          <ProtectedRoute>
+            <AdminProductNew />
+          </ProtectedRoute>
+        } />
+        <Route path="admin/products/edit/:id" element={
+          <ProtectedRoute>
+            <AdminProductEdit />
+          </ProtectedRoute>
+        } />
       </Route>
     </Routes>
   );
