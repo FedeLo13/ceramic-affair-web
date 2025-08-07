@@ -58,7 +58,7 @@ export default function Header() {
                         </button>
                         {adminMenuOpen && (
                             <div className="admin-dropdown">
-                                <NavLink to="/add-pieces" onClick={() => setSidebarOpen(false)}>Add Pieces</NavLink>
+                                <NavLink to="/admin/products/new" onClick={() => setSidebarOpen(false)}>Add Pieces</NavLink>
                                 <NavLink to="/add-findme-post" onClick={() => setSidebarOpen(false)}>Add Find Me Post</NavLink>
                                 <NavLink to="/manage-categories" onClick={() => setSidebarOpen(false)}>Manage Categories</NavLink>
                                 <button className="logout-btn" onClick={() => { logout(); setSidebarOpen(false); }}>
