@@ -7,33 +7,48 @@ import ProductGrid from "../../components/ProductGrid/ProductGrid";
 import "./Pieces.css";
 import { useAuth } from "../../context/AuthContext";
 import { FaCrown } from "react-icons/fa";
+import { useSearchParams } from "react-router-dom";
 
 export default function Pieces() {
-    const [productos, setProductos] = useState<ProductoOutputDTO[]>([]);
+    const [searchParams] = useSearchParams(); // Obtener los parámetros de búsqueda
+    const categoriaParam = searchParams.get("categoria"); // Obtener el parámetro de categoría
+    const [productos, setProductos] = useState<ProductoOutputDTO[]>([]); // Estado para los productos
     const [pageInfo, setPageInfo] = useState({
         totalPages: 0,
         currentPage: 0,
-    });
-    const [categorias, setCategorias] = useState<Categoria[]>([]);
-    const [loading, setLoading] = useState(false);
-    const [isFetching, setIsFetching] = useState(false);
-    const [adminDropdownOpen, setAdminDropdownOpen] = useState(false);
-    const { isAuthenticated } = useAuth(); // Importa el hook de autenticación si es necesario
+    }); // Estado para la paginación
+    const [categorias, setCategorias] = useState<Categoria[]>([]); // Estado para las categorías
+    const [loading, setLoading] = useState(false); // Estado de carga
+    const [isFetching, setIsFetching] = useState(false); // Estado para el lazy loading
+    const [adminDropdownOpen, setAdminDropdownOpen] = useState(false); // Estado para el menú de administrador
+    const { isAuthenticated } = useAuth(); // Hook de autenticación
 
     // Estado para los filtros
-    const [nombre, setNombre] = useState("");
+    const [nombre, setNombre] = useState(""); // Estado para el filtro de búsqueda por nombre
     const [debouncedNombre, setDebouncedNombre] = useState(nombre); // Para evitar llamadas excesivas a la API
-    const [categoriaId, setCategoriaId] = useState<number | undefined>(undefined); // undefined para "Todas las categorías"
+    const [categoriaId, setCategoriaId] = useState<number | undefined>(
+        categoriaParam ? Number(categoriaParam) : undefined
+    ); // undefined para "Todas las categorías"
     const [soloEnStock, setSoloEnStock] = useState<boolean | undefined>(undefined); // undefined para "Todos los productos"
-    const [orden, setOrden] = useState<"nuevos" | "viejos">("nuevos");
+    const [orden, setOrden] = useState<"nuevos" | "viejos">("nuevos"); // Filtro de orden
 
     // Estados para el modo edición del administrador
     const [selectedProductos, setSelectedProductos] = useState<number[]>([]); // IDs de productos seleccionados
-    const [selectionMode, setSelectionMode] = useState<"delete" | "soldout" | null>(null);
-    const isSoldOutSelectionMode = selectionMode === "soldout";
+    const [selectionMode, setSelectionMode] = useState<"delete" | "soldout" | null>(null); // Modo de selección actual
+    const isSoldOutSelectionMode = selectionMode === "soldout"; 
 
     // Ref para manejar la paginación con lazy loading
     const loader = useRef<HTMLDivElement | null>(null);
+
+    // Estado para manejar el filtro de categoría por URL
+    useEffect(() => {
+        if (categoriaParam && !isNaN(Number(categoriaParam))) {
+            setCategoriaId(Number(categoriaParam));
+        } else {
+            setCategoriaId(undefined);
+        }
+    }, [categoriaParam]);
+
 
     // Debounce para la búsqueda por nombre
     useEffect(() => {
@@ -66,7 +81,7 @@ export default function Pieces() {
             try {
                 const filtros: FilterProductosParams = {
                     nombre: debouncedNombre.trim() || undefined, // Usar el nombre debounced
-                    categoria: categoriaId,
+                    categoria: categoriaId && !isNaN(categoriaId) ? categoriaId : undefined,
                     soloEnStock,
                     orden,
                 };
@@ -179,14 +194,9 @@ export default function Pieces() {
                 await Promise.all(selectedProductos.map(id => updateStockProducto(id, soldOutPayload)));
             }
 
-            // Actualizar la lista de productos después de la acción
-            setProductos((prev) => 
-                selectionMode === "delete"
-                    ? prev.filter((p) => !selectedProductos.includes(p.id))
-                    : prev.map((p) =>
-                        selectedProductos.includes(p.id) ? { ...p, soldOut: true } : p
-                    )
-            );
+            // Reiniciar productos y paginación
+            setProductos([]);
+            setPageInfo({ totalPages: 0, currentPage: 0 });
 
             // Limpiar selección y modo
             setSelectedProductos([]);
@@ -214,7 +224,7 @@ export default function Pieces() {
 
                 {/* Dropdown de categorías */}
                 <select
-                    value={categoriaId}
+                    value={categoriaId !== undefined ? categoriaId.toString() : ""}
                     onChange={handleCategoriaChange}
                     className="select-category"
                 >
