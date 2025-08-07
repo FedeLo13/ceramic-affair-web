@@ -1,0 +1,141 @@
+/* Form container */
+.product-form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* Titles */
+.product-form h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+/* Form groups */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: #444;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="number"]:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #007BFF;
+  outline: none;
+}
+
+/* Error messages */
+.error-message {
+  color: #d93025;
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+}
+
+/* Form row for width, height, diameter */
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-row > div {
+  flex: 1;
+}
+
+/* Checkbox styling */
+.form-group input[type="checkbox"] {
+  transform: scale(1.2);
+  margin-left: 0.3rem;
+  cursor: pointer;
+}
+
+/* Buttons container */
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+/* Buttons */
+.button-group button {
+  padding: 0.6rem 1.4rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #007BFF;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.button-group button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+/* Disabled buttons */
+.button-group button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #007BFF;
+}
+
+/* Images container inside ImageUploader (assumed class .image-list) */
+.image-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.image-list img {
+  width: 120px;    /* ajusta a un tamaño razonable */
+  height: 120px;
+  object-fit: cover; /* recorta y mantiene proporción */
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.image-list img:hover {
+  transform: scale(1.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .form-row {
+    flex-direction: column;
+  }
+
+  .image-list img {
+    width: 100px;
+    height: 100px;
+  }
+}
