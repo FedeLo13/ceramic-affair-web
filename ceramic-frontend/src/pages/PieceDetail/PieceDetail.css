@@ -1,0 +1,200 @@
+.piece-detail-container {
+    padding: 20px;
+}
+
+.breadcrumb {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.breadcrumb a {
+    text-decoration: none;
+    color: #555;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.piece-detail-content {
+    display: flex;
+    gap: 40px;
+}
+
+.gallery {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.gallery-main {
+    position: relative;
+    width: 100%;
+    max-width: 500px; /* Ancho máximo de la imagen principal */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.nav-btn.prev { left: 10px; }
+.nav-btn.next { right: 10px; }
+
+.gallery-thumbs {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  overflow-x: auto;
+  white-space: nowrap;
+  width: 320px; /* aprox 5 thumbnails (5*60 + gaps) */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+.gallery-thumbs::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+.thumb {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  display: inline-block; /* Para que respete white-space */
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.thumb:hover {
+    transform: scale(1.05);
+}
+
+.thumb.active {
+    border-color: black;
+}
+
+.thumb-nav-btn {
+  background-color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thumb-nav-btn.left {
+  margin-right: 4px;
+}
+
+.thumb-nav-btn.right {
+  margin-left: 4px;
+}
+
+.nav-btn-prev {
+  position: absolute;
+  left: -40px; /* Fuera de la imagen a la izquierda */
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+
+.nav-btn-next {
+  position: absolute;
+  right: -40px; /* Fuera de la imagen a la derecha */
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+
+.details {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-name {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.product-price {
+    font-size: 22px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.product-description {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.sizes h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.sizes p {
+    margin: 4px 0;
+}
+
+.sold-out {
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 8px 16px;
+    width: 120px;
+    border-radius: 4px;
+    margin-top: 20px;
+}
+
+.zoom-container {
+    position: relative;
+    display: inline-block;
+    cursor: zoom-in;
+    border-radius: 8px; /* Igual que la imagen */
+    overflow: hidden; /* Importante para que el zoom no sobresalga */
+}
+
+.zoom-image {
+    max-width: 500px;
+    max-height: 400px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    display: block;
+}
+
+.zoom-container.hover {
+    background-repeat: no-repeat;
+    background-size: 200%;
+    border-radius: 8px; /* Igual que la imagen */
+}
+
+.zoom-container.hover .zoom-image {
+    opacity: 0;
+}
+
+
