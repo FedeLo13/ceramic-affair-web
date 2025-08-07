@@ -1,0 +1,72 @@
+.image-uploader {
+  margin-top: 1rem;
+}
+
+.image-uploader label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #444;
+}
+
+.image-uploader input[type="file"] {
+  margin-bottom: 1rem;
+}
+
+/* Contenedor de las imágenes */
+.preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+/* Cada imagen con su botón */
+.preview-item {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  background: #fff;
+}
+
+/* Las imágenes, que no se salgan y mantengan proporción */
+.preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Botón para eliminar la imagen */
+.preview-item button {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(255, 0, 0, 0.8);
+  border: none;
+  color: white;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-weight: bold;
+  line-height: 22px;
+  text-align: center;
+  padding: 0;
+  transition: background 0.2s ease;
+}
+
+.preview-item button:hover {
+  background: rgba(255, 0, 0, 1);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .preview-item {
+    width: 90px;
+    height: 90px;
+  }
+}
