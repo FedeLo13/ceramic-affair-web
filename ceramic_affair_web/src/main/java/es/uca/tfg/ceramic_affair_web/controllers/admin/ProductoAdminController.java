@@ -1,5 +1,7 @@
 package es.uca.tfg.ceramic_affair_web.controllers.admin;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -85,7 +87,7 @@ public class ProductoAdminController {
         @ApiResponse(responseCode = "404", description = "Producto no encontrado"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<ApiResponseType<Void>> eliminarProducto(@PathVariable Long id) {
+    public ResponseEntity<ApiResponseType<Void>> eliminarProducto(@PathVariable Long id) throws IOException {
         productoService.eliminarProducto(id);
         return ResponseEntity.noContent().build();
     }

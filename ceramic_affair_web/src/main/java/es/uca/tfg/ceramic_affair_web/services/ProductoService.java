@@ -1,5 +1,6 @@
 package es.uca.tfg.ceramic_affair_web.services;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class ProductoService {
 
     @Autowired
     private CategoriaRepo categoriaRepo;
+
+    @Autowired
+    private ImagenService imagenService;
 
     @Autowired
     private ImagenRepo imagenRepo;
@@ -152,11 +156,17 @@ public class ProductoService {
      * Método para eliminar un producto
      * 
      * @param id el id del producto a eliminar
+     * @throws IOException 
      * @throws ProductoException.NoEncontrado si no se encuentra el producto
      */
-    public void eliminarProducto(Long id) {
+    public void eliminarProducto(Long id) throws IOException {
         Producto producto = productoRepo.findById(id)
             .orElseThrow(() -> new ProductoException.NoEncontrado(id));
+
+        // Eliminar las imágenes asociadas al producto
+        for (Imagen imagen : producto.getImagenes()) {
+            imagenService.eliminarImagen(imagen.getId());
+        }
         
         productoRepo.delete(producto);
     }
