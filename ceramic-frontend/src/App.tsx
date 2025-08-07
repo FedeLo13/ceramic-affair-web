@@ -9,6 +9,7 @@ import AdminLogin from "./pages/AdminLogin/AdminLogin";
 import AdminProductNew from "./pages/Admin/AdminProductNew";
 import AdminProductEdit from "./pages/Admin/AdminProductEdit";
 import ProtectedRoute from "./components/ProtectedRoutes/ProtectedRoute";
+import AdminManageCategories from "./pages/Admin/AdminManageCategories";
 
 function App() {
   return (
@@ -30,6 +31,11 @@ function App() {
         <Route path="admin/products/edit/:id" element={
           <ProtectedRoute>
             <AdminProductEdit />
+          </ProtectedRoute>
+        } />
+        <Route path="admin/categories" element={
+          <ProtectedRoute>
+            <AdminManageCategories />
           </ProtectedRoute>
         } />
       </Route>
