@@ -6,13 +6,16 @@ import './styles/variables.css'
 import './styles/global.css'
 import App from './App.tsx'
 import { AuthProvider } from './context/AuthContext.tsx'
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
+      <GoogleReCaptchaProvider reCaptchaKey='6Ley9IwrAAAAANfsyFpChaZHQLShQWdi7UwYBWxR'>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </GoogleReCaptchaProvider>
     </BrowserRouter>
   </StrictMode>,
 );
