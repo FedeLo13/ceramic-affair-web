@@ -36,7 +36,7 @@ public class GmailEmailService implements EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
             helper.setTo(to);
             helper.setSubject(subject);
-            //helper.setFrom("correo@gmail.com", "Ceramic Affair");
+            helper.setFrom("fedevlopez17@gmail.com", "Ceramic Affair");
             helper.setText(body, true);
 
             mailSender.send(message);

@@ -79,4 +79,16 @@ public class RecaptchaResponse {
     public void setErrorCodes(List<String> errorCodes) {
         this.errorCodes = errorCodes;
     }
+
+    @Override
+    public String toString() {
+        return "RecaptchaResponse{" +
+                "success=" + success +
+                ", score=" + score +
+                ", action='" + action + '\'' +
+                ", challengeTs='" + challengeTs + '\'' +
+                ", hostname='" + hostname + '\'' +
+                ", errorCodes=" + errorCodes +
+                '}';
+    }
 }

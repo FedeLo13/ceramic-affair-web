@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import es.uca.tfg.ceramic_affair_web.DTOs.RecaptchaResponse;
@@ -38,7 +39,9 @@ public class RecaptchaService {
         RecaptchaResponse response = webClient.post()
                 .uri(url)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .bodyValue("secret=" + recaptchaSecretKey + "&response=" + recaptchaResponse)
+                .body(BodyInserters
+                        .fromFormData("secret", recaptchaSecretKey)
+                        .with("response", recaptchaResponse))
                 .retrieve()
                 .bodyToMono(RecaptchaResponse.class)
                 .block();
