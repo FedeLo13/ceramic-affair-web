@@ -14,19 +14,3 @@ export const subscribe = async (suscripcion: SuscripcionDTO): Promise<string> =>
 
     return await handleFetch<string>(response, 'Error al suscribirse');
 }
-
-export const unsubscribe = async (token: string): Promise<void> => {
-    const response = await fetch(`${API_URL}/desuscribir?token=${token}`, {
-        method: 'GET',
-    });
-
-    return await handleFetch<void>(response, 'Error al desuscribirse');
-}
-
-export const verifySubscription = async (token: string): Promise<void> => {
-    const response = await fetch(`${API_URL}/verificar?token=${token}`, {
-        method: 'GET',
-    });
-
-    return await handleFetch<void>(response, 'Error al verificar la suscripción');
-};
