@@ -9,7 +9,7 @@ const API_PLANTILLA = 'http://localhost:8080/api/admin/plantilla';
 //------------------ NEWSLETTER ------------------//
 
 export const sendNewsletter = async (newsletter: NewsletterDTO): Promise<string> => {
-    const response = await fetch(`${API_NEWSLETTER}/enviar`, {
+    const response = await fetchWithAuth(`${API_NEWSLETTER}/enviar`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
