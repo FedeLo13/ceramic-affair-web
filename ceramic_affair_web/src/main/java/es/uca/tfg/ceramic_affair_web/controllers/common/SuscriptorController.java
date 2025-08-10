@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -102,7 +103,7 @@ public class SuscriptorController {
         @ApiResponse(responseCode = "410", description = "Token de verificación expirado"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<ApiResponseType<Void>> verificarSuscriptor(@RequestParam String token) {
+    public ResponseEntity<Void> verificarSuscriptor(@RequestParam String token) {
         // Buscar el suscriptor por el token de verificación
         Optional<Suscriptor> optionalSuscriptor = suscriptorRepo.findByTokenVerificacion(token);
 
@@ -120,8 +121,8 @@ public class SuscriptorController {
         // Verificar el suscriptor
         suscriptor.verificar(); // Establece el suscriptor como verificado y genera un token de desuscripción
         suscriptorRepo.save(suscriptor);
-        //TODO : Hacer que redirija a una página de éxito o similar
-        return ResponseEntity.ok(new ApiResponseType<>(true, "Suscriptor verificado correctamente", null));
+
+        return redirectToFrontend("subscribed");
     }
 
     @GetMapping("/desuscribir")
@@ -131,7 +132,7 @@ public class SuscriptorController {
         @ApiResponse(responseCode = "404", description = "Suscriptor no encontrado"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<ApiResponseType<Void>> desuscribirSuscriptor(@RequestParam String token) {
+    public ResponseEntity<Void> desuscribirSuscriptor(@RequestParam String token) {
         // Buscar el suscriptor por el token de desuscripción
         Optional<Suscriptor> optionalSuscriptor = suscriptorRepo.findByTokenDesuscripcion(token);
 
@@ -142,8 +143,8 @@ public class SuscriptorController {
 
         // Desuscribir al suscriptor
         suscriptorRepo.delete(optionalSuscriptor.get());
-        // TODO : Hacer que redirija a una página de éxito o similar
-        return ResponseEntity.ok(new ApiResponseType<>(true, "Suscriptor desuscrito correctamente", null));
+
+        return redirectToFrontend("unsubscribed");
     }
 
     private void enviarCorreoVerificacion(Suscriptor suscriptor) {
@@ -160,5 +161,13 @@ public class SuscriptorController {
         } catch (Exception e) {
             throw new EmailException.EnvioFallido(e);
         }
+    }
+
+    private ResponseEntity<Void> redirectToFrontend(String status) {
+        // TODO: Cambiar la URL de origen a la de producción cuando esté disponible
+        String frontendUrl = "http://localhost:5173/confirmation?status=" + status;
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .header("Location", frontendUrl)
+                .build();
     }
 }

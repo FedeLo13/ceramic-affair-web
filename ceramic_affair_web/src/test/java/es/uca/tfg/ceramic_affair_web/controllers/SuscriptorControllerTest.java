@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -22,17 +23,21 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import es.uca.tfg.ceramic_affair_web.DTOs.SuscripcionDTO;
 import es.uca.tfg.ceramic_affair_web.controllers.common.SuscriptorController;
 import es.uca.tfg.ceramic_affair_web.entities.Suscriptor;
+import es.uca.tfg.ceramic_affair_web.exceptions.SuscriptorExceptionHandler;
 import es.uca.tfg.ceramic_affair_web.repositories.SuscriptorRepo;
 import es.uca.tfg.ceramic_affair_web.security.JwtUtils;
 import es.uca.tfg.ceramic_affair_web.services.EmailService;
@@ -44,7 +49,8 @@ import es.uca.tfg.ceramic_affair_web.services.RecaptchaService;
  * 
  * @version 1.0
  */
-@WebMvcTest(controllers = SuscriptorController.class)
+@WebMvcTest(controllers = SuscriptorController.class,
+        includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SuscriptorExceptionHandler.class))
 @AutoConfigureMockMvc
 public class SuscriptorControllerTest {
 
@@ -190,10 +196,8 @@ public class SuscriptorControllerTest {
 
         mockMvc.perform(get("/api/public/suscriptores/desuscribir")
                     .param("token", "desuscripcion-token"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("Suscriptor desuscrito correctamente"))
-                .andExpect(jsonPath("$.data").doesNotExist());
+                .andExpect(status().isFound())
+                .andExpect(header().string("Location", "http://localhost:5173/confirmation?status=unsubscribed"));
 
         // Verificar que el suscriptor fue eliminado
         verify(suscriptorRepo).delete(suscriptor);
@@ -206,11 +210,8 @@ public class SuscriptorControllerTest {
 
         mockMvc.perform(get("/api/public/suscriptores/desuscribir")
                     .param("token", "invalid-token"))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.status").value(404))
-                .andExpect(jsonPath("$.error").value("Excepción de negocio"))
-                .andExpect(jsonPath("$.message").value("Suscriptor no encontrado"))
-                .andExpect(jsonPath("$.path").value("/api/public/suscriptores/desuscribir"));
+                .andExpect(status().isFound())
+                .andExpect(header().string("Location", "http://localhost:5173/confirmation?status=not_found"));
     }
 
     @Test
@@ -224,10 +225,8 @@ public class SuscriptorControllerTest {
 
         mockMvc.perform(get("/api/public/suscriptores/verificar")
                     .param("token", "valid-token"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("Suscriptor verificado correctamente"))
-                .andExpect(jsonPath("$.data").doesNotExist());
+                .andExpect(status().isFound())
+                .andExpect(header().string("Location", "http://localhost:5173/confirmation?status=subscribed"));
 
         // Verificar que el suscriptor fue marcado como verificado
         verify(suscriptorRepo).save(any(Suscriptor.class));
@@ -240,11 +239,8 @@ public class SuscriptorControllerTest {
 
         mockMvc.perform(get("/api/public/suscriptores/verificar")
                     .param("token", "invalid-token"))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.status").value(404))
-                .andExpect(jsonPath("$.error").value("Excepción de negocio"))
-                .andExpect(jsonPath("$.message").value("Suscriptor no encontrado"))
-                .andExpect(jsonPath("$.path").value("/api/public/suscriptores/verificar"));
+                .andExpect(status().isFound())
+                .andExpect(header().string("Location", "http://localhost:5173/confirmation?status=not_found"));
     }
 
     @Test
@@ -257,11 +253,8 @@ public class SuscriptorControllerTest {
 
         mockMvc.perform(get("/api/public/suscriptores/verificar")
                     .param("token", "expired-token"))
-                .andExpect(status().isGone())
-                .andExpect(jsonPath("$.status").value(410))
-                .andExpect(jsonPath("$.error").value("Excepción de negocio"))
-                .andExpect(jsonPath("$.message").value("El token de verificación ha expirado"))
-                .andExpect(jsonPath("$.path").value("/api/public/suscriptores/verificar"));
+                .andExpect(status().isFound())
+                .andExpect(header().string("Location", "http://localhost:5173/confirmation?status=expired"));
     }
 
     @TestConfiguration
