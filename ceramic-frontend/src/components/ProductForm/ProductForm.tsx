@@ -4,7 +4,7 @@ import type { Imagen } from "../../types/imagen.types";
 import type { Categoria } from "../../types/categoria.types";
 import ImageUploader from "./ImageUploader";
 import { newImagen, deleteImagen, getImagenById } from "../../api/imagenes";
-import { getAllCategorias } from "../../api/categorias";
+import { getAllCategorias, newCategoria } from "../../api/categorias";
 import "./ProductForm.css"
 import type { ProductoInputDTOWithImages } from "./ProductoInputDTOWithImages";
 
@@ -32,6 +32,10 @@ export default function ProductForm({ mode, isEditingDraft, initialData, onSubmi
   const [newImages, setNewImages] = useState<File[]>([]);
   const [deletedImages, setDeletedImages] = useState<number[]>([]);
 
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [savingCategory, setSavingCategory] = useState(false);
+
   const [errors, setErrors] = useState<{ name?: string; category?: string; price?: string }>({});
   const [isFormValid, setIsFormValid] = useState(false);
 
@@ -47,6 +51,33 @@ export default function ProductForm({ mode, isEditingDraft, initialData, onSubmi
     };
     fetchCategorias();
   }, []);
+
+  // Añadir nueva categoría
+  const handleAddNewCategory = () => {
+    setNewCategoryName("");
+    setShowCategoryModal(true);
+  };
+
+  // Guardar la categoría añadida
+  const saveNewCategory = async () => {
+    if (!newCategoryName.trim()) {
+      alert("El nombre de la categoría no puede estar vacío.");
+      return;
+    }
+    setSavingCategory(true);
+    try {
+      const newCatId = await newCategoria({ nombre: newCategoryName.trim() });
+      const cats = await getAllCategorias();
+      setCategories(cats);
+      setCategory(newCatId.toString());
+      setShowCategoryModal(false);
+    } catch (err) {
+      console.error("Error creando categoría", err);
+      alert("Error al crear la categoría");
+    } finally {
+      setSavingCategory(false);
+    }
+  };
 
   // Cargar imágenes existentes y nuevas desde initialData
   useEffect(() => {
@@ -203,7 +234,15 @@ export default function ProductForm({ mode, isEditingDraft, initialData, onSubmi
 
       <div className="form-group">
         <label>Category</label>
-        <select value={category} onChange={(e) => setCategory(e.target.value)}>
+        <select value={category} onChange={
+          (e) => {
+            if (e.target.value === "__add_new__") {
+              handleAddNewCategory();
+            } else {
+              setCategory(e.target.value);
+            }
+          }
+        }>
           <option value="" disabled>
             -- Choose category --
           </option>
@@ -212,6 +251,7 @@ export default function ProductForm({ mode, isEditingDraft, initialData, onSubmi
               {cat.nombre}
             </option>
           ))}
+          <option value="__add_new__">Add new category...</option>
         </select>
         {errors.category && <p className="error-message">{errors.category}</p>}
       </div>
@@ -283,6 +323,31 @@ export default function ProductForm({ mode, isEditingDraft, initialData, onSubmi
           Clear Form
         </button>
       </div>
+
+      {/* Modal para nueva categoría */}
+      {showCategoryModal && (
+        <div className="modal-backdrop" onClick={(e) => {
+          if (e.target === e.currentTarget) setShowCategoryModal(false);
+        }}>
+          <div className="modal">
+            <h2>New Category</h2>
+            <label>
+              Category Name:
+              <input
+                type="text"
+                value={newCategoryName}
+                onChange={(e) => setNewCategoryName(e.target.value)}
+              />
+            </label>
+            <div className="modal-actions">
+              <button onClick={saveNewCategory} disabled={savingCategory}>
+                {savingCategory ? "Saving..." : "Save"}
+              </button>
+              <button onClick={() => setShowCategoryModal(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
     </form>
   );
 }
