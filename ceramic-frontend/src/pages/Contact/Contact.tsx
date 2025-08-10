@@ -2,10 +2,19 @@ import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import './Contact.css'
 import { useState } from 'react';
 import { sendContactoForm } from '../../api/contactoform';
+import { subscribe } from '../../api/suscriptores';
+import { ValidationError } from '../../api/utils';
 
 export default function Contact() {
     const { executeRecaptcha } = useGoogleReCaptcha();
 
+    // Estados para la newsletter
+    const [newsletterEmail, setNewsletterEmail] = useState('');
+    const [newsletterStatus, setNewsletterStatus] = useState<string | null>(null);
+    const [newsletterError, setNewsletterError] = useState<string | null>(null);
+    const [newsletterLoading, setNewsletterLoading] = useState(false);
+
+    // Lógica del formulario de contacto
     const [form, setForm] = useState({
         nombre: '',
         apellidos: '',
@@ -49,6 +58,48 @@ export default function Contact() {
         }
     }
 
+    // Lógica de la newsletter
+    const handleNewsletterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewsletterEmail(e.target.value);
+        setNewsletterStatus(null);
+        setNewsletterError(null);
+    }
+
+    const handleNewsletterSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setNewsletterLoading(true);
+        setNewsletterStatus(null);
+        setNewsletterError(null);
+
+        if (!executeRecaptcha) {
+            setNewsletterError('Recaptcha not executed');
+            setNewsletterLoading(false);
+            return;
+        }
+
+        try {
+            const token = await executeRecaptcha('newsletterSubscribe');
+
+            const message = await subscribe({
+                email: newsletterEmail,
+                recaptchaToken: token
+            });
+
+            setNewsletterStatus(message);
+            setNewsletterEmail('');
+        } catch (error) {
+            if (error instanceof ValidationError) {
+                setNewsletterError('Validation error: ' + error.message);
+            } else if (error instanceof Error) {
+                setNewsletterError(error.message);
+            } else {
+                setNewsletterError('Unknown error');
+            }
+        } finally {
+            setNewsletterLoading(false);
+        }
+    }
+
     return (
         <div className="contact-page">
             <h1>Contact</h1>
@@ -89,13 +140,26 @@ export default function Contact() {
             {/* Newsletter */}
             <section className="newsletter-section">
                 <h2>Subscribe to our Newsletter</h2>
-                <form className="newsletter-form">
+                <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
                     <div className="form-group">
                         <label htmlFor="newsletterEmail">Email</label>
-                        <input type="email" id="newsletterEmail" name="newsletterEmail" required />
+                        <input 
+                            type="email" 
+                            id="newsletterEmail" 
+                            name="newsletterEmail" 
+                            value={newsletterEmail} 
+                            onChange={handleNewsletterChange} 
+                            required
+                            disabled={newsletterLoading}
+                        />
                     </div>
-                    <button type="submit" className="subscribe-button">Subscribe</button>
+                    <button type="submit" className="subscribe-button" disabled={newsletterLoading}>
+                        {newsletterLoading ? 'Loading...' : 'Subscribe'}
+                    </button>
                 </form>
+
+                {newsletterStatus && <p className="success-message">{newsletterStatus}</p>}
+                {newsletterError && <p className="error-message">{newsletterError}</p>}
             </section>
         </div>
     );
