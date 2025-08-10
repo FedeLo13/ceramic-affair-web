@@ -28,7 +28,7 @@ public class SuscriptorException {
      */
     public static class YaVerificado extends BusinessException {
         public YaVerificado(String email) {
-            super("El suscriptor con email: " + email + " ya está verificado", HttpStatus.CONFLICT);
+            super("El suscriptor con email: " + email + " ya está suscrito", HttpStatus.CONFLICT);
         }
     }
 
@@ -37,7 +37,7 @@ public class SuscriptorException {
      */
     public static class TokenExpirado extends BusinessException {
         public TokenExpirado() {
-            super("El token de verificación ha expirado", HttpStatus.GONE);
+            super("El enlace de verificación ha expirado", HttpStatus.GONE);
         }
     }
 
