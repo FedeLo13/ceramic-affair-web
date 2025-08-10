@@ -5,11 +5,19 @@ import type { ProductoInputDTOWithImages } from "../../components/ProductForm/Pr
 import { useState } from "react";
 import { newImagen } from "../../api/imagenes";
 import "./AdminProductNew.css";
+import type { NewsletterDTO } from "../../types/newsletter.types";
+import { getPlantilla, sendNewsletter, updatePlantilla } from "../../api/newsletters";
 
 export default function AdminProductNew() {
   const navigate = useNavigate();
   const [drafts, setDrafts] = useState<ProductoInputDTOWithImages[]>([]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+
+  // Estados para el modal de la newsletter
+  const [showNewsletterModal, setShowNewsletterModal] = useState(false);
+  const [newsletter, setNewsletter] = useState<NewsletterDTO>({ asunto: "", mensaje: "" });
+  const [loadingPlantilla, setLoadingPlantilla] = useState(false);
+  const [sending, setSending] = useState(false);
 
   const handleAddToList = (data: ProductoInputDTOWithImages) => {
     if (editingIndex !== null) {
@@ -55,6 +63,42 @@ export default function AdminProductNew() {
     }
   };
 
+  const handleSaveAndNotify = async () => {
+    setLoadingPlantilla(true);
+    try {
+      const plantilla = await getPlantilla();
+      setNewsletter(plantilla);
+      setShowNewsletterModal(true);
+    } catch (error) {
+      console.error("Error saving and notifying:", error);
+    } finally {
+      setLoadingPlantilla(false);
+    }
+  };
+
+  const handleUpdatePlantilla = async () => {
+    try {
+      await updatePlantilla(newsletter);
+      alert("Template updated successfully");
+    } catch (error) {
+      console.error("Error updating template:", error);
+    }
+  };
+
+  const handleSendNewsletter = async () => {
+    setSending(true);
+    try {
+      await sendNewsletter(newsletter);
+      alert("Newsletter sent successfully");
+      setShowNewsletterModal(false);
+      await handleSaveAll(); // Guardar todos los cambios tras enviar
+    } catch (error) {
+      console.error("Error sending newsletter:", error);
+    } finally {
+      setSending(false);
+    }
+  };
+
   return (
     <div>
       <h3>Added pieces</h3>
@@ -86,8 +130,8 @@ export default function AdminProductNew() {
         <button className="save-button" onClick={handleSaveAll} disabled={drafts.length === 0}> 
           Save All Pieces
         </button>
-        <button className="save-button" onClick={handleSaveAll} disabled={drafts.length === 0}> 
-          Save & Notify Subscribers
+        <button className="save-button" onClick={handleSaveAndNotify} disabled={drafts.length === 0 || loadingPlantilla}> 
+          {loadingPlantilla ? "Loading..." : "Save & Notify Subscribers"}
         </button>
         <button onClick={() => navigate("/pieces")}>
           Cancel
@@ -103,6 +147,39 @@ export default function AdminProductNew() {
         onAddToList={handleAddToList}
         onCancel={() => setEditingIndex(null)} 
       />
-    </div>
+
+      {/*Modal Newsletter */}
+      {showNewsletterModal && (
+        <div className="modal-backdrop">
+          <div className="modal">
+            <h2>Send a Newsletter</h2>
+            <label>
+              Subject:
+              <input
+                type="text"
+                value={newsletter.asunto}
+                onChange={(e) => setNewsletter({ ...newsletter, asunto: e.target.value })}
+              />
+            </label>
+            <label>
+              Message:
+              <textarea
+                rows={6}
+                value={newsletter.mensaje}
+                onChange={(e) => setNewsletter({ ...newsletter, mensaje: e.target.value })}
+              />
+              </label>
+
+              <div className="modal-actions">
+                <button onClick={handleUpdatePlantilla}>Save current as template</button>
+                <button onClick={handleSendNewsletter} disabled={sending}>
+                  {sending ? "Sending..." : "Send Newsletter & Save Products"}
+                </button>
+                <button onClick={() => setShowNewsletterModal(false)}>Cancel</button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
   );
 }
