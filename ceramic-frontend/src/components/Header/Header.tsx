@@ -44,6 +44,7 @@ export default function Header() {
                 <NavLink to="/pieces" onClick={() => setSidebarOpen(false)}>Pieces</NavLink>
                 <NavLink to="/contact" onClick={() => setSidebarOpen(false)}>Contact</NavLink>
                 <NavLink to="/find-me" onClick={() => setSidebarOpen(false)}>Find Me</NavLink>
+                <NavLink to="/privacy-policy" onClick={() => setSidebarOpen(false)}>Privacy Policy</NavLink>
                 <a href="https://www.instagram.com/ceramic_affair/" target="_blank" rel="noopener noreferrer" className="instagram-icon" onClick={() => setSidebarOpen(false)}>
                     <FaInstagram size={24} />
                 </a>

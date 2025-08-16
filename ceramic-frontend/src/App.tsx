@@ -14,6 +14,7 @@ import Confirmacion from "./pages/Confirmation/Confirmation";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import AdminFindMeEdit from "./pages/Admin/AdminFindMeEdit";
 import AdminFindMeNew from "./pages/Admin/AdminFindMeNew";
+import PoliticaPrivacidad from "./pages/PolíticaPrivacidad/PrivacyPolicy";
 
 function App() {
   return (
@@ -30,6 +31,9 @@ function App() {
           </GoogleReCaptchaProvider>
         } />
         <Route path="find-me" element={<FindMe />} />
+        <Route path="privacy-policy" element={<PoliticaPrivacidad />} />
+        
+        {/* Rutas de administración */}
         <Route path="admin-login" element={<AdminLogin />} />
         <Route path="confirmation" element={<Confirmacion />} />
         {/* Rutas protegidas para administración */}
