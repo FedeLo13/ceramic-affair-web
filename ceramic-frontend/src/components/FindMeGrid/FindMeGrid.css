@@ -1,0 +1,49 @@
+.findme-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Siempre 1 tarjeta por fila */
+    gap: 20px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+/* Puedes mantener media queries por si en el futuro quieres más columnas,
+   pero ahora siempre usará 1 columna */
+@media (max-width: 900px) {
+    .findme-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .findme-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Skeleton loader */
+.skeleton-card {
+    background-color: #e0e0e0;
+    border-radius: 8px;
+    height: 250px;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* Animación fade-in para las tarjetas */
+.findme-grid .findme-card {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.4s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

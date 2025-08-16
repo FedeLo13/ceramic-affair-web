@@ -1,10 +1,31 @@
+import { useEffect, useState } from "react";
+import { getAllFindMePosts } from "../../api/findmeposts";
+import type { FindMePostOutputDTO } from "../../types/findmepost.types";
+import FindMeGrid from "../../components/FindMeGrid/FindMeGrid";
+
 export default function FindMe() {
-    return ( 
-        <div>
-            <h1>Find Me</h1>
-            <p> THIS PAGE IS UNDER CONSTRUCTION</p>
-            <p>We are working hard to bring you this feature. Stay tuned!</p>
-            {/* Add more content or components related to finding locations here */}
-        </div>
-    );
+  const [posts, setPosts] = useState<FindMePostOutputDTO[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const data = await getAllFindMePosts();
+        setPosts(data);
+      } catch (error) {
+        console.error("Error al obtener los posts de Find Me:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
+  return (
+    <div className="findme-page">
+      <h1>Find Me</h1>
+      <FindMeGrid posts={posts} isLoading={loading} />
+    </div>
+  );
 }
