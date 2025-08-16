@@ -7,3 +7,11 @@ body {
   line-height: 1.5;
   font-size: 16px;
 }
+
+/* Forzar a que inputs, selects, buttons hereden */
+input,
+select,
+button,
+textarea {
+  font-family: inherit;
+}
