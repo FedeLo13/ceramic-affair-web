@@ -158,33 +158,33 @@ export default function PieceDetail() {
 
                 {/* Galería */}
                 <div className="gallery">
-                    <div className="gallery-main">
-                        {imagenes.length > 0 && (
-                            <ZoomImage
-                                src={`${BASE_IMAGE_URL}${imagenes[currentImageIndex].ruta}`}
-                                alt={producto.nombre}
-                                onDoubleClick={() => setShowModal(true)}
-                            />
-                        )}
-                        {showModal && (
-                            <ImageModal
-                                images={imagenes}
-                                currentIndex={currentImageIndex}
-                                alt={producto.nombre}
-                                onClose={() => setShowModal(false)}
-                            />
-                        )}
-                        {imagenes.length > 1 && (
-                            <>
-                                <button className="nav-btn-prev" onClick={handlePrev}>
-                                    <FaChevronLeft />
-                                </button>
-                                <button className="nav-btn-next" onClick={handleNext}>
-                                    <FaChevronRight />
-                                </button>
-                            </>
-                        )}
-                    </div>
+                    {imagenes.length > 0 ? (
+                        <>
+                            <div className="gallery-main">
+                                <ZoomImage
+                                    src={`${BASE_IMAGE_URL}${imagenes[currentImageIndex].ruta}`}
+                                    alt={producto.nombre}
+                                    onDoubleClick={() => setShowModal(true)}
+                                />
+                                {showModal && (
+                                    <ImageModal
+                                        images={imagenes}
+                                        currentIndex={currentImageIndex}
+                                        alt={producto.nombre}
+                                        onClose={() => setShowModal(false)}
+                                    />
+                                )}
+                                {imagenes.length > 1 && (
+                                    <>
+                                        <button className="nav-btn-prev" onClick={handlePrev}>
+                                            <FaChevronLeft />
+                                        </button>
+                                        <button className="nav-btn-next" onClick={handleNext}>
+                                            <FaChevronRight />
+                                        </button>
+                                    </>
+                                )}
+                            </div>
 
                     <div className="gallery-thumbs" ref={combinedRef} {...handlersWithoutRef} onWheel={handleWheel}>
                         {imagenes.map((imagen, index) => (
@@ -197,6 +197,16 @@ export default function PieceDetail() {
                             />
                         ))}
                     </div>
+                        </>
+                    ) : (
+                        <div className="gallery-main">
+                            <img
+                                src="/images/1068302.png"
+                                alt="Default"
+                                className="default-image"
+                            />
+                        </div>
+                    )}
                 </div>
 
                 {/* Detalles del producto */}
