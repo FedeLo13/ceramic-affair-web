@@ -49,38 +49,40 @@ export default function ProductCard({ producto, selectionMode, selected = false,
         ${selected && selectionMode === "soldout" ? "selected-soldout" : ""}
     `;
 
+    const cardContent = (
+        <>
+         <div className="product-card-image-wrapper">
+            <div className={`product-card-image-container ${imageURL.includes("images/1068302.png") ? "default-image" : ""}`}>
+                <img
+                    src={imageURL}
+                    alt={nombre}
+                    className={`product-card-image ${imageURL.includes("images/1068302.png") ? "default-image" : ""}`}
+                />
+            </div>
+                {soldOut && (
+                    <span className="product-card-sold-out">
+                        SOLD OUT
+                    </span>
+                )}
+            </div>
+            <p className="product-card-name">{nombre}</p>
+            <p className="product-card-price">€{precio.toFixed(2)}</p>
+        </>
+    )
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
-            onClick={selectionMode ? onClick : undefined} // Maneja el clic solo si hay un modo de selección
         >
             {selectionMode ? (
-                <div className={cardClass}>
-                    <img src={imageURL} alt={nombre} className="product-image" />
-                    <h3 className="product-name">{nombre}</h3>
-                    <p className="product-price">€{precio.toFixed(2)}</p>
-                    {soldOut && (
-                        <span className="product-sold-out">
-                            Sold Out
-                        </span>
-                    )}
+                <div className={cardClass} onClick={onClick}>
+                    {cardContent}
                 </div>
             ) : (
                 <Link to={`/pieces/${id}`} className="product-card">
-                    <img
-                        src={imageURL}
-                        alt={nombre}
-                        className="product-image"
-                    />
-                    <h3 className="product-name">{nombre}</h3>
-                    <p className="product-price">€{precio.toFixed(2)}</p>
-                    {soldOut && (
-                        <span className="product-sold-out">
-                            Sold Out
-                        </span>
-                    )}
+                    {cardContent}
                 </Link>
             )}
         </motion.div>

@@ -1,20 +1,36 @@
 .product-card {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    background: #fff;
-    border: 1px solid #ddd;
-    padding: 10px;
-    width: 100%;
-    border-radius: 8px;
+    align-items: flex-start;
+    width: 300px;
+    margin: 0 0 32px 0;
     box-sizing: border-box;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease;
-    position: relative;
-    overflow: hidden;
     color: inherit;
     text-decoration: none;
+    position: relative;
+}
+
+.product-card-image-wrapper {
+    position: relative; /* para posicionar el cartel */
+    width: 100%;
+}
+
+.product-card-image-container {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: visible; /* que nada se desborde */
+    background: #ffffff;
+    position: relative;
+    transition: box-shadow .18s ease, transform .18s ease, filter .18s ease;
+}
+
+.product-card-image-container.default-image {
+    background: #f9f9f9; /* gris solo si es imagen default */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
 }
 
 .product-card:hover {
@@ -22,33 +38,42 @@
     color: inherit;
 }
 
-.product-image {
-    width: 100%;
-    height: 200px;
+.product-card-image {
+    max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
-    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12); /* sombrita en la foto */
+    display: block;
+    position: relative;
+    z-index: 1;
 }
 
-.product-name{
-    font-size: 1.1rem;
-    margin-top: 10px;
+.product-card-image.default-image {
+    box-shadow: none; /* sin sombra si es default */
 }
 
-.product-price {
-    color: #444;
-    font-weight: bold;
+.product-card-name {
+    font-size: 1rem;
+    margin: 8px 0 2px 0;
+    text-align: left;
 }
 
-.product-sold-out {
+.product-card-price {
+    font-size: 1rem;
+    text-align: left;
+    margin: 0;
+}
+
+.product-card-sold-out {
     position: absolute;
     top: 10px;
-    right: 10px;
-    padding: 5px 8px;
+    right: -8px;
+    padding: 6px 12px;
     background-color: #000000;
-    color: white;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: bold;
+    color: #fff;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.12); /* sombrita en la foto */
+    z-index: 3;
 }
 
 .product-card:not(:has(.product-sold-out)) {
@@ -59,10 +84,41 @@
   cursor: pointer;
 }
 
-.product-card.selected-delete {
-  border: 2px solid red;
+/* DELETE → rojo */
+.product-card.selected-delete .product-card-image-container {
+  /* borde interior suave + glow exterior */
+  box-shadow:
+    0 0 0 2px rgba(255, 59, 48, 0.9),
+    0 8px 16px rgba(255, 59, 48, 0.28);
+  transform: translateY(-1px);
 }
 
-.product-card.selected-soldout {
-  border: 2px solid yellow;
+.product-card.selected-delete .product-card-image-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(255, 59, 48, 0.12);
+  pointer-events: none;
+  z-index: 1;
 }
+
+/* SOLDOUT → amarillo */
+.product-card.selected-soldout .product-card-image-container {
+  box-shadow:
+    0 0 0 2px rgba(255, 204, 0, 0.95),
+    0 8px 16px rgba(255, 204, 0, 0.28);
+  transform: translateY(-1px);
+}
+.product-card.selected-soldout .product-card-image-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(255, 204, 0, 0.14);
+  pointer-events: none;
+  z-index: 1;
+}
+
+
+

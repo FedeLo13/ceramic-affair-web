@@ -1,9 +1,10 @@
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 columnas en pantallas grandes */
-    gap: 20px;
+    grid-template-columns: repeat(3, 250px); /* 3 columnas en pantallas grandes */
+    gap: 10px 200px;
     padding: 20px;
     transition: all 0.3s ease;
+    justify-content: center;
 }
 
 @media (max-width: 900px) {
@@ -16,20 +17,6 @@
     .product-grid {
         grid-template-columns: 1fr; /* 1 columna en pantallas pequeñas */
     }
-}
-
-/* Skeleton loader */
-.skeleton-card {
-    background-color: #e0e0e0;
-    border-radius: 8px;
-    height: 250px;
-    animation: pulse 1.5s infinite ease-in-out;
-}
-
-@keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
 }
 
 /* Animación fade-in */

@@ -5,7 +5,6 @@ import "./ProductGrid.css";
 
 interface ProductGridProps {
   productos: ProductoOutputDTO[];
-  isLoading?: boolean;
   selectionMode?: "delete" | "soldout" | null; // Modo de selección para administrador
   selectedProductos: number[];
   onProductClick: (productoId: number) => void;
@@ -16,7 +15,7 @@ const containerVariants = {
     visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
 };
 
-export default function ProductGrid({ productos, isLoading, selectionMode, selectedProductos, onProductClick }: ProductGridProps) {
+export default function ProductGrid({ productos, selectionMode, selectedProductos, onProductClick }: ProductGridProps) {
     return (
         <motion.div
             className="product-grid"
@@ -33,14 +32,6 @@ export default function ProductGrid({ productos, isLoading, selectionMode, selec
                     onClick={() => onProductClick(producto.id)}    
                 />
             ))}
-
-            {isLoading && (
-                <>
-                    <div className="skeleton-card"></div>
-                    <div className="skeleton-card"></div>
-                    <div className="skeleton-card"></div>
-                </>
-            )}
         </motion.div>
     );
 }
