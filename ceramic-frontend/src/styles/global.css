@@ -8,6 +8,10 @@ body {
   font-size: 16px;
 }
 
+::-webkit-scrollbar {
+    display: none;
+}
+
 /* Forzar a que inputs, selects, buttons hereden */
 input,
 select,
