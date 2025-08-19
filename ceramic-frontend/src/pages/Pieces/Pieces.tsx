@@ -6,7 +6,7 @@ import type { Categoria } from "../../types/categoria.types";
 import ProductGrid from "../../components/ProductGrid/ProductGrid";
 import "./Pieces.css";
 import { useAuth } from "../../context/AuthContext";
-import { FaCrown } from "react-icons/fa";
+import { FaCrown, FaSearch } from "react-icons/fa";
 import { useSearchParams } from "react-router-dom";
 
 export default function Pieces() {
@@ -78,6 +78,10 @@ export default function Pieces() {
     useEffect(() => {
         const fetchProductos = async () => {
             setLoading(true);
+
+            // Vaciar productos justo antes de hacer la búsqueda
+            if (pageInfo.currentPage === 0) setProductos([]);
+
             try {
                 const filtros: FilterProductosParams = {
                     nombre: debouncedNombre.trim() || undefined, // Usar el nombre debounced
@@ -148,25 +152,21 @@ export default function Pieces() {
 
     // Handlers para los filtros
     const handleNombreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setProductos([]); // Limpiar productos al cambiar el nombre
         setPageInfo({ totalPages: 0, currentPage: 0 }); // Reiniciar paginación
         setNombre(e.target.value);
     };
 
     const handleCategoriaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setProductos([]); // Limpiar productos al cambiar la categoría
         setPageInfo({ totalPages: 0, currentPage: 0 }); // Reiniciar paginación
         setCategoriaId(e.target.value === "" ? undefined : Number(e.target.value));
     };
 
     const handleOrdenChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setProductos([]); // Limpiar productos al cambiar el orden
         setPageInfo({ totalPages: 0, currentPage: 0 }); // Reiniciar paginación
         setOrden(e.target.value as "nuevos" | "viejos");
     };
 
     const handleSoloEnStockChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setProductos([]); // Limpiar productos al cambiar el stock
         setPageInfo({ totalPages: 0, currentPage: 0 }); // Reiniciar paginación
         const value = e.target.value;
         setSoloEnStock(value === "" ? undefined : value === "true");
@@ -214,91 +214,109 @@ export default function Pieces() {
             <div className="filters">
 
                 {/* Barra de búsqueda */}
-                <input
-                    type="text"
-                    placeholder="Search for a product..."
-                    value={nombre}
-                    onChange={handleNombreChange}
-                    className="search-bar"
-                />
+                <div className="search-wrapper">
+                    <input
+                        type="text"
+                        placeholder="Search for a product..."
+                        value={nombre}
+                        onChange={handleNombreChange}
+                        className="search-bar"
+                    />
+                    <FaSearch className="search-icon" />
+                </div>
 
                 {/* Dropdown de categorías */}
-                <select
-                    value={categoriaId !== undefined ? categoriaId.toString() : ""}
-                    onChange={handleCategoriaChange}
-                    className="select-category"
-                >
-                    <option value="">All categories</option>
-                    {categorias.map((categoria) => (
-                        <option key={categoria.id} value={categoria.id}>
-                            {categoria.nombre}
-                        </option>
-                    ))}
-                </select>
+                <div className="select-wrapper">
+                    <select
+                        value={categoriaId !== undefined ? categoriaId.toString() : ""}
+                        onChange={handleCategoriaChange}
+                        className="minimal-select"
+                    >
+                        <option value="">All categories</option>
+                        {categorias.map((categoria) => (
+                            <option key={categoria.id} value={categoria.id}>
+                                {categoria.nombre}
+                            </option>
+                        ))}
+                    </select>
+                </div>
 
                 {/* Orden */}
-                <select
-                    value={orden}
-                    onChange={handleOrdenChange}
-                    className="select-order"
-                >
-                    <option value="nuevos">Newest</option>
-                    <option value="viejos">Oldest</option>
-                </select>
+                <div className="select-wrapper">
+                    <select
+                        value={orden}
+                        onChange={handleOrdenChange}
+                        className="minimal-select"
+                    >
+                        <option value="nuevos">Newest</option>
+                        <option value="viejos">Oldest</option>
+                    </select>
+                </div>
 
                 {/* Stock */}
-                <select
-                    value={soloEnStock === undefined ? "" : soloEnStock ? "true" : "false"}
-                    onChange={handleSoloEnStockChange}
-                    className="select-stock"
-                    disabled={isSoldOutSelectionMode} // Deshabilitar si estamos en modo sold out
-                >
-                    <option value="">All products</option>
-                    <option value="true">In stock</option>
-                </select>
-            </div>
-
-            {/* Admin Dropdown (solo visible si está logueado) */}
-            {isAuthenticated && (
-                <div className="admin-menu">
-                    <button
-                        className="admin-toggle" 
-                        onClick={() => setAdminDropdownOpen(!adminDropdownOpen)}>
-                            <FaCrown size={24} /> Admin Menu
-                    </button>
-                    {adminDropdownOpen && (
-                        <div className="admin-dropdown">
-                            <button className="delete-btn" onClick={() => {
-                                setSelectionMode("delete");
-                                setSelectedProductos([]);
-                                setAdminDropdownOpen(false);
-                            }}>
-                                Delete products
-                            </button>
-                            <button className="soldout-btn" onClick={() => {
-                                setSelectionMode("soldout");
-                                setSelectedProductos([]);
-                                setAdminDropdownOpen(false);
-                            }}>
-                                Mark as sold out
-                            </button>
-                        </div>
-                    )}
+                <div className="select-wrapper">
+                    <select
+                        value={soloEnStock === undefined ? "" : soloEnStock ? "true" : "false"}
+                        onChange={handleSoloEnStockChange}
+                        className="minimal-select"
+                        disabled={isSoldOutSelectionMode} // Deshabilitar si estamos en modo sold out
+                    >
+                        <option value="">All products</option>
+                        <option value="true">In stock</option>
+                    </select>
                 </div>
-            )}
+
+                {/* Admin Dropdown (solo visible si está logueado) */}
+                {isAuthenticated && (
+                    <div className="admin-menu">
+                        <button
+                            className="admin-toggle" 
+                            onClick={() => setAdminDropdownOpen(!adminDropdownOpen)}>
+                                <FaCrown size={24} /> Admin Menu
+                        </button>
+                        {adminDropdownOpen && (
+                            <div className="admin-dropdown">
+                                <button className="delete-btn" onClick={() => {
+                                    setSelectionMode("delete");
+                                    setSelectedProductos([]);
+                                    setAdminDropdownOpen(false);
+                                }}>
+                                    Delete products
+                                </button>
+                                <button className="soldout-btn" onClick={() => {
+                                    setSelectionMode("soldout");
+                                    setSelectedProductos([]);
+                                    setAdminDropdownOpen(false);
+                                }}>
+                                    Mark as sold out
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
 
             {/* Grid de productos */}
             {productos.length === 0 ? (
-                <p className="text-no-products">No products found.</p>
+                <div className="loader-container">
+                    {loading ? (
+                        <>
+                            <div className="spinner"></div>
+                            <p>Cargando productos...</p>
+                        </>
+                    ) : (
+                        <p>No se encontraron productos</p>
+                    )}
+                </div>
             ) : (
                 <ProductGrid 
                     productos={productos} 
-                    isLoading={loading}
                     selectionMode={selectionMode}
                     selectedProductos={selectedProductos}
                     onProductClick={handleProductClick}
                 />
             )}
+
 
             {/* Loader para lazy loading */}
             {hasMore && <div ref={loader} style = {{ height: "20px" }}></div>}
