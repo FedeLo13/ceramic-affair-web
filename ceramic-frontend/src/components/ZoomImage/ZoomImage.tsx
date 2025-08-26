@@ -1,17 +1,16 @@
 import { useState, useRef } from "react";
 
-interface ZoomImageProps {
-    src: string;
-    alt: string;
-    onDoubleClick: () => void;
+interface ZoomImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+    enableZoom?: boolean; // Prop to control zoom functionality
 }
 
-export default function ZoomImage({ src, alt, onDoubleClick }: ZoomImageProps) {
+export default function ZoomImage({ src, alt, enableZoom, ...rest }: ZoomImageProps) {
     const [hover, setHover] = useState(false);
     const [backgroundPosition, setBackgroundPosition] = useState("center");
     const containerRef = useRef<HTMLDivElement>(null);
 
     const handleMouseMove = (e: React.MouseEvent<HTMLImageElement>) => {
+        if (!enableZoom) return; // No hacer nada si el zoom está deshabilitado
         const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
         const x = ((e.pageX - left) / width) * 100;
         const y = ((e.pageY - top) / height) * 100;
@@ -22,16 +21,16 @@ export default function ZoomImage({ src, alt, onDoubleClick }: ZoomImageProps) {
         <div
             ref={containerRef}
             className={`zoom-container ${hover ? "hover" : ""}`}
-            style={hover ? { backgroundImage: `url(${src})`, backgroundPosition } : {}}
+            style={hover && enableZoom ? { backgroundImage: `url(${src})`, backgroundPosition } : {}}
         >
             <img
                 src={src}
                 alt={alt}
                 className="zoom-image"
-                onMouseEnter={() => setHover(true)}
-                onMouseLeave={() => setHover(false)}
+                onMouseEnter={() => enableZoom && setHover(true)}
+                onMouseLeave={() => enableZoom && setHover(false)}
                 onMouseMove={handleMouseMove}
-                onDoubleClick={onDoubleClick}
+                {...rest}
             />
         </div>
     );
