@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import type { LoginDTO } from "../../types/login.types";
 import { login } from "../../api/login";
 import { useAuth } from "../../context/AuthContext";
+import "./AdminLogin.css"
 
 export default function AdminLogin() {
     const { login: doLogin} = useAuth();
@@ -13,6 +14,13 @@ export default function AdminLogin() {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
+
+        const trimmedEmail = email.trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+            setError("Please enter a valid email address.");
+            return;
+        }
+
         try {
             const res = await login({ email, password } as LoginDTO);
             doLogin(res.token);
@@ -24,16 +32,26 @@ export default function AdminLogin() {
 
     return (
         <div className="admin-login">
-            <h1>Admin Login</h1>
             <form className="admin-login-form" onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="email">Email</label>
                     <input 
-                        type="text" 
+                        type="email" 
                         id="email" 
                         name="email"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)} 
+                        onChange={(e) => setEmail(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === " ") {
+                                e.preventDefault();
+                            }
+                        }}
+                        onPaste={(e) => {
+                            const pasted = e.clipboardData.getData("text");
+                            if (/\s/.test(pasted)) {
+                                e.preventDefault();
+                            }
+                        }}
                         required />
                 </div>
                 <div className="form-group">
