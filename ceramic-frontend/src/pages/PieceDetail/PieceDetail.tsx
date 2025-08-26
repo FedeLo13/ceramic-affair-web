@@ -22,6 +22,7 @@ export default function PieceDetail() {
     const [showModal, setShowModal] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const { isAuthenticated } = useAuth(); // Hook de autenticación
+    const [isMobile, setIsMobile] = useState(false);
 
     const thumbsRef = useRef<HTMLDivElement>(null);
 
@@ -38,7 +39,7 @@ export default function PieceDetail() {
             const thumbRect = activeThumb.getBoundingClientRect();
 
             const offset =
-            thumbRect.left - containerRect.left - container.clientWidth / 2 + thumbRect.width / 2;
+                thumbRect.left - containerRect.left - container.clientWidth / 2 + thumbRect.width / 2;
 
             container.scrollBy({
             left: offset,
@@ -68,6 +69,19 @@ export default function PieceDetail() {
         fetchProducto();
     }, [id]);
 
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        handleResize(); // Verificar el tamaño inicial
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
+
     const handlers = useSwipeable({
         onSwipedLeft: () => {
             if (thumbsRef.current) {
@@ -93,15 +107,6 @@ export default function PieceDetail() {
             (swipeRef as React.RefObject<HTMLDivElement | null>).current = node;
         }
     }, [swipeRef]);
-
-    const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-        if (thumbsRef.current) {
-            e.preventDefault(); // evitar scroll vertical de la página
-            thumbsRef.current.scrollBy({
-            left: e.deltaY,
-            });
-        }
-    };
 
     if (!producto) {
         return <p>Loading...</p>;
@@ -151,7 +156,7 @@ export default function PieceDetail() {
                     >
                         <span>{producto.nombreCategoria || "Uncategorized"}</span>
                 </Link> &gt;
-                <span>{producto.nombre}</span>
+                <span> {producto.nombre}</span>
             </div>
 
             <div className="piece-detail-content">
@@ -164,7 +169,9 @@ export default function PieceDetail() {
                                 <ZoomImage
                                     src={`${BASE_IMAGE_URL}${imagenes[currentImageIndex].ruta}`}
                                     alt={producto.nombre}
-                                    onDoubleClick={() => setShowModal(true)}
+                                    onDoubleClick={() => !isMobile && setShowModal(true)}
+                                    onClick={() => isMobile && setShowModal(true)}
+                                    enableZoom={!isMobile}
                                 />
                                 {showModal && (
                                     <ImageModal
@@ -174,29 +181,30 @@ export default function PieceDetail() {
                                         onClose={() => setShowModal(false)}
                                     />
                                 )}
+                            </div>
+                            <div className="thumbs-container">
+
+                                {/* Miniaturas */}
+                                <div className="gallery-thumbs" ref={combinedRef} {...handlersWithoutRef}>
+                                    {imagenes.map((imagen, index) => (
+                                        <img
+                                        key={imagen.id}
+                                        src={`${BASE_IMAGE_URL}${imagen.ruta}`}
+                                        alt={`${producto.nombre} thumbnail`}
+                                        className={`thumb ${index === currentImageIndex ? "active" : ""}`}
+                                        onClick={() => setCurrentImageIndex(index)}
+                                        />
+                                    ))}
+                                </div>
+
+                                {/* Flechas de navegación */}
                                 {imagenes.length > 1 && (
-                                    <>
-                                        <button className="nav-btn-prev" onClick={handlePrev}>
-                                            <FaChevronLeft />
-                                        </button>
-                                        <button className="nav-btn-next" onClick={handleNext}>
-                                            <FaChevronRight />
-                                        </button>
-                                    </>
+                                <>
+                                    <button className="thumb-nav-btn left" onClick={handlePrev}><FaChevronLeft /></button>
+                                    <button className="thumb-nav-btn right" onClick={handleNext}><FaChevronRight /></button>
+                                </>
                                 )}
                             </div>
-
-                    <div className="gallery-thumbs" ref={combinedRef} {...handlersWithoutRef} onWheel={handleWheel}>
-                        {imagenes.map((imagen, index) => (
-                            <img
-                            key={imagen.id}
-                            src={`${BASE_IMAGE_URL}${imagen.ruta}`}
-                            alt={`${producto.nombre} thumbnail`}
-                            className={`thumb ${index === currentImageIndex ? "active" : ""}`}
-                            onClick={() => setCurrentImageIndex(index)}
-                            />
-                        ))}
-                    </div>
                         </>
                     ) : (
                         <div className="gallery-main">
@@ -211,8 +219,14 @@ export default function PieceDetail() {
 
                 {/* Detalles del producto */}
                 <div className="details">
-                    <h2 className="product-name">{producto.nombre}</h2>
-                    <p className="product-price">€{producto.precio.toFixed(2)}</p>
+
+                    {/* Nombre y precio */}
+                    <div className="product-header">
+                        <h2 className="product-name">{producto.nombre}</h2>
+                        <h2 className="product-price">{producto.precio.toFixed(2)}€</h2>
+                    </div>
+
+                    {/* Descripción */}
                     <p className="product-description">{producto.descripcion}</p>
                     
                     {/* Tamaños */}
@@ -226,13 +240,13 @@ export default function PieceDetail() {
                     {/* Sold out */}
                     {producto.soldOut && (
                         <div className="sold-out">
-                            <span>Sold Out</span>
+                            <span>SOLD OUT</span>
                         </div>
                     )}
 
                     {/* Botón de editar (solo para administradores) */}
                     {isAuthenticated && (
-                        <>
+                        <div className="admin-actions">
                             <button 
                                 className="edit-button"
                                 onClick={handleEditClick}
@@ -245,7 +259,7 @@ export default function PieceDetail() {
                             >
                                 <FaTrash /> Eliminar
                             </button>
-                        </>
+                        </div>
                     )}
                 </div>
             </div>
