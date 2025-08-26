@@ -210,8 +210,10 @@
 /* Móvil */
 @media (max-width: 600px) {
     .filters .search-wrapper {
-        width: 100%;
-        flex: none; /* que no intente crecer en vertical */
+        width: 90%;        /* ocupa casi toda la pantalla */
+        max-width: 400px;  /* límite para no verse gigante */
+        margin: 0 auto;    /* centrado */
+        flex: none;
     }
 }
 
