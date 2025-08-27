@@ -8,6 +8,13 @@ body {
   font-size: 16px;
 }
 
+/* Deshabilitar selección de texto e imágenes */
+* {
+  user-select: none;    /* Evita seleccionar texto */
+  -webkit-user-drag: none; /* Evita arrastrar imágenes */
+}
+
+
 ::-webkit-scrollbar {
     display: none;
 }
