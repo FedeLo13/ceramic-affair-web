@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import "./ImageModal.css";
 import { FaChevronLeft, FaChevronRight, FaTimes } from "react-icons/fa";
+import ZoomableImage from "./ZoomableImage";
 
 interface ImageModalProps {
     images: { ruta: string }[];
@@ -55,9 +56,10 @@ export default function ImageModal({ images, currentIndex, alt, onClose }: Image
                 >
                     <FaChevronLeft size={24} />
                 </button>
-                <img
+                <ZoomableImage
                     src={`http://localhost:8080/uploads/${images[index].ruta}`}
                     alt={alt}
+                    enableZoom={true}
                     className="modal-image"
                 />
                 <button 

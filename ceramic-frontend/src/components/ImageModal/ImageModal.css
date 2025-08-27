@@ -26,11 +26,10 @@
     max-width: 90vw;
     max-height: 90vh;
     object-fit: contain;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
 }
 
-/* Botón cerrar (arriba derecha de la pantalla, fijo) */
+/* Botón cerrar */
 .modal-close-btn {
     position: fixed;
     top: 20px;
@@ -53,7 +52,7 @@
   background: rgba(255,255,255,0.2);
 }
 
-/* Flechas de navegación (fijas a izquierda y derecha de la pantalla) */
+/* Flechas de navegación */
 .nav-btn {
     position: fixed;
     top: 50%;
@@ -110,7 +109,7 @@
 
 .nav-btn.hidden {
   opacity: 0;
-  pointer-events: none; /* no clicables cuando están ocultas */
+  pointer-events: none;
 }
 
 .nav-btn:hover {
@@ -129,17 +128,17 @@
   right: 20px;
 }
 
-/* --- Ajustes móviles --- */
+/* Ajustes móviles */
 @media (max-width: 768px) {
   .nav-btn {
-    background: rgba(0,0,0,0.3); /* Más translúcido */
+    background: rgba(0,0,0,0.3);
     width: 36px;
     height: 36px;
-    border-radius: 50%; /* Más redondito para no tapar tanto */
+    border-radius: 50%;
   }
 
   .nav-btn.left {
-    left: 10px; /* más pegado al borde */
+    left: 10px;
   }
 
   .nav-btn.right {
