@@ -102,58 +102,68 @@ export default function Contact() {
 
     return (
         <div className="contact-page">
-            <h1>Contact</h1>
-
             {/* Formulario de contacto */}
+            <p className='contact-text'>If you have any questions about the process, please don’t hesitate to get in touch. I’ll get back to you as soon as possible to answer your inquiries.</p>
+            <p className='contact-text'>You can also subscribe to my newsletter below the form to receive updates and exclusive content.</p>
+
+            {/* Separador */}
+            <hr className="section-separator" />
+
             <section className="contact-form-section">
-                <h2>Send a Message</h2>
+                <h2 className='contact-title'>Send a Message</h2>
                 <form className="contact-form" onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="nombre">First Name</label>
-                        <input type="text" id="nombre" name="nombre" value={form.nombre} onChange={handleChange} required />
+                    <div className="form-group name-fields">
+                        <div className="name-field">
+                            <label htmlFor="nombre" className='contact-label'>First Name</label>
+                            <input type="text" id="nombre" name="nombre" className='contact-input' value={form.nombre} onChange={handleChange} required />
+                        </div>
+                        <div className="name-field">
+                            <label htmlFor="apellidos" className='contact-label'>Last Name</label>
+                            <input type="text" id="apellidos" name="apellidos" className='contact-input' value={form.apellidos} onChange={handleChange} required />
+                        </div>
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="apellidos">Last Name</label>
-                        <input type="text" id="apellidos" name="apellidos" value={form.apellidos} onChange={handleChange} required />
+                        <label htmlFor="email" className='contact-label'>Email</label>
+                        <input type="email" id="email" name="email" className='contact-input' value={form.email} onChange={handleChange} required />
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="email">Email</label>
-                        <input type="email" id="email" name="email" value={form.email} onChange={handleChange} required />
+                        <label htmlFor="asunto" className='contact-label'>Subject</label>
+                        <input type="text" id="asunto" name="asunto" className='contact-input' value={form.asunto} onChange={handleChange} required />
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="asunto">Subject</label>
-                        <input type="text" id="asunto" name="asunto" value={form.asunto} onChange={handleChange} required />
+                        <label htmlFor="mensaje" className='contact-label'>Message</label>
+                        <textarea id="mensaje" name="mensaje" className='contact-message-input' rows={5} value={form.mensaje} onChange={handleChange} required></textarea>
                     </div>
 
-                    <div className="form-group">
-                        <label htmlFor="mensaje">Message</label>
-                        <textarea id="mensaje" name="mensaje" rows={5} value={form.mensaje} onChange={handleChange} required></textarea>
-                    </div>
-
-                    <button type="submit" className="submit-button">Send</button>
+                    <button type="submit" className="contact-button">Submit</button>
                 </form>
             </section>
 
+            {/* Separador */}
+            <hr className="section-separator" />
+
             {/* Newsletter */}
             <section className="newsletter-section">
-                <h2>Subscribe to our Newsletter</h2>
+                <h2 className='newsletter-title'>Newsletter</h2>
+                <p className='contact-text'>Sign up here with your email adress to receive updates and notifications to stay informed about the latest news and never miss an opportunity.</p>
                 <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
                     <div className="form-group">
-                        <label htmlFor="newsletterEmail">Email</label>
                         <input 
                             type="email" 
                             id="newsletterEmail" 
-                            name="newsletterEmail" 
+                            name="newsletterEmail"
+                            placeholder='Email Adress'
+                            className='contact-input'
                             value={newsletterEmail} 
                             onChange={handleNewsletterChange} 
                             required
                             disabled={newsletterLoading}
                         />
                     </div>
-                    <button type="submit" className="subscribe-button" disabled={newsletterLoading}>
+                    <button type="submit" className="contact-button" disabled={newsletterLoading}>
                         {newsletterLoading ? 'Loading...' : 'Subscribe'}
                     </button>
                 </form>
