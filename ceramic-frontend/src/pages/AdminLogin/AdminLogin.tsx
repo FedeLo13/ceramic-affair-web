@@ -33,8 +33,8 @@ export default function AdminLogin() {
     return (
         <div className="admin-login">
             <form className="admin-login-form" onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="email">Email</label>
+                <div className="login-form-group">
+                    <label htmlFor="email" className="login-label">Email</label>
                     <input 
                         type="email" 
                         id="email" 
@@ -54,8 +54,8 @@ export default function AdminLogin() {
                         }}
                         required />
                 </div>
-                <div className="form-group">
-                    <label htmlFor="password">Password</label>
+                <div className="login-form-group">
+                    <label htmlFor="password" className="login-label">Password</label>
                     <input 
                         type="password" 
                         id="password" 
@@ -65,7 +65,7 @@ export default function AdminLogin() {
                         required />
                 </div>
                 {error && <p className="error-message">{error}</p>}
-                <button type="submit">Login</button>
+                <button type="submit" className="login-button">Login</button>
             </form>
         </div>
     );

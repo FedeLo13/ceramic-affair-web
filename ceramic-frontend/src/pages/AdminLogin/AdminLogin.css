@@ -11,33 +11,34 @@
 .admin-login-form {
   background: #ffffff;
   padding: 2.5rem;
-  border-radius: 1rem;
+  border-radius: 4px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   width: 100%;
   max-width: 380px;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
   gap: 1.2rem;
 }
 
 /* Grupo de inputs */
-.form-group {
+.login-form-group {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.form-group label {
-  font-size: 0.9rem;
+.login-label {
+  font-size: 1.1rem;
   color: #374151;
-  font-weight: 500;
+  font-weight: 600;
 }
 
-.form-group input {
+.login-form-group input {
   width: 100%;
   padding: 0.55rem 0.85rem;
   border: 1px solid #d1d5db;
-  border-radius: 0.6rem;
+  border-radius: 4px;
   font-size: 0.95rem;
   line-height: 1.4;
   outline: none;
@@ -46,30 +47,30 @@
 }
 
 
-.form-group input:focus {
+.login-form-group input:focus {
   border-color: #2563eb;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
 }
 
 /* Botón */
-button[type="submit"] {
+.login-button {
   padding: 0.9rem;
   background: #000000;
   color: #ffffff;
   border: none;
-  border-radius: 0.6rem;
+  border-radius: 4px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
+  width: 100%;
+  max-width: 125px;
+  margin: 0 auto;
   transition: background 0.25s ease, transform 0.1s ease;
 }
 
-button[type="submit"]:hover {
+.login-button:hover {
+  background: #333333;
   transform: translateY(-1px);
-}
-
-button[type="submit"]:active {
-  transform: translateY(1px);
 }
 
 /* Mensaje de error */
@@ -78,7 +79,7 @@ button[type="submit"]:active {
   background: #fee2e2;
   border: 1px solid #fecaca;
   padding: 0.75rem 1rem;
-  border-radius: 0.6rem;
+  border-radius: 4px;
   font-size: 0.9rem;
   text-align: center;
 }
