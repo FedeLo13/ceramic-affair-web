@@ -226,13 +226,13 @@ export default function ProductForm({ mode, isEditingDraft, initialData, onSubmi
     <form onSubmit={handleSubmit} className="product-form">
       <h2>{mode === "create" ? "Add a new Piece" : "Edit Product"}</h2>
 
-      <div className="form-group">
+      <div className="product-form-group">
         <label>Product name</label>
         <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
         {errors.name && <p className="error-message">{errors.name}</p>}
       </div>
 
-      <div className="form-group">
+      <div className="product-form-group">
         <label>Category</label>
         <select value={category} onChange={
           (e) => {
@@ -256,12 +256,12 @@ export default function ProductForm({ mode, isEditingDraft, initialData, onSubmi
         {errors.category && <p className="error-message">{errors.category}</p>}
       </div>
 
-      <div className="form-group">
+      <div className="product-form-group">
         <label>Product description</label>
         <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
       </div>
 
-      <div className="form-row">
+      <div className="product-form-row">
         <div>
           <label>Width</label>
           <input type="number" value={width} onChange={(e) => setWidth(Number(e.target.value))} />
@@ -276,13 +276,13 @@ export default function ProductForm({ mode, isEditingDraft, initialData, onSubmi
         </div>
       </div>
 
-      <div className="form-group">
+      <div className="product-form-group">
         <label>Product price</label>
         <input type="number" value={price} onChange={(e) => setPrice(Number(e.target.value))} />
         {errors.price && <p className="error-message">{errors.price}</p>}
       </div>
 
-      <div className="form-group">
+      <div className="product-form-group">
         <label>Sold out</label>
         <input type="checkbox" checked={soldOut} onChange={(e) => setSoldOut(e.target.checked)} />
       </div>

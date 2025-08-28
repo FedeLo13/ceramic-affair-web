@@ -16,21 +16,21 @@
 }
 
 /* Form groups */
-.form-group {
+.product-form-group {
   margin-bottom: 1rem;
 }
 
-.form-group label {
+.product-form-group label {
   display: block;
   font-weight: 600;
   margin-bottom: 0.3rem;
   color: #444;
 }
 
-.form-group input[type="text"],
-.form-group input[type="number"],
-.form-group select,
-.form-group textarea {
+.product-form-group input[type="text"],
+.product-form-group input[type="number"],
+.product-form-group select,
+.product-form-group textarea {
   width: 100%;
   padding: 0.4rem 0.6rem;
   border: 1px solid #ccc;
@@ -40,10 +40,10 @@
   transition: border-color 0.2s ease;
 }
 
-.form-group input[type="text"]:focus,
-.form-group input[type="number"]:focus,
-.form-group select:focus,
-.form-group textarea:focus {
+.product-form-group input[type="text"]:focus,
+.product-form-group input[type="number"]:focus,
+.product-form-group select:focus,
+.product-form-group textarea:focus {
   border-color: #007BFF;
   outline: none;
 }
@@ -56,17 +56,17 @@
 }
 
 /* Form row for width, height, diameter */
-.form-row {
+.product-form-row {
   display: flex;
   gap: 1rem;
 }
 
-.form-row > div {
+.product-form-row > div {
   flex: 1;
 }
 
 /* Checkbox styling */
-.form-group input[type="checkbox"] {
+.product-form-group input[type="checkbox"] {
   transform: scale(1.2);
   margin-left: 0.3rem;
   cursor: pointer;
@@ -129,7 +129,7 @@
 
 /* Responsive adjustments */
 @media (max-width: 480px) {
-  .form-row {
+  .product-form-row {
     flex-direction: column;
   }
 

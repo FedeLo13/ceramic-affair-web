@@ -194,18 +194,18 @@ export default function FindMeForm({ mode, initialData, onSave, onSaveAndNotify,
     <form className="findme-form" onSubmit={(e) => e.preventDefault()}>
       <h2>{mode === "create" ? "New Find Me Post" : "Edit Find Me Post"}</h2>
 
-      <div className="form-group">
+      <div className="findme-form-group">
         <label>Title</label>
         <input type="text" value={titulo} onChange={(e) => setTitulo(e.target.value)} />
         {errors.titulo && <p className="error-message">{errors.titulo}</p>}
       </div>
 
-      <div className="form-group">
+      <div className="findme-form-group">
         <label>Description</label>
         <textarea value={descripcion} onChange={(e) => setDescripcion(e.target.value)} />
       </div>
 
-      <div className="form-row">
+      <div className="findme-form-row">
         <div>
           <label>Start Date</label>
           <input type="datetime-local" value={fechaInicio} onChange={(e) => setFechaInicio(e.target.value)} />
@@ -218,7 +218,7 @@ export default function FindMeForm({ mode, initialData, onSave, onSaveAndNotify,
         </div>
       </div>
 
-      <div className="form-group">
+      <div className="findme-form-group">
         <label>Location</label>
         <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search for a location" />
         {searchResults.length > 0 && (

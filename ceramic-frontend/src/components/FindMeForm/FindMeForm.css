@@ -16,21 +16,21 @@
 }
 
 /* Form groups */
-.form-group {
+.findme-form-group {
   margin-bottom: 1rem;
   position: relative; /* necesario para el dropdown */
 }
 
-.form-group label {
+.findme-form-group label {
   display: block;
   font-weight: 600;
   margin-bottom: 0.3rem;
   color: #444;
 }
 
-.form-group input[type="text"],
-.form-group input[type="date"],
-.form-group textarea {
+.findme-form-group input[type="text"],
+.findme-form-group input[type="date"],
+.findme-form-group textarea {
   width: 100%;
   padding: 0.4rem 0.6rem;
   border: 1px solid #ccc;
@@ -40,8 +40,8 @@
   transition: border-color 0.2s ease;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
+.findme-form-group input:focus,
+.findme-form-group textarea:focus {
   border-color: #007BFF;
   outline: none;
 }
@@ -54,12 +54,12 @@
 }
 
 /* Row for dates */
-.form-row {
+.findme-form-row {
   display: flex;
   gap: 1rem;
 }
 
-.form-row > div {
+.findme-form-row > div {
   flex: 1;
 }
 
@@ -145,7 +145,7 @@
 
 /* Responsive */
 @media (max-width: 480px) {
-  .form-row {
+  .findme-form-row {
     flex-direction: column;
   }
 }
