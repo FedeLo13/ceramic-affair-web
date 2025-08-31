@@ -6,6 +6,8 @@ import type { FindMePostOutputDTO } from "../../types/findmepost.types";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { deleteFindMePost } from "../../api/findmeposts";
+import "./FindMeCard.css"
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -38,7 +40,8 @@ function CenteredMarker({ latitud, longitud }: { latitud: number; longitud: numb
       e.preventDefault();
       const zoomDelta = e.deltaY > 0 ? -1 : 1;
       const newZoom = Math.min(Math.max(map.getZoom() + zoomDelta, map.getMinZoom()), map.getMaxZoom());
-      map.setZoomAround(markerLatLng, newZoom);
+      map.setZoom(newZoom);
+      map.panTo(markerLatLng, { animate: false });
     };
 
 
@@ -53,7 +56,7 @@ function CenteredMarker({ latitud, longitud }: { latitud: number; longitud: numb
 
 function formatLocal(dateStr: string) {
   const d = new Date(dateStr);
-  return d.toLocaleString("es-ES", {
+  return d.toLocaleString("en-US", {
     weekday: "short",   // "lun"
     day: "2-digit",     // "22"
     month: "short",     // "may"
@@ -90,49 +93,54 @@ export default function FindMeCard({ post }: FindMeCardProps) {
   };
 
   return (
-    <div style={{display: "flex", alignItems: "center", gap: "16px"}}>
-      {/* Mapa y Título */}
-      <div style={{ width: "300px", height: "300px" }}>
-        {/* Título */}
-        <div style={{ minWidth: "120px", fontWeight: "bold" }}>
-          {titulo} <br />
-          {fechaInicioDate} → {fechaFinDate}
-        </div>
-
-        {/* Mapa */}
-        <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" style={{ display: "block", width: "100%", height: "100%" }}>
-            <MapContainer
-                center={[latitud, longitud]}
-                zoom={13}
-                style={{ width: "100%", height: "100%" }}
-            >
-                <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <CenteredMarker latitud={latitud} longitud={longitud} />
-            </MapContainer>
-        </a>
+    <div className="findme-card">
+      {/* Título */}
+      <div className="findme-card-title">
+        {titulo} - {fechaInicioDate.toUpperCase()} → {fechaFinDate.toUpperCase()}
       </div>
 
-      {/* Descripción */}
-      <div style={{ minWidth: "120px" }}>
-        {descripcion}
-        <br />
-        <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.9em", color: "blue", textDecoration: "underline" }}>
-          ← Click here to see the location in Google Maps
-        </a>
 
-        {isAuthenticated && (
-          <div style={{ marginTop: "10px", display: "flex", gap: "8px" }}>
-            <button onClick={handleEdit} style={{ padding: "6px 12px", backgroundColor: "orange", color: "white", border: "none", borderRadius: "4px" }}>
-              Edit
-            </button>
-            <button onClick={handleDelete} style={{ padding: "6px 12px", backgroundColor: "red", color: "white", border: "none", borderRadius: "4px" }}>
-              Delete
-            </button>
+      <div className="findme-card-body">
+        {/* Mapa */}
+        <div className="findme-card-map">
+          <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" style={{ display: "block", width: "100%", height: "100%" }}>
+              <MapContainer
+                  center={[latitud, longitud]}
+                  zoom={13}
+                  scrollWheelZoom={false}
+                  style={{ width: "100%", height: "100%" }}
+              >
+                  <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+                  <CenteredMarker latitud={latitud} longitud={longitud} />
+              </MapContainer>
+          </a>
+        </div>
+
+        {/* Descripción */}
+        <div className="findme-card-content">
+          <div className="findme-card-description">
+            {descripcion}
+            <br />
           </div>
-        )}
+          <div className="findme-card-footer">
+            {isAuthenticated && (
+              <div className="findme-admin-actions">
+                <button onClick={handleEdit} className="findme-admin-button findme-admin-button-edit">
+                  <FaEdit /> Edit
+                </button>
+                <button onClick={handleDelete} className="findme-admin-button findme-admin-button-delete">
+                  <FaTrash /> Delete
+                </button>
+              </div>
+            )}
+            <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="findme-card-map-link">
+              Click here to see the location in Google Maps
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,8 +1,12 @@
 .findme-grid {
     display: grid;
     grid-template-columns: 1fr; /* Siempre 1 tarjeta por fila */
-    gap: 20px;
+    gap: 100px;
     padding: 20px;
+
+    width: 100%;
+    max-width: 1200px;      /* límite de ancho */
+    margin: 0 auto;        /* centra horizontalmente */
     transition: all 0.3s ease;
 }
 

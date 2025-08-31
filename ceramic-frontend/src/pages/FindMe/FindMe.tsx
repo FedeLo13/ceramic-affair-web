@@ -24,7 +24,7 @@ export default function FindMe() {
 
   return (
     <div className="findme-page">
-      <h1>Find Me</h1>
+      <h2>Upcoming events</h2>
       <FindMeGrid posts={posts} isLoading={loading} />
     </div>
   );

@@ -202,7 +202,8 @@ export default function FindMeForm({ mode, initialData, onSave, onSaveAndNotify,
 
       <div className="findme-form-group">
         <label>Description</label>
-        <textarea value={descripcion} onChange={(e) => setDescripcion(e.target.value)} />
+        <textarea value={descripcion} onChange={(e) => setDescripcion(e.target.value)} maxLength={1000} />
+        <small>{descripcion.length}/1000</small>
       </div>
 
       <div className="findme-form-row">
