@@ -251,13 +251,13 @@ export default function PieceDetail() {
                                 className="edit-button"
                                 onClick={handleEditClick}
                             >
-                                <FaEdit /> Editar
+                                <FaEdit /> Edit
                             </button>
                             <button 
                                 className="delete-button"
                                 onClick={handleDeleteClick}
                             >
-                                <FaTrash /> Eliminar
+                                <FaTrash /> Delete
                             </button>
                         </div>
                     )}

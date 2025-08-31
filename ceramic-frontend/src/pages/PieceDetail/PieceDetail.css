@@ -247,9 +247,8 @@
   background-color: #000000;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   padding: 0.6rem 1rem;
-  font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s ease;
@@ -260,9 +259,8 @@
   background-color: #000000;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   padding: 0.6rem 1rem;
-  font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s ease;
