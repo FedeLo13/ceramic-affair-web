@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 
 /**
  * Clase que representa una publicación de tipo "Encuéntrame" en el sistema.
@@ -23,7 +24,8 @@ public class FindMePost {
     @Column(nullable = false)
     private String titulo;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT")
+    @Lob
     private String descripcion;
 
     @Column(nullable = false)
