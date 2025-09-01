@@ -111,7 +111,7 @@ public class ImagenControllerTest {
             .file(archivo))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.error").value("Excepción de negocio"))
+            .andExpect(jsonPath("$.error").value("Business exception"))
             .andExpect(jsonPath("$.message").value("El archivo no es válido."))
             .andExpect(jsonPath("$.path").value("/api/admin/imagenes/crear"));
     }
@@ -124,8 +124,8 @@ public class ImagenControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/public/imagenes/1"))
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.status").value(404))
-            .andExpect(jsonPath("$.error").value("Excepción de negocio"))
-            .andExpect(jsonPath("$.message").value("Imagen no encontrada con ID: 1"))
+            .andExpect(jsonPath("$.error").value("Business exception"))
+            .andExpect(jsonPath("$.message").value("Image not found with ID 1"))
             .andExpect(jsonPath("$.path").value("/api/public/imagenes/1"));
     }
 
@@ -137,8 +137,8 @@ public class ImagenControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/admin/imagenes/1"))
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.status").value(404))
-            .andExpect(jsonPath("$.error").value("Excepción de negocio"))
-            .andExpect(jsonPath("$.message").value("Imagen no encontrada con ID: 1"))
+            .andExpect(jsonPath("$.error").value("Business exception"))
+            .andExpect(jsonPath("$.message").value("Image not found with ID 1"))
             .andExpect(jsonPath("$.path").value("/api/admin/imagenes/1"));
     }
 

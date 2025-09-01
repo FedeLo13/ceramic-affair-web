@@ -94,8 +94,8 @@ public class ContactoFormControllerTest {
                 .content(objectMapper.writeValueAsString(dto)))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.error").value("reCAPTCHA inválido"))
-            .andExpect(jsonPath("$.message").value("El token de reCAPTCHA es inválido o ha expirado. Por favor, inténtelo de nuevo."))
+            .andExpect(jsonPath("$.error").value("Invalid reCAPTCHA"))
+            .andExpect(jsonPath("$.message").value("The reCAPTCHA token is invalid or has expired. Please try again."))
             .andExpect(jsonPath("$.path").value("/api/public/contacto/enviar"));
     }
 
@@ -120,8 +120,8 @@ public class ContactoFormControllerTest {
                 .content(objectMapper.writeValueAsString(dto)))
             .andExpect(status().isInternalServerError())
             .andExpect(jsonPath("$.status").value(500))
-            .andExpect(jsonPath("$.error").value("Error al enviar el correo electrónico"))
-            .andExpect(jsonPath("$.message").value("Error al enviar el correo electrónico"))
+            .andExpect(jsonPath("$.error").value("Failed to send email"))
+            .andExpect(jsonPath("$.message").value("Failed to send email"))
             .andExpect(jsonPath("$.path").value("/api/public/contacto/enviar"));
     }
 

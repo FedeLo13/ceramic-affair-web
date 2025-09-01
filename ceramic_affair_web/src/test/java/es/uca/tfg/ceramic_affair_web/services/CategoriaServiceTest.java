@@ -82,7 +82,7 @@ public class CategoriaServiceTest {
         assertThatThrownBy(() -> {
             categoriaService.insertarCategoria("Cerámica");
         }).isInstanceOf(CategoriaException.YaExistente.class)
-        .hasMessageContaining("Ya existe una categoría con el nombre: Cerámica");
+        .hasMessageContaining("Category already exists with name Cerámica");
     }
 
     @Test
@@ -109,7 +109,7 @@ public class CategoriaServiceTest {
         assertThatThrownBy(() -> {
             categoriaService.modificarCategoria(999L, "Cerámica Modificada");
         }).isInstanceOf(CategoriaException.NoEncontrada.class)
-        .hasMessageContaining("Categoría no encontrada con ID: 999");
+        .hasMessageContaining("Category not found with ID 999");
     }
 
     @Test
@@ -125,7 +125,7 @@ public class CategoriaServiceTest {
         assertThatThrownBy(() -> {
             categoriaService.modificarCategoria(id, "Vidrio");
         }).isInstanceOf(CategoriaException.YaExistente.class)
-        .hasMessageContaining("Ya existe una categoría con el nombre: Vidrio");
+        .hasMessageContaining("Category already exists with name Vidrio");
     }
 
     @Test
@@ -151,7 +151,7 @@ public class CategoriaServiceTest {
         assertThatThrownBy(() -> {
             categoriaService.obtenerPorId(999L);
         }).isInstanceOf(CategoriaException.NoEncontrada.class)
-        .hasMessageContaining("Categoría no encontrada con ID: 999");
+        .hasMessageContaining("Category not found with ID 999");
     }
 
     @Test
@@ -179,7 +179,7 @@ public class CategoriaServiceTest {
         assertThatThrownBy(() -> {
             categoriaService.eliminarCategoria(999L);
         }).isInstanceOf(CategoriaException.NoEncontrada.class)
-        .hasMessageContaining("Categoría no encontrada con ID: 999");
+        .hasMessageContaining("Category not found with ID 999");
     }
 
     @Test

@@ -79,7 +79,7 @@ public class LoginControllerTest {
                 .content(jsonBody))
             .andExpect(status().isOk())
             .andExpect(jsonPath("success").value(true))
-            .andExpect(jsonPath("message").value("Inicio de sesión exitoso"))
+            .andExpect(jsonPath("message").value("Login successful"))
             .andExpect(jsonPath("data.token").value("mocked-jwt-token"));
     }
 
@@ -100,8 +100,8 @@ public class LoginControllerTest {
                 .content(jsonBody))
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.status").value(401))
-            .andExpect(jsonPath("$.error").value("Excepción de estado de respuesta"))
-            .andExpect(jsonPath("$.message").value("Credenciales inválidas"))
+            .andExpect(jsonPath("$.error").value("Response status exception"))
+            .andExpect(jsonPath("$.message").value("Invalid credentials"))
             .andExpect(jsonPath("$.path").value("/api/public/login/login"));
     }
 

@@ -29,8 +29,9 @@ public class RecaptchaService {
     }
 
     // Constructor necesario para pruebas unitarias
-    public RecaptchaService(WebClient webClient) {
+    public RecaptchaService(WebClient webClient, String recaptchaSecretKey) {
         this.webClient = webClient;
+        this.recaptchaSecretKey = recaptchaSecretKey;
     }
 
     public boolean verifyRecaptcha(String recaptchaResponse) {

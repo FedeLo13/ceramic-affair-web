@@ -91,7 +91,7 @@ public class SuscriptorControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value("Suscriptor creado y correo de verificación enviado"))
-                .andExpect(jsonPath("$.data").value("Correo de verificación enviado"));
+                .andExpect(jsonPath("$.data").value("Verification email has been sent"));
 
         // Verificar que se envió el correo electrónico
         ArgumentCaptor<Suscriptor> captor = ArgumentCaptor.forClass(Suscriptor.class);
@@ -118,8 +118,8 @@ public class SuscriptorControllerTest {
                     .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.status").value(409))
-                .andExpect(jsonPath("$.error").value("Excepción de negocio"))
-                .andExpect(jsonPath("$.message").value("El suscriptor con email: test@example.com ya está verificado"))
+                .andExpect(jsonPath("$.error").value("Business exception"))
+                .andExpect(jsonPath("$.message").value("The subscriber with email: test@example.com is already subscribed"))
                 .andExpect(jsonPath("$.path").value("/api/public/suscriptores/suscribir"));
     }
 
@@ -140,8 +140,8 @@ public class SuscriptorControllerTest {
                     .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
-                .andExpect(jsonPath("$.error").value("Excepción de negocio"))
-                .andExpect(jsonPath("$.message").value("La verificación del suscriptor con email: test@example.com está pendiente"))
+                .andExpect(jsonPath("$.error").value("Business exception"))
+                .andExpect(jsonPath("$.message").value("The verification of the subscriber with email: test@example.com is pending"))
                 .andExpect(jsonPath("$.path").value("/api/public/suscriptores/suscribir"));
     }
 
@@ -164,7 +164,7 @@ public class SuscriptorControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value("Suscriptor encontrado y correo de verificación reenviado"))
-                .andExpect(jsonPath("$.data").value("Correo de verificación reenviado"));
+                .andExpect(jsonPath("$.data").value("Verification email has been resent"));
 
         // Verificar que se envió el correo electrónico de verificación
         verify(emailService, times(1)).sendEmail(eq(existingSuscriptor.getEmail()), anyString(), anyString());
@@ -181,8 +181,8 @@ public class SuscriptorControllerTest {
                     .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
-                .andExpect(jsonPath("$.error").value("reCAPTCHA inválido"))
-                .andExpect(jsonPath("$.message").value("El token de reCAPTCHA es inválido o ha expirado. Por favor, inténtelo de nuevo."))
+                .andExpect(jsonPath("$.error").value("Invalid reCAPTCHA"))
+                .andExpect(jsonPath("$.message").value("The reCAPTCHA token is invalid or has expired. Please try again."))
                 .andExpect(jsonPath("$.path").value("/api/public/suscriptores/suscribir"));
     }
 

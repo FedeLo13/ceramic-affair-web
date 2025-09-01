@@ -108,7 +108,7 @@ public class ProductoServiceTest {
         assertThatThrownBy(() -> {
             productoService.insertarProducto(productoDTO);
         }).isInstanceOf(CategoriaException.NoEncontrada.class)
-          .hasMessageContaining("Categoría no encontrada con ID: 999");
+          .hasMessageContaining("Category not found with ID 999");
     }
 
     @Test
@@ -149,7 +149,7 @@ public class ProductoServiceTest {
         assertThatThrownBy(() -> {
             productoService.modificarProducto(999L, productoModificado); // ID que no existe
         }).isInstanceOf(ProductoException.NoEncontrado.class)
-          .hasMessageContaining("Producto no encontrado con id: 999");
+          .hasMessageContaining("Product not found with ID 999");
     }
 
     @Test
@@ -165,7 +165,7 @@ public class ProductoServiceTest {
         assertThatThrownBy(() -> {
             productoService.modificarProducto(id, dtoConCategoriaInexistente); // ID de categoría que no existe
         }).isInstanceOf(CategoriaException.NoEncontrada.class)
-          .hasMessageContaining("Categoría no encontrada con ID: 999");
+          .hasMessageContaining("Category not found with ID 999");
     }
 
     @Test
@@ -196,7 +196,7 @@ public class ProductoServiceTest {
         assertThatThrownBy(() -> {
             productoService.establecerStock(999L, true); // ID que no existe
         }).isInstanceOf(ProductoException.NoEncontrado.class)
-          .hasMessageContaining("Producto no encontrado con id: 999");
+          .hasMessageContaining("Product not found with ID 999");
     }
 
     @Test
@@ -224,7 +224,7 @@ public class ProductoServiceTest {
         assertThatThrownBy(() -> {
             productoService.obtenerPorId(999L); // ID que no existe
         }).isInstanceOf(ProductoException.NoEncontrado.class)
-          .hasMessageContaining("Producto no encontrado con id: 999");
+          .hasMessageContaining("Product not found with ID 999");
     }
 
     @Test
@@ -370,7 +370,7 @@ public class ProductoServiceTest {
         assertThatThrownBy(() -> {
             productoService.eliminarProducto(999L); // ID que no existe
         }).isInstanceOf(ProductoException.NoEncontrado.class)
-          .hasMessageContaining("Producto no encontrado con id: 999");
+          .hasMessageContaining("Product not found with ID 999");
     }
 
     @Test

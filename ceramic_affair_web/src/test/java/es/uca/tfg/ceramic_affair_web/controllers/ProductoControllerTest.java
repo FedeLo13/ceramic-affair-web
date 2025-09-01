@@ -329,8 +329,8 @@ public class ProductoControllerTest {
         mockMvc.perform(get("/api/public/productos/{id}", id))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404))
-                .andExpect(jsonPath("$.error").value("Excepción de negocio"))
-                .andExpect(jsonPath("$.message").value("Producto no encontrado con id: " + id))
+                .andExpect(jsonPath("$.error").value("Business exception"))
+                .andExpect(jsonPath("$.message").value("Product not found with ID " + id))
                 .andExpect(jsonPath("$.path").value("/api/public/productos/" + id));
     }
 
@@ -365,8 +365,8 @@ public class ProductoControllerTest {
                 .content(jsonBody))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404))
-                .andExpect(jsonPath("$.error").value("Excepción de negocio"))
-                .andExpect(jsonPath("$.message").value("Producto no encontrado con id: " + id))
+                .andExpect(jsonPath("$.error").value("Business exception"))
+                .andExpect(jsonPath("$.message").value("Product not found with ID " + id))
                 .andExpect(jsonPath("$.path").value("/api/admin/productos/" + id));
 
     }
@@ -390,8 +390,8 @@ public class ProductoControllerTest {
                 .content(jsonBody))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404))
-                .andExpect(jsonPath("$.error").value("Excepción de negocio"))
-                .andExpect(jsonPath("$.message").value("Producto no encontrado con id: " + id))
+                .andExpect(jsonPath("$.error").value("Business exception"))
+                .andExpect(jsonPath("$.message").value("Product not found with ID " + id))
                 .andExpect(jsonPath("$.path").value("/api/admin/productos/" + id + "/stock"));
     }
 
@@ -406,8 +406,8 @@ public class ProductoControllerTest {
         mockMvc.perform(delete("/api/admin/productos/{id}", id))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404))
-                .andExpect(jsonPath("$.error").value("Excepción de negocio"))
-                .andExpect(jsonPath("$.message").value("Producto no encontrado con id: " + id))
+                .andExpect(jsonPath("$.error").value("Business exception"))
+                .andExpect(jsonPath("$.message").value("Product not found with ID " + id))
                 .andExpect(jsonPath("$.path").value("/api/admin/productos/" + id));
     }
 }

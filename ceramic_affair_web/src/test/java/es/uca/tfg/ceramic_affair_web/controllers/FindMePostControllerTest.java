@@ -178,8 +178,8 @@ public class FindMePostControllerTest {
         mockMvc.perform(get("/api/public/find-me-posts/999"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404))
-                .andExpect(jsonPath("$.error").value("Excepción de negocio"))
-                .andExpect(jsonPath("$.message").value("Publicación 'Encuéntrame' no encontrada con id: 999"))
+                .andExpect(jsonPath("$.error").value("Business exception"))
+                .andExpect(jsonPath("$.message").value("Find Me Post not found with ID 999"))
                 .andExpect(jsonPath("$.path").value("/api/public/find-me-posts/999"));
     }
 
@@ -197,8 +197,8 @@ public class FindMePostControllerTest {
                     .content(jsonRequest))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404))
-                .andExpect(jsonPath("$.error").value("Excepción de negocio"))
-                .andExpect(jsonPath("$.message").value("Publicación 'Encuéntrame' no encontrada con id: 999"))
+                .andExpect(jsonPath("$.error").value("Business exception"))
+                .andExpect(jsonPath("$.message").value("Find Me Post not found with ID 999"))
                 .andExpect(jsonPath("$.path").value("/api/admin/find-me-posts/999"));
     }
 
@@ -211,8 +211,8 @@ public class FindMePostControllerTest {
         mockMvc.perform(delete("/api/admin/find-me-posts/999"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404))
-                .andExpect(jsonPath("$.error").value("Excepción de negocio"))
-                .andExpect(jsonPath("$.message").value("Publicación 'Encuéntrame' no encontrada con id: 999"))
+                .andExpect(jsonPath("$.error").value("Business exception"))
+                .andExpect(jsonPath("$.message").value("Find Me Post not found with ID 999"))
                 .andExpect(jsonPath("$.path").value("/api/admin/find-me-posts/999"));
     }
 }

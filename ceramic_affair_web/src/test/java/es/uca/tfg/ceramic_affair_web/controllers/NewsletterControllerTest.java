@@ -116,8 +116,8 @@ public class NewsletterControllerTest {
                 .content(objectMapper.writeValueAsString(newsletterDTO)))
             .andExpect(status().isInternalServerError())
             .andExpect(jsonPath("$.status").value(500))
-            .andExpect(jsonPath("$.error").value("Error al enviar el correo electrónico"))
-            .andExpect(jsonPath("$.message").value("Error al enviar el correo electrónico"))
+            .andExpect(jsonPath("$.error").value("Failed to send email"))
+            .andExpect(jsonPath("$.message").value("Failed to send email"))
             .andExpect(jsonPath("$.path").value("/api/admin/newsletter/enviar"));
     }
 
@@ -131,8 +131,8 @@ public class NewsletterControllerTest {
                     .content(objectMapper.writeValueAsString(newsletterDTO)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
-                .andExpect(jsonPath("$.error").value("Errores de validación"))
-                .andExpect(jsonPath("$.message").value("Por favor, revise los campos marcados."))
+                .andExpect(jsonPath("$.error").value("Validation errors"))
+                .andExpect(jsonPath("$.message").value("Please check the marked fields."))
                 .andExpect(jsonPath("$.path").value("/api/admin/newsletter/enviar"))
                 .andExpect(jsonPath("$.validationErrors.asunto").value("El asunto es obligatorio"))
                 .andExpect(jsonPath("$.validationErrors.mensaje").value("El mensaje es obligatorio"));

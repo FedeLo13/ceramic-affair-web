@@ -161,8 +161,8 @@ public class CategoriaControllerTest {
             .content(jsonBody))
             .andExpect(status().isConflict())
             .andExpect(jsonPath("$.status").value(409))
-            .andExpect(jsonPath("$.error").value("Excepción de negocio"))
-            .andExpect(jsonPath("$.message").value("Ya existe una categoría con el nombre: Cerámica"))
+            .andExpect(jsonPath("$.error").value("Business exception"))
+            .andExpect(jsonPath("$.message").value("Category already exists with name Cerámica"))
             .andExpect(jsonPath("$.path").value("/api/admin/categorias/crear"));
     }
 
@@ -178,8 +178,8 @@ public class CategoriaControllerTest {
         mockMvc.perform(get("/api/public/categorias/{id}", id))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404))
-                .andExpect(jsonPath("$.error").value("Excepción de negocio"))
-                .andExpect(jsonPath("$.message").value("Categoría no encontrada con ID: 999"))
+                .andExpect(jsonPath("$.error").value("Business exception"))
+                .andExpect(jsonPath("$.message").value("Category not found with ID 999"))
                 .andExpect(jsonPath("$.path").value("/api/public/categorias/999"));
     }
 
@@ -195,7 +195,7 @@ public class CategoriaControllerTest {
         mockMvc.perform(delete("/api/admin/categorias/{id}", id))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404))
-                .andExpect(jsonPath("$.error").value("Excepción de negocio"))
+                .andExpect(jsonPath("$.error").value("Business exception"))
                 .andExpect(jsonPath("$.message").value("Categoría no encontrada"))
                 .andExpect(jsonPath("$.path").value("/api/admin/categorias/999"));
     }
@@ -221,8 +221,8 @@ public class CategoriaControllerTest {
             .content(jsonBody))
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.status").value(404))
-            .andExpect(jsonPath("$.error").value("Excepción de negocio"))
-            .andExpect(jsonPath("$.message").value("Categoría no encontrada con ID: 999"))
+            .andExpect(jsonPath("$.error").value("Business exception"))
+            .andExpect(jsonPath("$.message").value("Category not found with ID 999"))
             .andExpect(jsonPath("$.path").value("/api/admin/categorias/999"));
     }
 
@@ -247,8 +247,8 @@ public class CategoriaControllerTest {
             .content(jsonBody))
             .andExpect(status().isConflict())
             .andExpect(jsonPath("$.status").value(409))
-            .andExpect(jsonPath("$.error").value("Excepción de negocio"))
-            .andExpect(jsonPath("$.message").value("Ya existe una categoría con el nombre: Cerámica Moderna"))
+            .andExpect(jsonPath("$.error").value("Business exception"))
+            .andExpect(jsonPath("$.message").value("Category already exists with name Cerámica Moderna"))
             .andExpect(jsonPath("$.path").value("/api/admin/categorias/1"));
     }
 }

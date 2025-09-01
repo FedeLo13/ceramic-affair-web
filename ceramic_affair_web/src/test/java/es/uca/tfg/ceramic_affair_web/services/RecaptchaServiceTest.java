@@ -48,10 +48,10 @@ public class RecaptchaServiceTest {
         when(webClient.post()).thenReturn(uriSpec);
         when(uriSpec.uri(anyString())).thenReturn(bodySpec);
         when(bodySpec.contentType(MediaType.APPLICATION_FORM_URLENCODED)).thenReturn(bodySpec);
-        when(bodySpec.bodyValue(anyString())).thenReturn((WebClient.RequestHeadersSpec) headersSpec);
+        when(bodySpec.body(org.mockito.ArgumentMatchers.any())).thenReturn((WebClient.RequestHeadersSpec) headersSpec);
         when(headersSpec.retrieve()).thenReturn(responseSpec);
 
-        recaptchaService = new RecaptchaService(webClient);
+        recaptchaService = new RecaptchaService(webClient, "fake-secret");
     }
 
     @Test
