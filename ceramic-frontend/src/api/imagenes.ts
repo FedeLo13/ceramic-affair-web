@@ -11,7 +11,7 @@ const API_ADMIN = 'http://localhost:8080/api/admin/imagenes';
 export const getImagenById = async (id: number): Promise<Imagen> => {
     const response = await fetch(`${API_PUBLIC}/${id}`);
 
-    return await handleFetch<Imagen>(response, 'Error al obtener la imagen por ID');
+    return await handleFetch<Imagen>(response, 'Error obtaining image by ID');
 };
 
 //------------------ ADMINISTRATIVOS ------------------//
@@ -25,7 +25,7 @@ export const newImagen = async (archivo: File): Promise<Imagen> => {
         body: formData,
     });
 
-    return await handleFetch<Imagen>(response, 'Error al crear imagen');
+    return await handleFetch<Imagen>(response, 'Error creating image');
 };
 
 export const deleteImagen = async (id: number): Promise<void> => {
@@ -33,5 +33,5 @@ export const deleteImagen = async (id: number): Promise<void> => {
         method: 'DELETE',
     });
 
-    return await handleFetch<void>(response, 'Error al eliminar imagen');
+    return await handleFetch<void>(response, 'Error deleting image');
 };

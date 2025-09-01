@@ -17,7 +17,7 @@ export const sendNewsletter = async (newsletter: NewsletterDTO): Promise<string>
         body: JSON.stringify(newsletter),
     });
 
-    return await handleFetch<string>(response, 'Error al enviar newsletter');
+    return await handleFetch<string>(response, 'Error sending newsletter');
 }
 
 //------------------ PLANTILLAS ------------------//
@@ -25,7 +25,7 @@ export const sendNewsletter = async (newsletter: NewsletterDTO): Promise<string>
 export const getPlantilla = async (): Promise<NewsletterDTO> => {
     const response = await fetchWithAuth(`${API_PLANTILLA}/obtener`);
 
-    return await handleFetch<NewsletterDTO>(response, 'Error al obtener plantilla');
+    return await handleFetch<NewsletterDTO>(response, 'Error obtaining template');
 };
 
 export const updatePlantilla = async (plantilla: NewsletterDTO): Promise<void> => {
@@ -37,5 +37,5 @@ export const updatePlantilla = async (plantilla: NewsletterDTO): Promise<void> =
         body: JSON.stringify(plantilla),
     });
 
-    return await handleFetch<void>(response, 'Error al actualizar plantilla');
+    return await handleFetch<void>(response, 'Error updating template');
 };

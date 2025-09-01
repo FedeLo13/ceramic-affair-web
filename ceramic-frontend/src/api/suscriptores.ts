@@ -12,5 +12,5 @@ export const subscribe = async (suscripcion: SuscripcionDTO): Promise<string> =>
         body: JSON.stringify(suscripcion),
     });
 
-    return await handleFetch<string>(response, 'Error al suscribirse');
+    return await handleFetch<string>(response, 'Error subscribing');
 }

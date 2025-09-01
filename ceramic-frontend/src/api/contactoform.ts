@@ -12,5 +12,5 @@ export const sendContactoForm = async (form: ContactoFormDTO): Promise<void> => 
         body: JSON.stringify(form),
     });
 
-    return await handleFetch<void>(response, 'Error al enviar formulario de contacto');
+    return await handleFetch<void>(response, 'Error sending contact form');
 };

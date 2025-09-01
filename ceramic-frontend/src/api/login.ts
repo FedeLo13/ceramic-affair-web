@@ -12,5 +12,5 @@ export const login = async (data: LoginDTO): Promise<LoginResponse> => {
         body: JSON.stringify(data),
     });
 
-    return await handleFetch<LoginResponse>(response, 'Error al iniciar sesión');
+    return await handleFetch<LoginResponse>(response, 'Error logging in');
 };

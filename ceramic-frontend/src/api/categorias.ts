@@ -11,13 +11,13 @@ const API_ADMIN = 'http://localhost:8080/api/admin/categorias';
 export const getCategoriaById = async (id: number): Promise<Categoria> => {
     const response = await fetch(`${API_PUBLIC}/${id}`);
 
-    return await handleFetch<Categoria>(response, 'Error al obtener categoría por ID');
+    return await handleFetch<Categoria>(response, 'Error obtaining category by ID');
 };
 
 export const getAllCategorias = async (): Promise<Categoria[]> => {
     const response = await fetch(`${API_PUBLIC}/todas`);
 
-    return await handleFetch<Categoria[]>(response, 'Error al obtener todas las categorías');
+    return await handleFetch<Categoria[]>(response, 'Error obtaining categories');
 };
 
 //------------------ ADMINISTRATIVOS ------------------//
@@ -31,7 +31,7 @@ export const newCategoria = async (categoria: CategoriaInputDTO): Promise<number
         body: JSON.stringify(categoria),
     });
 
-    return await handleFetch<number>(response, 'Error al crear categoría');
+    return await handleFetch<number>(response, 'Error creating category');
 };
 
 export const updateCategoria = async (id: number, categoria: CategoriaInputDTO): Promise<void> => {
@@ -43,12 +43,12 @@ export const updateCategoria = async (id: number, categoria: CategoriaInputDTO):
         body: JSON.stringify(categoria),
     });
 
-    return await handleFetch<void>(response, 'Error al actualizar categoría');
+    return await handleFetch<void>(response, 'Error updating category');
 };
 
 export const deleteCategoria = async (id: number): Promise<void> => {
     const response = await fetchWithAuth(`${API_ADMIN}/${id}`, {
         method: 'DELETE',
     });
-    return await handleFetch<void>(response, 'Error al eliminar categoría');
+    return await handleFetch<void>(response, 'Error deleting category');
 };

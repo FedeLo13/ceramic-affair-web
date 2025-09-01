@@ -11,13 +11,13 @@ const API_ADMIN = 'http://localhost:8080/api/admin/find-me-posts';
 export const getFindMePostById = async (id: number): Promise<FindMePostOutputDTO> => {
     const response = await fetch(`${API_PUBLIC}/${id}`);
 
-    return await handleFetch<FindMePostOutputDTO>(response, 'Error al obtener post por ID');
+    return await handleFetch<FindMePostOutputDTO>(response, 'Error obtaining post by ID');
 };
 
 export const getAllFindMePosts = async (): Promise<FindMePostOutputDTO[]> => {
     const response = await fetch(`${API_PUBLIC}/todos`);
 
-    return await handleFetch<FindMePostOutputDTO[]>(response, 'Error al obtener todos los posts');
+    return await handleFetch<FindMePostOutputDTO[]>(response, 'Error obtaining all posts');
 };
 
 //------------------ ADMINISTRATIVOS ------------------//
@@ -31,7 +31,7 @@ export const newFindMePost = async (post: FindMePostInputDTO): Promise<number> =
         body: JSON.stringify(post),
     });
 
-    return await handleFetch<number>(response, 'Error al crear post');
+    return await handleFetch<number>(response, 'Error creating post');
 };
 
 export const updateFindMePost = async (id: number, post: FindMePostInputDTO): Promise<void> => {
@@ -43,7 +43,7 @@ export const updateFindMePost = async (id: number, post: FindMePostInputDTO): Pr
         body: JSON.stringify(post),
     });
 
-    return await handleFetch<void>(response, 'Error al actualizar post');
+    return await handleFetch<void>(response, 'Error updating post');
 };
 
 export const deleteFindMePost = async (id: number): Promise<void> => {
@@ -51,5 +51,5 @@ export const deleteFindMePost = async (id: number): Promise<void> => {
         method: 'DELETE',
     });
 
-    return await handleFetch<void>(response, 'Error al eliminar post');
+    return await handleFetch<void>(response, 'Error deleting post');
 };

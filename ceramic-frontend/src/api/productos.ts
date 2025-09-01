@@ -12,13 +12,13 @@ const API_ADMIN = 'http://localhost:8080/api/admin/productos';
 export const getProductoById = async (id: number): Promise<ProductoOutputDTO> => {
     const response = await fetch(`${API_PUBLIC}/${id}`);
 
-    return await handleFetch<ProductoOutputDTO>(response, 'Error al obtener el producto por ID');
+    return await handleFetch<ProductoOutputDTO>(response, 'Error obtaining product by ID');
 };
 
 export const getAllProductos = async (page = 0, size = 10): Promise<PageResponse<ProductoOutputDTO>> => {
     const response = await fetch(`${API_PUBLIC}/todos?page=${page}&size=${size}`);
 
-    return await handleFetch<PageResponse<ProductoOutputDTO>>(response, 'Error al obtener todos los productos');
+    return await handleFetch<PageResponse<ProductoOutputDTO>>(response, 'Error obtaining all products');
 };
 
 export interface FilterProductosParams {
@@ -40,7 +40,7 @@ export const filterProductos = async (params:FilterProductosParams & {page?: num
 
     const response = await fetch(`${API_PUBLIC}/filtrar?${query.toString()}`);
 
-    return await handleFetch<PageResponse<ProductoOutputDTO>>(response, 'Error al filtrar productos');
+    return await handleFetch<PageResponse<ProductoOutputDTO>>(response, 'Error filtering products');
 }
 
 //------------------ ADMINISTRATIVOS ------------------//
@@ -54,7 +54,7 @@ export const newProducto = async (producto: ProductoInputDTO): Promise<number> =
         body: JSON.stringify(producto),
     });
 
-    return await handleFetch<number>(response, 'Error al crear producto');
+    return await handleFetch<number>(response, 'Error creating product');
 }
 
 export const updateProducto = async (id: number, producto: ProductoInputDTO): Promise<void> => {
@@ -66,7 +66,7 @@ export const updateProducto = async (id: number, producto: ProductoInputDTO): Pr
         body: JSON.stringify(producto),
     });
 
-    return await handleFetch<void>(response, 'Error al actualizar producto');
+    return await handleFetch<void>(response, 'Error updating product');
 };
 
 export const updateStockProducto = async (id: number, stock: ProductoStockDTO): Promise<void> => {
@@ -78,7 +78,7 @@ export const updateStockProducto = async (id: number, stock: ProductoStockDTO): 
         body: JSON.stringify(stock),
     });
 
-    return await handleFetch<void>(response, 'Error al actualizar stock del producto');
+    return await handleFetch<void>(response, 'Error updating product stock');
 }
 
 export const deleteProducto = async (id: number): Promise<void> => {
@@ -86,6 +86,6 @@ export const deleteProducto = async (id: number): Promise<void> => {
         method: 'DELETE',
     });
 
-    return await handleFetch<void>(response, 'Error al eliminar producto');
+    return await handleFetch<void>(response, 'Error deleting product');
 };
 
