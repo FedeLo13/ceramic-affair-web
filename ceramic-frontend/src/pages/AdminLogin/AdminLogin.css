@@ -55,12 +55,11 @@
 /* Botón */
 .login-button {
   padding: 0.9rem;
-  background: #000000;
+  background: #2B3A64;
   color: #ffffff;
   border: none;
   border-radius: 4px;
   font-size: 1rem;
-  font-weight: 600;
   cursor: pointer;
   width: 100%;
   max-width: 125px;
@@ -69,7 +68,6 @@
 }
 
 .login-button:hover {
-  background: #333333;
   transform: translateY(-1px);
 }
 

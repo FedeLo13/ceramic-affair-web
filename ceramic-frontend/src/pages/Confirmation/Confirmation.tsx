@@ -7,15 +7,15 @@ export default function Confirmacion() {
   const mensaje = (() => {
     switch (status) {
       case "not_found":
-        return "No hemos encontrado tu suscripción. Inténtalo de nuevo más tarde.";
+        return "We couldn't find your subscription. Please try again later.";
       case "expired":
-        return "El enlace ha expirado. Por favor, solicita uno nuevo.";
+        return "The link has expired. Please request a new one.";
       case "subscribed":
-        return "¡Tu suscripción ha sido confirmada!";
+        return "Your subscription has been confirmed!";
       case "unsubscribed":
-        return "Tu suscripción ha sido cancelada correctamente.";
+        return "Your subscription has been successfully canceled.";
       default:
-        return "Ocurrió un error al procesar tu solicitud.";
+        return "An error occurred while processing your request.";
     }
   })();
 

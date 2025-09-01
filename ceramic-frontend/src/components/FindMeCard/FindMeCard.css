@@ -5,9 +5,8 @@
 }
 
 .findme-card-title {
-    font-weight: bold;
+    font-weight: 100;
     font-size: 20px;
-    color: rgb(120, 120, 120);
     margin: 15px 30px;
 }
 
@@ -88,7 +87,7 @@
 }
 
 .findme-admin-button-edit {
-    background-color: #000000;
+    background-color: #2B3A64;
     color: white;
     border: none;
     border-radius: 4px;
@@ -99,7 +98,7 @@
 }
 
 .findme-admin-button-delete {
-    background-color: #000000;
+    background-color: #2B3A64;
     color: white;
     border: none;
     border-radius: 4px;

@@ -106,9 +106,6 @@ export default function Contact() {
             <p className='contact-text'>If you have any questions about the process, please don’t hesitate to get in touch. I’ll get back to you as soon as possible to answer your inquiries.</p>
             <p className='contact-text'>You can also subscribe to my newsletter below the form to receive updates and exclusive content.</p>
 
-            {/* Separador */}
-            <hr className="section-separator" />
-
             <section className="contact-form-section">
                 <h2 className='contact-title'>Send a Message</h2>
                 <form className="contact-form" onSubmit={handleSubmit}>
@@ -142,13 +139,9 @@ export default function Contact() {
                 </form>
             </section>
 
-            {/* Separador */}
-            <hr className="section-separator" />
-
             {/* Newsletter */}
             <section className="newsletter-section">
                 <h2 className='newsletter-title'>Newsletter</h2>
-                <p className='contact-text'>Sign up here with your email adress to receive updates and notifications to stay informed about the latest news and never miss an opportunity.</p>
                 <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
                     <div className="form-group">
                         <input 
