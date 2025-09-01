@@ -1,4 +1,5 @@
 import React from "react";
+import "./PrivacyPolicy.css";
 
 const PrivacyPolicy: React.FC = () => {
   return (
