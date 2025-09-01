@@ -6,8 +6,8 @@ package es.uca.tfg.ceramic_affair_web.exceptions;
 public class RecaptchaException {
 
     private RecaptchaException() {
-        throw new UnsupportedOperationException("Esta clase no debe ser instanciada.");
-    }   
+        throw new UnsupportedOperationException("This class cannot be instantiated.");
+    }
 
     public static class Invalido extends RuntimeException {
         /**
@@ -15,7 +15,7 @@ public class RecaptchaException {
          * @param mensaje Mensaje de error personalizado.
          */
         public Invalido() {
-            super("El token de reCAPTCHA es inválido o ha expirado. Por favor, inténtelo de nuevo.");
+            super("The reCAPTCHA token is invalid or has expired. Please try again.");
         }
     }
 }

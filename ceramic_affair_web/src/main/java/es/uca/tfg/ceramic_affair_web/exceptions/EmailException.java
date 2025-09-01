@@ -6,7 +6,7 @@ package es.uca.tfg.ceramic_affair_web.exceptions;
 public class EmailException {
 
     private EmailException() {
-        throw new UnsupportedOperationException("Esta clase no debe ser instanciada.");
+        throw new UnsupportedOperationException("This class cannot be instantiated.");
     }
 
     /**
@@ -14,7 +14,7 @@ public class EmailException {
      */
     public static class EnvioFallido extends RuntimeException {
         public EnvioFallido(Throwable cause) {
-            super("Error al enviar el correo electrónico", cause);
+            super("Failed to send email", cause);
         }
     }
 }

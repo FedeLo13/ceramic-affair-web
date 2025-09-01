@@ -11,7 +11,7 @@ public class FindMePostException {
      * Constructor privado para evitar la instanciación de esta clase.
      */
     private FindMePostException() {
-        throw new UnsupportedOperationException("Esta clase no debe ser instanciada.");
+        throw new UnsupportedOperationException("This class cannot be instantiated.");
     }
 
     /**
@@ -23,7 +23,7 @@ public class FindMePostException {
          * @param id el id de la publicación no encontrada
          */
         public NoEncontrado(Long id) {
-            super("Publicación 'Encuéntrame' no encontrada con id: " + id, HttpStatus.NOT_FOUND);
+            super("Find Me Post not found with ID " + id, HttpStatus.NOT_FOUND);
         }
 
         /**

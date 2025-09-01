@@ -40,11 +40,11 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGlobalException(Exception ex, HttpServletRequest request) {
-        logger.error("Error interno del servidor: ", ex);
+        logger.error("Internal server error: ", ex);
         return createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR,
-            "Error interno del servidor",
-            "Por favor, inténtelo de nuevo más tarde o contacte con el soporte técnico.", 
-            request.getRequestURI(), 
+            "Internal server error",
+            "Please try again later or contact technical support.",
+            request.getRequestURI(),
             null);
     }
 
@@ -56,9 +56,9 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ApiError> handleBusinessException(BusinessException ex, HttpServletRequest request) {
-        logger.warn("Excepción de negocio: {}", ex.getMessage());
+        logger.warn("Business exception: {}", ex.getMessage());
         return createErrorResponse(ex.getStatus(),
-            "Excepción de negocio",
+            "Business exception",
             ex.getMessage(),
             request.getRequestURI(),
             null);
@@ -71,9 +71,9 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity<ApiError> handleMaxUploadSizeExceeded(MaxUploadSizeExceededException ex, HttpServletRequest request) {
-        logger.warn("Tamaño de archivo excedido: {}", ex.getMessage());
+        logger.warn("File size exceeded: {}", ex.getMessage());
         return createErrorResponse(HttpStatus.PAYLOAD_TOO_LARGE,
-            "Tamaño de archivo excedido",
+            "File size exceeded",
             ex.getMessage(),
             request.getRequestURI(),
             null);
@@ -86,9 +86,9 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<ApiError> handleResponseStatusException(ResponseStatusException ex, HttpServletRequest request) {
-        logger.warn("Excepción de estado de respuesta: {}", ex.getReason());
+        logger.warn("Response status exception: {}", ex.getReason());
         return createErrorResponse(ex.getStatusCode(),
-            "Excepción de estado de respuesta",
+            "Response status exception",
             ex.getReason(),
             request.getRequestURI(),
             null);
@@ -101,9 +101,9 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(RecaptchaException.Invalido.class)
     public ResponseEntity<ApiError> handleRecaptchaInvalido(RecaptchaException.Invalido ex, HttpServletRequest request) {
-        logger.warn("reCAPTCHA inválido: {}", ex.getMessage());
+        logger.warn("Invalid reCAPTCHA: {}", ex.getMessage());
         return createErrorResponse(HttpStatus.BAD_REQUEST,
-            "reCAPTCHA inválido",
+            "Invalid reCAPTCHA",
             ex.getMessage(),
             request.getRequestURI(),
             null);
@@ -116,9 +116,9 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(EmailException.EnvioFallido.class)
     public ResponseEntity<ApiError> handleEmailEnvioFallido(EmailException.EnvioFallido ex, HttpServletRequest request) {
-        logger.error("Error al enviar el correo electrónico: ", ex);
+        logger.error("Failed to send email: ", ex);
         return createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR,
-            "Error al enviar el correo electrónico",
+            "Failed to send email",
             ex.getMessage(),
             request.getRequestURI(),
             null);
@@ -131,9 +131,9 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ApiError> handleDataIntegrityViolation(DataIntegrityViolationException ex, HttpServletRequest request) {
-        logger.warn("Violación de integridad de datos: {}", ex.getMessage());
+        logger.warn("Data integrity violation: {}", ex.getMessage());
         return createErrorResponse(HttpStatus.CONFLICT,
-            "Violación de integridad de datos",
+            "Data integrity violation",
             ex.getMessage(),
             request.getRequestURI(),
             null);
@@ -151,10 +151,10 @@ public class GlobalExceptionHandler {
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
             errors.put(error.getField(), error.getDefaultMessage());
         }
-        logger.warn("Errores de validación: {}", errors);
+        logger.warn("Validation errors: {}", errors);
         return createErrorResponse(HttpStatus.BAD_REQUEST,
-            "Errores de validación",
-            "Por favor, revise los campos marcados.",
+            "Validation errors",
+            "Please check the marked fields.",
             request.getRequestURI(),
             errors);
     }

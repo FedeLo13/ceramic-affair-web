@@ -11,7 +11,7 @@ public class ProductoException {
      * Constructor privado para evitar la instanciación de esta clase.
      */
     private ProductoException() {
-        throw new UnsupportedOperationException("Esta clase no debe ser instanciada.");
+        throw new UnsupportedOperationException("This class cannot be instantiated.");
     }
 
     /**
@@ -23,7 +23,7 @@ public class ProductoException {
          * @param id
          */
         public NoEncontrado(Long id) {
-            super("Producto no encontrado con id: " + id, HttpStatus.NOT_FOUND);
+            super("Product not found with ID " + id, HttpStatus.NOT_FOUND);
         }
 
         /**

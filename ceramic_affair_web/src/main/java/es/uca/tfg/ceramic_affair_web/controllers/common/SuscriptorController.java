@@ -85,14 +85,14 @@ public class SuscriptorController {
             sub.regenerarTokenVerificacion();
             suscriptorRepo.save(sub);
             enviarCorreoVerificacion(sub);
-            return ResponseEntity.ok(new ApiResponseType<>(true, "Suscriptor encontrado y correo de verificación reenviado", "Correo de verificación reenviado"));
+            return ResponseEntity.ok(new ApiResponseType<>(true, "Suscriptor encontrado y correo de verificación reenviado", "Verification email has been resent"));
         }
 
         // Si no existe, crear un nuevo suscriptor
         Suscriptor nuevoSuscriptor = new Suscriptor(dto.getEmail());
         suscriptorRepo.save(nuevoSuscriptor);
         enviarCorreoVerificacion(nuevoSuscriptor);
-        return ResponseEntity.ok(new ApiResponseType<>(true, "Suscriptor creado y correo de verificación enviado", "Correo de verificación enviado"));
+        return ResponseEntity.ok(new ApiResponseType<>(true, "Suscriptor creado y correo de verificación enviado", "Verification email has been sent"));
     }
 
     @GetMapping("/verificar")
@@ -150,14 +150,14 @@ public class SuscriptorController {
     private void enviarCorreoVerificacion(Suscriptor suscriptor) {
         // TODO: Cambiar la URL de origen a la de producción cuando esté disponible
         String enlace = "http://localhost:8080/api/public/suscriptores/verificar?token=" + suscriptor.getTokenVerificacion();
-        String cuerpo = "<p>Hola,</p>"
-                      + "<p>Gracias por suscribirte a nuestro boletín. Para completar tu suscripción, por favor verifica tu correo electrónico haciendo clic en el siguiente enlace:</p>"
-                      + "<p><a href=\"" + enlace + "\">Verificar mi correo electrónico</a></p>"
-                      + "<p>Si no te has suscrito, puedes ignorar este correo.</p>"
-                      + "<p>Saludos,</p>"
-                      + "<p>El equipo de Ceramic Affair</p>";
+        String cuerpo = "<p>Hello,</p>"
+                      + "<p>Thank you for subscribing to our newsletter. To complete your subscription, please verify your email address by clicking the link below:</p>"
+                      + "<p><a href=\"" + enlace + "\">Verify my email address</a></p>"
+                      + "<p>If you did not subscribe, you can ignore this email.</p>"
+                      + "<p>Best regards,</p>"
+                      + "<p>The Ceramic Affair Team</p>";
         try {
-            emailService.sendEmail(suscriptor.getEmail(), "Verificación de suscripción", cuerpo);
+            emailService.sendEmail(suscriptor.getEmail(), "Subscription Verification", cuerpo);
         } catch (Exception e) {
             throw new EmailException.EnvioFallido(e);
         }

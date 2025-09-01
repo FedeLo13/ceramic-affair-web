@@ -48,26 +48,26 @@ public class ImagenService {
         // 1. Validar tipo MIME del archivo y que se pueda tratar como imagen
         String tipoMime = archivo.getContentType();
         if (tipoMime == null || !tipoMime.startsWith("image/")) {
-            throw new ImagenException.NoValida("El archivo no es válido.");
+            throw new ImagenException.NoValida("Invalid file type.");
         }
 
         // 2. Validar extensiones permitidas
         String nombreOriginal = archivo.getOriginalFilename();
         if (nombreOriginal == null || !nombreOriginal.contains(".")) {
-            throw new ImagenException.NoValida("El archivo no es válido.");
+            throw new ImagenException.NoValida("Invalid file.");
         }
 
         String extension = nombreOriginal.substring(nombreOriginal.lastIndexOf('.') + 1).toLowerCase();
         List<String> extensionesPermitidas = List.of("jpg", "jpeg", "png", "gif", "webp");
 
         if (!extensionesPermitidas.contains(extension)) {
-            throw new ImagenException.NoValida("El archivo no es válido.");
+            throw new ImagenException.NoValida("Invalid file extension.");
         }
 
         // 3. Leer imagen para asegurarse de que es válida y obtener sus dimensiones
         BufferedImage img = ImageIO.read(archivo.getInputStream());
         if (img == null) {
-            throw new ImagenException.NoValida("El archivo no es válido.");
+            throw new ImagenException.NoValida("Invalid file.");
         }
 
         float ancho = img.getWidth();

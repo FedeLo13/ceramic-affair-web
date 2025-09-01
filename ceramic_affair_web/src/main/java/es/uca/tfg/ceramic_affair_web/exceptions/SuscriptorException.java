@@ -11,7 +11,7 @@ public class SuscriptorException {
      * Constructor privado para evitar la instanciación de esta clase.
      */
     private SuscriptorException() {
-        throw new UnsupportedOperationException("Esta clase no debe ser instanciada");
+        throw new UnsupportedOperationException("This class cannot be instantiated.");
     }
 
     /**
@@ -19,7 +19,7 @@ public class SuscriptorException {
      */
     public static class NoEncontrado extends BusinessException {
         public NoEncontrado() {
-            super("Suscriptor no encontrado", HttpStatus.NOT_FOUND);
+            super("Subscriber not found", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -28,7 +28,7 @@ public class SuscriptorException {
      */
     public static class YaVerificado extends BusinessException {
         public YaVerificado(String email) {
-            super("El suscriptor con email: " + email + " ya está suscrito", HttpStatus.CONFLICT);
+            super("The subscriber with email: " + email + " is already subscribed", HttpStatus.CONFLICT);
         }
     }
 
@@ -37,7 +37,7 @@ public class SuscriptorException {
      */
     public static class TokenExpirado extends BusinessException {
         public TokenExpirado() {
-            super("El enlace de verificación ha expirado", HttpStatus.GONE);
+            super("The verification link has expired", HttpStatus.GONE);
         }
     }
 
@@ -46,7 +46,7 @@ public class SuscriptorException {
      */
     public static class VerificacionPendiente extends BusinessException {
         public VerificacionPendiente(String email) {
-            super("La verificación del suscriptor con email: " + email + " está pendiente", HttpStatus.BAD_REQUEST);
+            super("The verification of the subscriber with email: " + email + " is pending", HttpStatus.BAD_REQUEST);
         }
     }
 }

@@ -53,13 +53,13 @@ public class LoginController {
     })
     public ResponseEntity<ApiResponseType<Map<String, String>>> login(@Valid @RequestBody LoginDTO loginDTO) {
         Usuario usuario = usuarioRepo.findByEmail(loginDTO.getEmail())
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciales inválidas"));
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials"));
 
         if (!passwordEncoder.matches(loginDTO.getPassword(), usuario.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciales inválidas");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
         }
 
         String token = jwtUtils.generateToken(usuario);
-        return ResponseEntity.ok(new ApiResponseType<>(true, "Inicio de sesión exitoso", Map.of("token", token)));
+        return ResponseEntity.ok(new ApiResponseType<>(true, "Login successful", Map.of("token", token)));
     }
 }

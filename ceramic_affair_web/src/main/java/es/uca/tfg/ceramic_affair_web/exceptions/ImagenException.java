@@ -11,7 +11,7 @@ public class ImagenException {
      * Constructor privado para evitar la instanciación de esta clase.
      */
     private ImagenException() {
-        throw new UnsupportedOperationException("Esta clase no debe ser instanciada.");
+        throw new UnsupportedOperationException("This class cannot be instantiated.");
     }
 
     /**
@@ -23,7 +23,7 @@ public class ImagenException {
          * @param id el id de la imagen no encontrada
          */
         public NoEncontrada(Long id) {
-            super("Imagen no encontrada con ID: " + id, HttpStatus.NOT_FOUND);
+            super("Image not found with ID " + id, HttpStatus.NOT_FOUND);
         }
 
         /**

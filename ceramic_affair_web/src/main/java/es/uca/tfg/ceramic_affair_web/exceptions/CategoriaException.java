@@ -11,7 +11,7 @@ public class CategoriaException {
      * Constructor privado para evitar la instanciación de esta clase.
      */
     private CategoriaException() {
-        throw new UnsupportedOperationException("Esta clase no debe ser instanciada.");
+        throw new UnsupportedOperationException("This class cannot be instantiated.");
     }
 
     /**
@@ -23,7 +23,7 @@ public class CategoriaException {
          * @param id
          */
         public NoEncontrada(Long id) {
-            super("Categoría no encontrada con ID: " + id, HttpStatus.NOT_FOUND);
+            super("Category not found with ID " + id, HttpStatus.NOT_FOUND);
         }
 
         /**
@@ -44,7 +44,7 @@ public class CategoriaException {
          * @param nombre
          */
         public YaExistente(String nombre) {
-            super("Ya existe una categoría con el nombre: " + nombre, HttpStatus.CONFLICT);
+            super("Category already exists with name " + nombre, HttpStatus.CONFLICT);
         }
     }
 }
