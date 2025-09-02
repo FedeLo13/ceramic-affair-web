@@ -1,6 +1,6 @@
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import './Contact.css'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { sendContactoForm } from '../../api/contactoform';
 import { subscribe } from '../../api/suscriptores';
 import { ValidationError } from '../../api/utils';
@@ -13,6 +13,22 @@ export default function Contact() {
     const [newsletterStatus, setNewsletterStatus] = useState<string | null>(null);
     const [newsletterError, setNewsletterError] = useState<string | null>(null);
     const [newsletterLoading, setNewsletterLoading] = useState(false);
+
+    // Estados para toasts
+    const [toastMessage, setToastMessage] = useState<string | null>(null);
+    const [visibleToast, setVisibleToast] = useState(false);
+
+    useEffect(() => {
+        if (toastMessage) {
+            setVisibleToast(true);
+            const timer = setTimeout(() => setVisibleToast(false), 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [toastMessage]);
+
+    const handleToastTransitionEnd = () => {
+        if (!visibleToast) setToastMessage(null);
+    };
 
     // Lógica del formulario de contacto
     const [form, setForm] = useState({
@@ -43,7 +59,7 @@ export default function Contact() {
             recaptchaToken: token
             });
 
-            alert('Message sent successfully!');
+            setToastMessage('Message sent successfully!');
             setForm({
                 nombre: '',
                 apellidos: '',
@@ -54,7 +70,7 @@ export default function Contact() {
 
         } catch (error) {
             console.error('Error sending message:', error);
-            alert('Error sending message. Please try again later.');
+            setToastMessage('Error sending message. Please try again later.');
         }
     }
 
@@ -164,6 +180,21 @@ export default function Contact() {
                 {newsletterStatus && <p className="success-message">{newsletterStatus}</p>}
                 {newsletterError && <p className="error-message">{newsletterError}</p>}
             </section>
+
+            {toastMessage && (
+                <div
+                    className={`toast-message ${visibleToast ? 'show' : 'hide'}`}
+                    onTransitionEnd={handleToastTransitionEnd}
+                >
+                    {toastMessage}
+                    <button
+                        className="toast-close-btn"
+                    onClick={() => setVisibleToast(false)}
+                    >
+                    ×
+                    </button>
+                </div>
+            )}
         </div>
     );
 }
