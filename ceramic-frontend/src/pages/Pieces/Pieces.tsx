@@ -9,9 +9,14 @@ import { useAuth } from "../../context/AuthContext";
 import { FaCrown, FaSearch } from "react-icons/fa";
 import { useSearchParams } from "react-router-dom";
 
-export default function Pieces() {
+type PiecesProps = {
+    showFilters?: boolean;
+};
+
+export default function Pieces({ showFilters: defaultShowFilters = true }: PiecesProps) {
     const [searchParams] = useSearchParams(); // Obtener los parámetros de búsqueda
     const categoriaParam = searchParams.get("categoria"); // Obtener el parámetro de categoría
+    const showFilters = searchParams.get("showFilters") === "true" || defaultShowFilters; // Obtener el parámetro showFilters o usar el valor por defecto
     const [productos, setProductos] = useState<ProductoOutputDTO[]>([]); // Estado para los productos
     const [pageInfo, setPageInfo] = useState({
         totalPages: 0,
@@ -211,91 +216,92 @@ export default function Pieces() {
     return (
         <div className="pieces-page">
             {/* Filtros */}
-            <div className="filters">
+            { showFilters && (
+                <div className="filters">
 
-                {/* Barra de búsqueda */}
-                <div className="search-wrapper">
-                    <input
-                        type="text"
-                        placeholder="Search for a product..."
-                        value={nombre}
-                        onChange={handleNombreChange}
-                        className="search-bar"
-                    />
-                    <FaSearch className="search-icon" />
-                </div>
-
-                {/* Dropdown de categorías */}
-                <div className="select-wrapper">
-                    <select
-                        value={categoriaId !== undefined ? categoriaId.toString() : ""}
-                        onChange={handleCategoriaChange}
-                        className="minimal-select"
-                    >
-                        <option value="">All categories</option>
-                        {categorias.map((categoria) => (
-                            <option key={categoria.id} value={categoria.id}>
-                                {categoria.nombre}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                {/* Orden */}
-                <div className="select-wrapper">
-                    <select
-                        value={orden}
-                        onChange={handleOrdenChange}
-                        className="minimal-select"
-                    >
-                        <option value="nuevos">Newest</option>
-                        <option value="viejos">Oldest</option>
-                    </select>
-                </div>
-
-                {/* Stock */}
-                <div className="select-wrapper">
-                    <select
-                        value={soloEnStock === undefined ? "" : soloEnStock ? "true" : "false"}
-                        onChange={handleSoloEnStockChange}
-                        className="minimal-select"
-                        disabled={isSoldOutSelectionMode} // Deshabilitar si estamos en modo sold out
-                    >
-                        <option value="">All products</option>
-                        <option value="true">In stock</option>
-                    </select>
-                </div>
-
-                {/* Admin Dropdown (solo visible si está logueado) */}
-                {isAuthenticated && (
-                    <div className="admin-menu">
-                        <button
-                            className="admin-toggle" 
-                            onClick={() => setAdminDropdownOpen(!adminDropdownOpen)}>
-                                <FaCrown size={24} /> Admin Menu
-                        </button>
-                        {adminDropdownOpen && (
-                            <div className="admin-dropdown">
-                                <button className="delete-btn" onClick={() => {
-                                    setSelectionMode("delete");
-                                    setSelectedProductos([]);
-                                    setAdminDropdownOpen(false);
-                                }}>
-                                    Delete products
-                                </button>
-                                <button className="soldout-btn" onClick={() => {
-                                    setSelectionMode("soldout");
-                                    setSelectedProductos([]);
-                                    setAdminDropdownOpen(false);
-                                }}>
-                                    Mark as sold out
-                                </button>
-                            </div>
-                        )}
+                    {/* Barra de búsqueda */}
+                    <div className="search-wrapper">
+                        <input
+                            type="text"
+                            placeholder="Search for a product..."
+                            value={nombre}
+                            onChange={handleNombreChange}
+                            className="search-bar"
+                        />
+                        <FaSearch className="search-icon" />
                     </div>
-                )}
-            </div>
 
+                    {/* Dropdown de categorías */}
+                    <div className="select-wrapper">
+                        <select
+                            value={categoriaId !== undefined ? categoriaId.toString() : ""}
+                            onChange={handleCategoriaChange}
+                            className="minimal-select"
+                        >
+                            <option value="">All categories</option>
+                            {categorias.map((categoria) => (
+                                <option key={categoria.id} value={categoria.id}>
+                                    {categoria.nombre}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* Orden */}
+                    <div className="select-wrapper">
+                        <select
+                            value={orden}
+                            onChange={handleOrdenChange}
+                            className="minimal-select"
+                        >
+                            <option value="nuevos">Newest</option>
+                            <option value="viejos">Oldest</option>
+                        </select>
+                    </div>
+
+                    {/* Stock */}
+                    <div className="select-wrapper">
+                        <select
+                            value={soloEnStock === undefined ? "" : soloEnStock ? "true" : "false"}
+                            onChange={handleSoloEnStockChange}
+                            className="minimal-select"
+                            disabled={isSoldOutSelectionMode} // Deshabilitar si estamos en modo sold out
+                        >
+                            <option value="">All products</option>
+                            <option value="true">In stock</option>
+                        </select>
+                    </div>
+
+                    {/* Admin Dropdown (solo visible si está logueado) */}
+                    {isAuthenticated && (
+                        <div className="admin-menu">
+                            <button
+                                className="admin-toggle" 
+                                onClick={() => setAdminDropdownOpen(!adminDropdownOpen)}>
+                                    <FaCrown size={24} /> Admin Menu
+                            </button>
+                            {adminDropdownOpen && (
+                                <div className="admin-dropdown">
+                                    <button className="delete-btn" onClick={() => {
+                                        setSelectionMode("delete");
+                                        setSelectedProductos([]);
+                                        setAdminDropdownOpen(false);
+                                    }}>
+                                        Delete products
+                                    </button>
+                                    <button className="soldout-btn" onClick={() => {
+                                        setSelectionMode("soldout");
+                                        setSelectedProductos([]);
+                                        setAdminDropdownOpen(false);
+                                    }}>
+                                        Mark as sold out
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+            )}
             {/* Grid de productos */}
             {productos.length === 0 ? (
                 <div className="loader-container">

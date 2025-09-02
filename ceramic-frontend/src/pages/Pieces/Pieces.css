@@ -46,7 +46,6 @@
 /* Dropdown */
 .admin-dropdown {
     position: absolute;
-    top: 110%;
     left: 0;
     background-color: white;
     border: 1px solid #ddd;
@@ -54,7 +53,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
     display: flex;
     flex-direction: column;
-    width: 200px;
+    width: 160px;
     z-index: 100;
     animation: fadeIn 0.2s ease-out;
 }
@@ -73,20 +72,12 @@
     text-align: left;
     font-size: 14px;
     cursor: pointer;
+    color: #2B3A64;
     transition: background-color 0.2s;
 }
 
 .admin-dropdown button:hover {
     background-color: #f2f2f2;
-}
-
-/* Colores diferenciados */
-.delete-btn {
-    color: #000000;
-}
-
-.soldout-btn {
-    color: #000000  ;
 }
 
 .floating-action-buttons {
@@ -153,7 +144,7 @@
     border: none;
     border-radius: 20px;
     background-color: #f5f5f5;
-    color: #333;
+    color: #2B3A64;
     cursor: pointer;
     appearance: none; /* Quita estilo por defecto del navegador */
     -webkit-appearance: none;
