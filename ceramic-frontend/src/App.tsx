@@ -23,7 +23,8 @@ function App() {
         {/* Rutas públicas */}
         <Route index element={<Navigate to="/pieces" />} />
         <Route path="about" element={<About />} />
-        <Route path="pieces" element={<Pieces />} />
+        <Route path="pieces" element={<Pieces showFilters={false} />} />
+        <Route path="search" element={<Pieces showFilters={true} />} />
         <Route path="pieces/:id" element={<PieceDetail />} />
         <Route path="contact" element={
           <GoogleReCaptchaProvider reCaptchaKey='6Ley9IwrAAAAANfsyFpChaZHQLShQWdi7UwYBWxR'>

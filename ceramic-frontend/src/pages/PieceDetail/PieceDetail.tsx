@@ -150,8 +150,8 @@ export default function PieceDetail() {
                 <Link 
                     to={
                         producto.idCategoria
-                        ? `/pieces?categoria=${encodeURIComponent(producto.idCategoria)}`
-                        : `/pieces`
+                        ? `/pieces?categoria=${encodeURIComponent(producto.idCategoria)}&showFilters=true`
+                        : `/pieces?showFilters=true`
                     }
                     >
                         <span>{producto.nombreCategoria || "Uncategorized"}</span>
