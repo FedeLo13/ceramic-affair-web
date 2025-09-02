@@ -215,11 +215,11 @@ export default function AdminManageCategories() {
       </div>
       {message && (
         <div
-          className={`admin-categories-message ${visibleMessage ? 'show' : 'hide'}`}
+          className={`toast-message ${visibleMessage ? 'show' : 'hide'}`}
           onTransitionEnd={handleTransitionEnd}
         >
           {message}
-          <button className="admin-categories-close-btn" onClick={() => setVisibleMessage(false)}>×</button>
+          <button className="toast-close-btn" onClick={() => setVisibleMessage(false)}>×</button>
         </div>
       )}
   </>

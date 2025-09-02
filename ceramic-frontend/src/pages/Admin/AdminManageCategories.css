@@ -105,11 +105,11 @@
 }
 
 /* Contenedor de mensaje tipo toast */
-.admin-categories-message {
+.toast-message {
   position: fixed;
   bottom: 20px;            /* distancia desde el borde inferior */
   right: 20px;             /* distancia desde el borde derecho */
-  background-color: #323232; /* color de fondo oscuro */
+  background-color: #2B3A64; /* color de fondo oscuro */
   color: #fff;              /* texto blanco */
   padding: 12px 20px;       /* espacio interno */
   border-radius: 8px;       /* esquinas redondeadas */
@@ -124,7 +124,7 @@
 }
 
 /* Botón de cerrar */
-.admin-categories-close-btn {
+.toast-close-btn {
   background: none;
   border: none;
   color: #fff;
@@ -135,13 +135,13 @@
 }
 
 /* Animación de entrada */
-.admin-categories-message.show {
+.toast-message.show {
   transform: translateY(0);
   opacity: 1;
 }
 
 /* Animación de salida */
-.admin-categories-message.hide {
+.toast-message.hide {
   transform: translateY(20px);
   opacity: 0;
   transition: opacity 0.3s ease, transform 0.3s ease;
