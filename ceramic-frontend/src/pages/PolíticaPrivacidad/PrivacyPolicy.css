@@ -2,10 +2,9 @@
     max-width: 800px;
     margin: 40px auto;
     padding: 20px 30px;
-    background-color: #f9f9f9;
+    background-color: #FAFAFA;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    color: #333;
     line-height: 1.6;
 }
 
@@ -13,14 +12,12 @@
     font-size: 2rem;
     margin-bottom: 20px;
     text-align: center;
-    color: #222;
 }
 
 .privacy-policy h2 {
     font-size: 1.3rem;
     margin-top: 30px;
     margin-bottom: 12px;
-    color: #111;
     border-bottom: 2px solid #e0e0e0;
     padding-bottom: 4px;
 }
@@ -40,10 +37,6 @@
 
 .privacy-policy a:hover {
     color: #005fa3;
-}
-
-.privacy-policy strong {
-    color: #000;
 }
 
 @media (max-width: 600px) {

@@ -20,7 +20,7 @@ header {
   left: 0;
   width: 50px;           /* ancho del marcapáginas */
   height: 50px;          /* alto visible */
-  background: #fff;
+  background: #FAFAFA;
   border: none;
   border-radius: 0 8px 8px 0; /* borde redondeado en la derecha */
   cursor: pointer;
@@ -98,7 +98,7 @@ header nav a:hover {
     left: 0;
     width: 250px;
     height: 100%;
-    background: #fff;
+    background: #FAFAFA;
     box-shadow: 2px 0 8px rgba(0,0,0,0.1);
     transform: translateX(-100%);
     display: flex;
@@ -162,17 +162,6 @@ header nav a:hover {
     position: relative;
     display: inline-block;
     margin-left: 20px;
-}
-
-.admin-toggle {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: inherit; /* hereda el color del texto */
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
 }
 
 .sidebar-admin-dropdown {

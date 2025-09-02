@@ -9,7 +9,7 @@
 
 /* Caja del formulario */
 .admin-login-form {
-  background: #ffffff;
+  background: #FAFAFA;
   padding: 2.5rem;
   border-radius: 4px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
@@ -37,7 +37,7 @@
 .login-form-group input {
   width: 100%;
   padding: 0.55rem 0.85rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid #d1d5db;  
   border-radius: 4px;
   font-size: 0.95rem;
   line-height: 1.4;
