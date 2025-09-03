@@ -73,9 +73,8 @@
 
 /* Mensaje de error */
 .error-message {
-  color: #dc2626;
-  background: #fee2e2;
-  border: 1px solid #fecaca;
+  color: #D72638;
+  background: #F9DCDE;
   padding: 0.75rem 1rem;
   border-radius: 4px;
   font-size: 0.9rem;

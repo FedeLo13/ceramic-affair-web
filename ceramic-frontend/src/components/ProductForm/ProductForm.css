@@ -48,13 +48,6 @@
   outline: none;
 }
 
-/* Error messages */
-.error-message {
-  color: #d93025;
-  font-size: 0.9rem;
-  margin-top: 0.3rem;
-}
-
 /* Form row for width, height, diameter */
 .product-form-row {
   display: flex;
@@ -101,7 +94,6 @@
 .button-group button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  background-color: #007BFF;
 }
 
 /* Images container inside ImageUploader (assumed class .image-list) */
