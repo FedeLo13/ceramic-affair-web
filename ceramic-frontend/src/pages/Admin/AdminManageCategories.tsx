@@ -151,7 +151,8 @@ export default function AdminManageCategories() {
                     <span className="admin-category-name">{cat.nombre}</span>
                     <div className="admin-categories-actions">
                       {confirmDeleteId === cat.id ? (
-                        <>
+                        <div className="admin-categories-confirm-delete">
+                          <span>Are you sure you want to delete this category?</span>
                           <button
                             className="admin-categories-btn admin-categories-btn-delete"
                             onClick={() => handleDeleteConfirm(cat.id)}
@@ -164,7 +165,7 @@ export default function AdminManageCategories() {
                           >
                             Cancel
                           </button>
-                        </>
+                        </div>
                       ) : (
                         <>
                           <button

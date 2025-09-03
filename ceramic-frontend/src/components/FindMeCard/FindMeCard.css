@@ -107,3 +107,16 @@
     cursor: pointer;
     transition: background 0.2s ease;
 }
+
+.findme-delete-container {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* espacio entre botón y mensaje */
+  position: relative;
+}
+
+.findme-delete-confirmation {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* espacio entre botones y texto */
+}

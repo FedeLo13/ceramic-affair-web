@@ -23,6 +23,7 @@ export default function PieceDetail() {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const { isAuthenticated } = useAuth(); // Hook de autenticación
     const [isMobile, setIsMobile] = useState(false);
+    const [showDeleteMessage, setShowDeleteMessage] = useState(false);
 
     const thumbsRef = useRef<HTMLDivElement>(null);
 
@@ -131,13 +132,11 @@ export default function PieceDetail() {
     };
 
     const handleDeleteClick = async () => {
-        if (window.confirm("Are you sure you want to delete this piece?")) {
-            try {
-                await deleteProducto(producto.id);
-                navigate("/pieces");
-            } catch (error) {
-                console.error("Error deleting product:", error);
-            }
+        try {
+            await deleteProducto(producto.id);
+            navigate("/pieces");
+        } catch (error) {
+            console.error("Error deleting product:", error);
         }
     };
 
@@ -253,12 +252,34 @@ export default function PieceDetail() {
                             >
                                 <FaEdit /> Edit
                             </button>
-                            <button 
-                                className="delete-button"
-                                onClick={handleDeleteClick}
-                            >
-                                <FaTrash /> Delete
-                            </button>
+
+                            <div className="piece-delete-container">
+                                {!showDeleteMessage && (
+                                    <button 
+                                        className="delete-button"
+                                        onClick={() => setShowDeleteMessage(true)}
+                                    >
+                                        <FaTrash /> Delete
+                                    </button>
+                                )}
+                                {showDeleteMessage && (
+                                    <div className="piece-delete-confirmation">
+                                        <button 
+                                            onClick={handleDeleteClick}
+                                            className="delete-button"
+                                        >
+                                            Confirm Delete
+                                        </button>
+                                        <button 
+                                            onClick={() => setShowDeleteMessage(false)}
+                                            className="delete-button"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <span>Are you sure you want to delete this piece?</span>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     )}
                 </div>

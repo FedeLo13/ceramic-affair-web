@@ -1,6 +1,6 @@
 import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import * as L from "leaflet";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import type { FindMePostOutputDTO } from "../../types/findmepost.types";
 import { useAuth } from "../../context/AuthContext";
@@ -77,19 +77,19 @@ export default function FindMeCard({ post }: FindMeCardProps) {
 
   const googleMapsUrl = `https://www.google.com/maps?q=${latitud},${longitud}`;
 
+  const [showDeleteMessage, setShowDeleteMessage] = useState(false);
+
   const handleEdit = () => {
     navigate(`/admin/find-me/edit/${post.id}`)
   };
 
   const handleDelete = async () => {
-     if (confirm("Delete post?")) {
-       try {
-        await deleteFindMePost(post.id)
-        window.location.reload();
-       } catch (error) {
-         console.error("Error deleting post:", error);
-       }
-    }
+   try {
+    await deleteFindMePost(post.id)
+    window.location.reload();
+   } catch (error) {
+     console.error("Error deleting post:", error);
+   }
   };
 
   return (
@@ -131,9 +131,32 @@ export default function FindMeCard({ post }: FindMeCardProps) {
                 <button onClick={handleEdit} className="findme-admin-button findme-admin-button-edit">
                   <FaEdit /> Edit
                 </button>
-                <button onClick={handleDelete} className="findme-admin-button findme-admin-button-delete">
-                  <FaTrash /> Delete
-                </button>
+
+                <div className="findme-delete-container">
+
+                  {!showDeleteMessage && (
+                    <button 
+                      onClick={() => {
+                        setShowDeleteMessage(true);
+                      }} 
+                      className="findme-admin-button findme-admin-button-delete"
+                    >
+                      <FaTrash /> Delete
+                    </button>
+                  )}
+
+                  {showDeleteMessage && (
+                    <div className="findme-delete-confirmation">
+                      <button onClick={handleDelete} className="findme-admin-button findme-admin-button-delete">
+                        Confirm Delete
+                      </button>
+                      <button onClick={() => setShowDeleteMessage(false)} className="findme-admin-button findme-admin-button-delete">
+                        Cancel
+                      </button>
+                      <span>Are you sure you want to delete this post?</span>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
             <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="findme-card-map-link">
