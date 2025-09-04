@@ -108,19 +108,6 @@ li {
   font-size: 0.9rem;
 }
 
-.modal-actions button:nth-child(1) {
-  background: #f0f0f0;
-}
-
-.modal-actions button:nth-child(2) {
-  background: #4cafef;
-  color: white;
-}
-
-.modal-actions button:nth-child(3) {
-  background: #ccc;
-}
-
 /* Animación suave */
 @keyframes fadeIn {
   from {
