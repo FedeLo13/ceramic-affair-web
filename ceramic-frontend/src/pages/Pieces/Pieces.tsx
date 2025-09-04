@@ -7,7 +7,7 @@ import ProductGrid from "../../components/ProductGrid/ProductGrid";
 import "./Pieces.css";
 import { useAuth } from "../../context/AuthContext";
 import { FaCrown, FaSearch } from "react-icons/fa";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 type PiecesProps = {
     showFilters?: boolean;
@@ -42,8 +42,22 @@ export default function Pieces({ showFilters: defaultShowFilters = true }: Piece
     const [selectionMode, setSelectionMode] = useState<"delete" | "soldout" | null>(null); // Modo de selección actual
     const isSoldOutSelectionMode = selectionMode === "soldout"; 
 
+    // Para mostrar toast al volver a esta página
+    const [message, setMessage] = useState<string | null>(null);
+    const [visibleMessage, setVisibleMessage] = useState(false);
+    const location = useLocation();
+
     // Ref para manejar la paginación con lazy loading
     const loader = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        if (location.state?.toastMessage) {
+            setMessage(location.state.toastMessage);
+            setVisibleMessage(true);
+            const timer = setTimeout(() => setVisibleMessage(false), 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [location.state]);
 
     // Estado para manejar el filtro de categoría por URL
     useEffect(() => {
@@ -339,6 +353,21 @@ export default function Pieces({ showFilters: defaultShowFilters = true }: Piece
                     }}>
                         Cancel
                     </button>
+                </div>
+            )}
+
+            {/* Toast */}
+            {message && (
+                <div
+                className={`toast-message ${visibleMessage ? "show" : "hide"}`}
+                >
+                {message}
+                <button
+                    className="toast-close-btn"
+                    onClick={() => setVisibleMessage(false)}
+                >
+                    ×
+                </button>
                 </div>
             )}  
         </div>
