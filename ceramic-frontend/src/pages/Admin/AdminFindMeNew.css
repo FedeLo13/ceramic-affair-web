@@ -1,9 +1,9 @@
 /* Fondo borroso detrás del modal */
-.newsletter-modal-backdrop {
+.modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100vw  ;
   height: 100vh;
   background: rgba(0,0,0,0.4); /* semitransparente */
   backdrop-filter: blur(4px); /* desenfoque de fondo */
@@ -14,7 +14,7 @@
 }
 
 /* Contenedor del modal */
-.newsletter-modal {
+.modal {
   background-color: #fafafa;
   border-radius: 12px;
   padding: 20px 30px;
@@ -40,8 +40,8 @@
 }
 
 /* Inputs y textarea estilo consistente */
-.newsletter-modal input,
-.newsletter-modal textarea {
+.modal input,
+.modal textarea {
   width: 100%;
   padding: 8px 10px;
   border: 1px solid #ccc;
@@ -52,14 +52,14 @@
 }
 
 /* Botones del modal */
-.newsletter-modal-actions {
+.modal-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 10px;
   flex-wrap: wrap;
 }
 
-.newsletter-modal-actions button {
+.modal-actions button {
   padding: 0.6rem 1.4rem;
   font-size: 1rem;
   font-weight: 600;
@@ -71,12 +71,12 @@
   transition: background-color 0.3s ease;
 }
 
-.newsletter-modal-actions button:hover:not(:disabled) {
+.modal-actions button:hover:not(:disabled) {
   background-color: #232f52;
 }
 
 /* Diferentes estilos de botones */
-.newsletter-modal-actions button:disabled {
+.modal-actions button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }

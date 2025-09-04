@@ -109,8 +109,8 @@ export default function AdminFindMeNew() {
 
       {/* Modal Newsletter */}
       {showNewsletterModal && (
-        <div className="newsletter-modal-backdrop">
-          <div className="newsletter-modal">
+        <div className="modal-backdrop">
+          <div className="modal">
             <h2>Send a Newsletter</h2>
             <label>
               Subject:
@@ -133,7 +133,7 @@ export default function AdminFindMeNew() {
               />
             </label>
 
-            <div className="newsletter-modal-actions">
+            <div className="modal-actions">
               <button onClick={handleUpdatePlantilla}>
                 Save current as template
               </button>
