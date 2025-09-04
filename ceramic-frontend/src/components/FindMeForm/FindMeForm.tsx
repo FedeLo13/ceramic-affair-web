@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { FindMePostInputDTO } from "../../types/findmepost.types";
 import * as L from "leaflet";
 import { MapContainer, Marker, TileLayer, useMap, useMapEvents } from "react-leaflet";
@@ -40,32 +40,38 @@ export default function FindMeForm({ mode, initialData, onSave, onSaveAndNotify,
   const [latitud, setLatitud] = useState(initialData?.latitud || 36.5167); // Cádiz por defecto
   const [longitud, setLongitud] = useState(initialData?.longitud || -5.9667); // Cádiz por defecto
 
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [skipNextQuery, setSkipNextQuery] = useState(false);
   const [searchResults, setSearchResults] = useState<{ display_name: string; lat: string; lon: string}[]>([]);
   const [markerMode, setMarkerMode] = useState(false);
   const [hoverLatLng, setHoverLatLng] = useState<[number, number] | null>(null);
 
-  const [errors, setErrors] = useState<{ titulo?: string; fechaInicio?: string; fechaFin?: string }>({});
+  const [errors, setErrors] = useState<{ titulo?: string; descripcion?: string; fechaInicio?: string; fechaFin?: string }>({});
   const [isFormValid, setIsFormValid] = useState(false);
 
+  const mapRef = useRef<L.Map | null>(null);
   const navigate = useNavigate();
 
   // Debounce para la búsqueda (500 ms)
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedSearch(search);
+      if (!skipNextQuery) {
+        setSearchQuery(searchInput);
+      } else {
+        setSkipNextQuery(false);
+      }
     }, 500);
 
     return () => {
       clearTimeout(handler);
     };
-  }, [search]);
+  }, [searchInput]);
 
   // Buscar en Nominatim
   useEffect(() => {
     const fetchPlaces = async () => {
-      if (debouncedSearch.length < 3) {
+      if (searchQuery.length < 3) {
         setSearchResults([]);
         return;
       }
@@ -73,7 +79,7 @@ export default function FindMeForm({ mode, initialData, onSave, onSaveAndNotify,
       try {
         const response = await fetch(
             `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-                debouncedSearch
+                searchQuery
             )}
             &addressdetails=1&limit=5`
         );
@@ -85,14 +91,15 @@ export default function FindMeForm({ mode, initialData, onSave, onSaveAndNotify,
     };
 
     fetchPlaces();
-  }, [debouncedSearch]);
+  }, [searchQuery]);
 
   // Validación básica
   const getValidationErrors = () => {
     const newErrors: typeof errors = {};
-    if (!titulo.trim()) newErrors.titulo = "El título es obligatorio.";
-    if (!fechaInicio) newErrors.fechaInicio = "La fecha de inicio es obligatoria.";
-    if (!fechaFin) newErrors.fechaFin = "La fecha de fin es obligatoria.";
+    if (!titulo.trim()) newErrors.titulo = "Title is required.";
+    if (!descripcion.trim()) newErrors.descripcion = "Description is required.";
+    if (!fechaInicio) newErrors.fechaInicio = "Start date is required.";
+    if (!fechaFin) newErrors.fechaFin = "End date is required.";
     return newErrors;
   };
 
@@ -100,7 +107,7 @@ export default function FindMeForm({ mode, initialData, onSave, onSaveAndNotify,
     const errs = getValidationErrors();
     setErrors(errs);
     setIsFormValid(Object.keys(errs).length === 0);
-  }, [titulo, fechaInicio, fechaFin]);
+  }, [titulo, descripcion, fechaInicio, fechaFin]);
 
   // Componente para detectar click en mapa y mover el marcador
   function LocationMarker() {
@@ -194,76 +201,91 @@ export default function FindMeForm({ mode, initialData, onSave, onSaveAndNotify,
     <form className="findme-form" onSubmit={(e) => e.preventDefault()}>
       <h2>{mode === "create" ? "New Find Me Post" : "Edit Find Me Post"}</h2>
 
-      <div className="findme-form-group">
-        <label>Title</label>
-        <input type="text" value={titulo} onChange={(e) => setTitulo(e.target.value)} />
-        {errors.titulo && <p className="error-message">{errors.titulo}</p>}
-      </div>
+      <div className="findme-form-layout">
+        <div className="findme-form-left">
+          <div className="findme-form-group">
+            <label>Title</label>
+            <input type="text" value={titulo} onChange={(e) => setTitulo(e.target.value)} />
+            {errors.titulo && <p className="error-message">{errors.titulo}</p>}
+          </div>
 
-      <div className="findme-form-group">
-        <label>Description</label>
-        <textarea value={descripcion} onChange={(e) => setDescripcion(e.target.value)} maxLength={1000} />
-        <small>{descripcion.length}/1000</small>
-      </div>
+          <div className="findme-form-group">
+            <label>Description</label>
+            <textarea value={descripcion} onChange={(e) => setDescripcion(e.target.value)} maxLength={1000} rows={11} />
+            <small>{descripcion.length}/1000</small>
+            {errors.descripcion && <p className="error-message">{errors.descripcion}</p>}
+          </div>
 
-      <div className="findme-form-row">
-        <div>
-          <label>Start Date</label>
-          <input type="datetime-local" value={fechaInicio} onChange={(e) => setFechaInicio(e.target.value)} />
-          {errors.fechaInicio && <p className="error-message">{errors.fechaInicio}</p>}
+          <div className="findme-form-row">
+            <div className="findme-form-group">
+              <label>Start Date</label>
+              <input type="datetime-local" value={fechaInicio} onChange={(e) => setFechaInicio(e.target.value)} />
+              {errors.fechaInicio && <p className="error-message">{errors.fechaInicio}</p>}
+            </div>
+            <div className="findme-form-group">
+              <label>End Date</label>
+              <input type="datetime-local" value={fechaFin} onChange={(e) => setFechaFin(e.target.value)} />
+              {errors.fechaFin && <p className="error-message">{errors.fechaFin}</p>}
+            </div>
+          </div>
         </div>
-        <div>
-          <label>End Date</label>
-          <input type="datetime-local" value={fechaFin} onChange={(e) => setFechaFin(e.target.value)} />
-          {errors.fechaFin && <p className="error-message">{errors.fechaFin}</p>}
+
+        <div className="findme-form-right">
+          <div className="findme-form-group">
+            <label>Location</label>
+            <input type="text" value={searchInput} onChange={(e) => setSearchInput(e.target.value)} placeholder="Search for a location" />
+            {searchResults.length > 0 && (
+                <ul className="search-results">
+                  {searchResults.map((r, i) => (
+                    <li 
+                        key={i} 
+                        onClick={() => {
+                            const lat = parseFloat(r.lat);
+                            const lon = parseFloat(r.lon);
+                            setLatitud(lat);
+                            setLongitud(lon);
+                            setSearchResults([]);
+                            setSearchInput(r.display_name);
+                            setSkipNextQuery(true);
+
+                            if (mapRef.current) {
+                              mapRef.current.flyTo([lat, lon], 15, { duration: 1.2 });
+                            }
+                        }}
+                    >
+                      {r.display_name}
+                    </li>
+                  ))}
+                </ul>
+            )}
+          </div>
+
+          <div className={`map-container ${markerMode ? "marker-mode" : ""}`}>
+            <MapContainer
+              center={[latitud, longitud]}
+              zoom={8}
+              style={{ width: "100%", height: "100%" }}
+              ref={mapRef}
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <LocationMarker />
+              <CenterMarkerButton lat={latitud} lng={longitud} />
+            </MapContainer>
+            <button
+              type="button"
+              className={`marker-toggle-btn ${markerMode ? "active" : ""}`}
+              onClick={() => {
+                setMarkerMode((prev) => !prev);
+                setHoverLatLng(null);
+              }}
+            >
+              {markerMode ? "Cancel" : "Place Marker"}
+            </button>
+          </div>
         </div>
-      </div>
-
-      <div className="findme-form-group">
-        <label>Location</label>
-        <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search for a location" />
-        {searchResults.length > 0 && (
-            <ul className="search-results">
-              {searchResults.map((r, i) => (
-                <li 
-                    key={i} 
-                    onClick={() => {
-                        setLatitud(parseFloat(r.lat));
-                        setLongitud(parseFloat(r.lon));
-                        setSearchResults([]);
-                        setSearch(r.display_name);
-                    }}
-                >
-                  {r.display_name}
-                </li>
-              ))}
-            </ul>
-        )}
-      </div>
-
-      <div className={`map-container ${markerMode ? "marker-mode" : ""}`}>
-        <MapContainer
-          center={[latitud, longitud]}
-          zoom={8}
-          style={{ width: "100%", height: "100%" }}
-        >
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          <LocationMarker />
-          <CenterMarkerButton lat={latitud} lng={longitud} />
-        </MapContainer>
-        <button
-          type="button"
-          className={`marker-toggle-btn ${markerMode ? "active" : ""}`}
-          onClick={() => {
-            setMarkerMode((prev) => !prev);
-            setHoverLatLng(null);
-          }}
-        >
-          {markerMode ? "Cancel" : "Place Marker"}
-        </button>
       </div>
 
       <div className="button-group">

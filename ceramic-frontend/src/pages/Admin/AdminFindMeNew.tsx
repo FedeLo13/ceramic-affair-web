@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FindMeForm from "../../components/FindMeForm/FindMeForm";
 import {
@@ -9,6 +9,7 @@ import {
 import type { NewsletterDTO } from "../../types/newsletter.types";
 import type { FindMePostInputDTO } from "../../types/findmepost.types";
 import { newFindMePost } from "../../api/findmeposts";
+import "./AdminFindMeNew.css";
 
 export default function AdminFindMeNew() {
   const navigate = useNavigate();
@@ -21,30 +22,46 @@ export default function AdminFindMeNew() {
   });
   const [loadingPlantilla, setLoadingPlantilla] = useState(false);
   const [sending, setSending] = useState(false);
+  const [pendingPostData, setPendingPostData] = useState<FindMePostInputDTO | null>(null);
+
+  // Toast
+  const [message, setMessage] = useState<string | null>(null);
+  const [visibleMessage, setVisibleMessage] = useState(false);
+
+  useEffect(() => {
+    if (message) {
+      setVisibleMessage(true);
+      const timer = setTimeout(() => setVisibleMessage(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
+  const handleTransitionEnd = () => {
+    if (!visibleMessage) setMessage(null);
+  };
 
   // Guardar post sin notificar
   const handleSavePost = async (data: FindMePostInputDTO) => {
     try {
       await newFindMePost(data);
-      navigate(-1);
+      navigate("/pieces", { state: { toastMessage: "Post created successfully!" } });
     } catch (error) {
       console.error("Error saving FindMe post:", error);
+      setMessage("Error saving FindMe post");
     }
   };
 
   // Guardar y abrir modal newsletter
   const handleSaveAndNotify = async (data: FindMePostInputDTO) => {
     try {
-      // Primero guardamos el post
-      await newFindMePost(data);
-
-      // Luego cargamos la plantilla y mostramos el modal
+      setPendingPostData(data);
       setLoadingPlantilla(true);
       const plantilla = await getPlantilla();
       setNewsletter(plantilla);
       setShowNewsletterModal(true);
     } catch (error) {
       console.error("Error saving and notifying:", error);
+      setMessage("Error while preparing newsletter, please contact support");
     } finally {
       setLoadingPlantilla(false);
     }
@@ -53,21 +70,29 @@ export default function AdminFindMeNew() {
   const handleUpdatePlantilla = async () => {
     try {
       await updatePlantilla(newsletter);
-      alert("Template updated successfully");
+      setMessage("Template updated successfully");
     } catch (error) {
       console.error("Error updating template:", error);
+      setMessage("Error updating template");
     }
   };
 
   const handleSendNewsletter = async () => {
+    if (!pendingPostData) {
+      setMessage("No post data available to send");
+      return;
+    }
+
     setSending(true);
     try {
+      await newFindMePost(pendingPostData);
       await sendNewsletter(newsletter);
-      alert("Newsletter sent successfully");
       setShowNewsletterModal(false);
-      navigate(-1);
+      setPendingPostData(null);
+      navigate("/pieces", { state: { toastMessage: "Post created and newsletter sent successfully!" } });
     } catch (error) {
       console.error("Error sending newsletter:", error);
+      setMessage("Error sending newsletter");
     } finally {
       setSending(false);
     }
@@ -75,8 +100,6 @@ export default function AdminFindMeNew() {
 
   return (
     <div>
-      <h2>Create New Find Me Post</h2>
-
       <FindMeForm
         mode="create"
         onSave={handleSavePost}
@@ -86,8 +109,8 @@ export default function AdminFindMeNew() {
 
       {/* Modal Newsletter */}
       {showNewsletterModal && (
-        <div className="modal-backdrop">
-          <div className="modal">
+        <div className="newsletter-modal-backdrop">
+          <div className="newsletter-modal">
             <h2>Send a Newsletter</h2>
             <label>
               Subject:
@@ -102,7 +125,7 @@ export default function AdminFindMeNew() {
             <label>
               Message:
               <textarea
-                rows={6}
+                rows={10}
                 value={newsletter.mensaje}
                 onChange={(e) =>
                   setNewsletter({ ...newsletter, mensaje: e.target.value })
@@ -110,7 +133,7 @@ export default function AdminFindMeNew() {
               />
             </label>
 
-            <div className="modal-actions">
+            <div className="newsletter-modal-actions">
               <button onClick={handleUpdatePlantilla}>
                 Save current as template
               </button>
@@ -124,6 +147,22 @@ export default function AdminFindMeNew() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Toast */}
+      {message && (
+        <div
+          className={`toast-message ${visibleMessage ? "show" : "hide"}`}
+          onTransitionEnd={handleTransitionEnd}
+        >
+          {message}
+          <button
+            className="toast-close-btn"
+            onClick={() => setVisibleMessage(false)}
+          >
+            ×
+          </button>
         </div>
       )}
     </div>
