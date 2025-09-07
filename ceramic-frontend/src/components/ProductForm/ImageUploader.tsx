@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import type { Imagen } from "../../types/imagen.types";
 import "./ImageUploader.css";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import ImageCropper from "./ImageCropper";
 
 const BASE_IMAGE_URL = "http://localhost:8080/uploads/";
 
@@ -24,6 +25,7 @@ export default function ImageUploader({
   const thumbsRef = useRef<HTMLDivElement>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [visibleMessage, setVisibleMessage] = useState(false);
+  const [croppingFile, setCroppingFile] = useState<File | null>(null);
 
   useEffect(() => {
     if (message) {
@@ -44,19 +46,21 @@ export default function ImageUploader({
   }, [newImages]);
 
   const handleSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const filesArray = Array.from(e.target.files);
-      const imageFiles = filesArray.filter(file =>
-        file.type.startsWith('image/')
-      );
-      if (imageFiles.length > 0) {
-        onAddNew(imageFiles);
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      if (!file.type.startsWith('image/')) {
+        setMessage("Selected file is not an image.");
+        return;
       }
-      if (imageFiles.length < filesArray.length) {
-        setMessage("Some files were not images and were ignored.");
-      }
+      setCroppingFile(file);
+      e.target.value = ""; // reset input
     }
   };
+
+  const handleCropComplete = (file: File) => {
+    onAddNew([file]);
+    setCroppingFile(null);
+  }
 
   const scrollLeft = () => {
     thumbsRef.current?.scrollBy({ left: -100, behavior: "smooth" });
@@ -70,10 +74,9 @@ export default function ImageUploader({
     <div className="image-uploader">
       <label className="image-uploader-title">Upload images</label>
       <label className="file-upload-button">
-        Browse files
+        Crop & Upload Image
         <input 
           type="file" 
-          multiple 
           accept="image/*" 
           onChange={handleSelect} 
           style={{ display: 'none' }}
@@ -131,6 +134,14 @@ export default function ImageUploader({
           </div>
         )}
       </div>
+
+        {croppingFile && (
+        <ImageCropper
+          imageSrc={URL.createObjectURL(croppingFile)}
+          onCancel={() => setCroppingFile(null)}
+          onCropComplete={handleCropComplete}
+        />
+      )}
 
       {/* Toast */}
       {message && (
