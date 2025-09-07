@@ -1,0 +1,6 @@
+.cropper-container {
+  background: #333;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
