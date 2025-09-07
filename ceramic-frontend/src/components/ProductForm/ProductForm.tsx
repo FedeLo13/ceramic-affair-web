@@ -7,6 +7,7 @@ import { newImagen, deleteImagen, getImagenById } from "../../api/imagenes";
 import { getAllCategorias, newCategoria } from "../../api/categorias";
 import "./ProductForm.css"
 import type { ProductoInputDTOWithImages } from "./ProductoInputDTOWithImages";
+import { FaCheck, FaEdit, FaPlus, FaRegEnvelope, FaSave, FaTrash } from "react-icons/fa";
 
 interface ProductFormProps {
   mode: "create" | "edit";
@@ -15,9 +16,17 @@ interface ProductFormProps {
   onSubmit?: (data: ProductoInputDTO) => void;
   onAddToList?: (data: ProductoInputDTOWithImages) => void;
   onCancel?: () => void;
+  drafts?: ProductoInputDTOWithImages[];
+  editingIndex?: number | null;
+  onEditDraft?: (index: number) => void;
+  onDeleteDraft?: (index: number) => void;
+  onSaveAll?: () => void;
+  onSaveAndNotify?: () => void;
+  onGlobalCancel?: () => void;
+  disableGlobalActions?: boolean;
 }
 
-export default function ProductForm({ mode, isEditingDraft, initialData, onSubmit, onAddToList, onCancel }: ProductFormProps) {
+export default function ProductForm({ mode, isEditingDraft, initialData, onSubmit, onAddToList, onCancel, drafts, editingIndex, onEditDraft, onDeleteDraft, onSaveAll, onSaveAndNotify, onGlobalCancel, disableGlobalActions }: ProductFormProps) {
   const [name, setName] = useState(initialData?.nombre || "");
   const [category, setCategory] = useState(initialData?.idCategoria?.toString() || "");
   const [description, setDescription] = useState(initialData?.descripcion || "");
@@ -38,6 +47,21 @@ export default function ProductForm({ mode, isEditingDraft, initialData, onSubmi
 
   const [errors, setErrors] = useState<{ name?: string; category?: string; price?: string }>({});
   const [isFormValid, setIsFormValid] = useState(false);
+
+  const [message, setMessage] = useState<string | null>(null);
+  const [visibleMessage, setVisibleMessage] = useState(false);
+  
+  useEffect(() => {
+    if (message) {
+      setVisibleMessage(true);
+      const timer = setTimeout(() => setVisibleMessage(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
+  const handleTransitionEnd = () => {
+    if (!visibleMessage) setMessage(null);
+  };
 
   // Obtener las categorías para el select
   useEffect(() => {
@@ -61,21 +85,21 @@ export default function ProductForm({ mode, isEditingDraft, initialData, onSubmi
   // Guardar la categoría añadida
   const saveNewCategory = async () => {
     if (!newCategoryName.trim()) {
-      alert("El nombre de la categoría no puede estar vacío.");
-      return;
-    }
-    setSavingCategory(true);
-    try {
-      const newCatId = await newCategoria({ nombre: newCategoryName.trim() });
-      const cats = await getAllCategorias();
-      setCategories(cats);
-      setCategory(newCatId.toString());
-      setShowCategoryModal(false);
-    } catch (err) {
-      console.error("Error creando categoría", err);
-      alert("Error al crear la categoría");
-    } finally {
-      setSavingCategory(false);
+      setMessage("Category name cannot be empty.");
+    } else {
+      setSavingCategory(true);
+      try {
+        const newCatId = await newCategoria({ nombre: newCategoryName.trim() });
+        const cats = await getAllCategorias();
+        setCategories(cats);
+        setCategory(newCatId.toString());
+        setShowCategoryModal(false);
+      } catch (err) {
+        console.error("Error creando categoría", err);
+        setMessage("Error creating category. Please try again.");
+      } finally {
+        setSavingCategory(false);
+      }
     }
   };
 
@@ -226,109 +250,213 @@ export default function ProductForm({ mode, isEditingDraft, initialData, onSubmi
     <form onSubmit={handleSubmit} className="product-form">
       <h2>{mode === "create" ? "Add a new Piece" : "Edit Product"}</h2>
 
-      <div className="product-form-group">
-        <label>Product name</label>
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-        {errors.name && <p className="error-message">{errors.name}</p>}
-      </div>
+      <div className="product-form-layout">
+        <div className="product-form-left">
+          <div className="product-form-row">
+            <div className="product-form-group">
+              <label>Product name</label>
+              <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+              {errors.name && <p className="error-message">{errors.name}</p>}
+            </div>
 
-      <div className="product-form-group">
-        <label>Category</label>
-        <select value={category} onChange={
-          (e) => {
-            if (e.target.value === "__add_new__") {
-              handleAddNewCategory();
-            } else {
-              setCategory(e.target.value);
-            }
-          }
-        }>
-          <option value="" disabled>
-            -- Choose category --
-          </option>
-          {categories.map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.nombre}
-            </option>
-          ))}
-          <option value="__add_new__">Add new category...</option>
-        </select>
-        {errors.category && <p className="error-message">{errors.category}</p>}
-      </div>
+            <div className="product-form-group">
+              <label>Category</label>
+              <select value={category} onChange={
+                (e) => {
+                  if (e.target.value === "__add_new__") {
+                    handleAddNewCategory();
+                  } else {
+                    setCategory(e.target.value);
+                  }
+                }
+              }>
+                <option value="" disabled>
+                  -- Choose category --
+                </option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.nombre}
+                  </option>
+                ))}
+                <option value="__add_new__">Add new category...</option>
+              </select>
+              {errors.category && <p className="error-message">{errors.category}</p>}
+            </div>
+          </div>
 
-      <div className="product-form-group">
-        <label>Product description</label>
-        <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
-      </div>
+          <div className="product-form-group">
+            <label>Product description</label>
+            <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={8} />
+          </div>
 
-      <div className="product-form-row">
-        <div>
-          <label>Width</label>
-          <input type="number" value={width} onChange={(e) => setWidth(Number(e.target.value))} />
+          <div className="product-form-group">
+            <label>Dimensions (cm)</label>
+            <p className="info-text">(Enter 0 for any dimension to hide it from the product display)</p>
+            <div className="product-form-row">
+              <div>
+                <label>Width</label>
+                <input type="number" value={width} onChange={(e) => setWidth(Number(e.target.value))} />
+              </div>
+              <div>
+                <label>Height</label>
+                <input type="number" value={height} onChange={(e) => setHeight(Number(e.target.value))} />
+              </div>
+              <div>
+                <label>Diameter</label>
+                <input type="number" value={diameter} onChange={(e) => setDiameter(Number(e.target.value))} />
+              </div>
+            </div>
+          </div>
+
+          <div className="product-form-group">
+            <div className="product-form-price-soldout">
+              <div className="product-form-group">
+                <div>
+                  <label>Product price</label>
+                  <input type="number" value={price} onChange={(e) => setPrice(Number(e.target.value))} />
+                </div>
+                {errors.price && <p className="error-message">{errors.price}</p>}
+              </div>
+              <div className="product-form-group">
+                <label>Sold out</label>
+                <div className="checkbox-inline">
+                  <input type="checkbox" checked={soldOut} onChange={(e) => setSoldOut(e.target.checked)} />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div>
-          <label>Height</label>
-          <input type="number" value={height} onChange={(e) => setHeight(Number(e.target.value))} />
+
+        <div className="product-form-right">
+          <ImageUploader
+            existingImages={existingImages}
+            onRemoveExisting={handleRemoveExisting}
+            newImages={newImages}
+            onAddNew={(files) => setNewImages((prev) => [...prev, ...files])}
+            onRemoveNew={handleRemoveNew}
+          />
+
+          {mode === "create" && drafts && drafts.length > 0 && (
+            <div className="added-pieces">
+              <h3>Added pieces</h3>
+              <div className="added-pieces-table">
+                <div className="added-pieces-table-header">
+                  <span className="col-actions"></span>
+                  <span className="col-product">Product</span>
+                  <span className="col-price">Category</span>
+                  <span className="col-price">Price</span>
+                </div>
+
+                <ul className="added-pieces-body">
+                  {drafts.map((draft, index) => {
+                    const isEditing = editingIndex === index;
+                    return (
+                      <li key={index} className={`pieces-row ${isEditing ? "editing" : ""}`}>
+                        <div className="col-actions">
+                          <button
+                            type="button"
+                            onClick={() => onEditDraft?.(index)}
+                            disabled={isEditing}
+                            title="Edit"
+                          >
+                            <FaEdit size={16} />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => onDeleteDraft?.(index)}
+                            disabled={isEditing}
+                            title="Delete"
+                          >
+                            <FaTrash size={16} />
+                          </button>
+                        </div>
+
+                        <div className="col-product">
+                          <div className="added-product-info">
+                            {draft.localImages?.[0] ? (
+                              <img
+                                src={URL.createObjectURL(draft.localImages[0])}
+                                alt={draft.nombre}
+                                className="preview-image"
+                              />
+                            ) : (
+                              <img
+                                src="/images/1068302.png"
+                                alt="No preview"
+                                className="preview-image"
+                              />
+                            )}
+                            <span>{draft.nombre}</span>
+                          </div>
+                        </div>
+
+                        <div className="col-category">{categories.find(cat => cat.id === draft.idCategoria)?.nombre}</div>
+                        <div className="col-price">{draft.precio?.toFixed(2)} €</div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </div>
+          )}
+          
         </div>
-        <div>
-          <label>Diameter</label>
-          <input type="number" value={diameter} onChange={(e) => setDiameter(Number(e.target.value))} />
-        </div>
       </div>
 
-      <div className="product-form-group">
-        <label>Product price</label>
-        <input type="number" value={price} onChange={(e) => setPrice(Number(e.target.value))} />
-        {errors.price && <p className="error-message">{errors.price}</p>}
-      </div>
-
-      <div className="product-form-group">
-        <label>Sold out</label>
-        <input type="checkbox" checked={soldOut} onChange={(e) => setSoldOut(e.target.checked)} />
-      </div>
-
-      <ImageUploader
-        existingImages={existingImages}
-        onRemoveExisting={handleRemoveExisting}
-        newImages={newImages}
-        onAddNew={(files) => setNewImages((prev) => [...prev, ...files])}
-        onRemoveNew={handleRemoveNew}
-      />
-
-      <div className="button-group">
-        {mode === "create" && !isEditingDraft && (
-          <button type="submit" disabled={!isFormValid}>
-            Add Piece
+      <div className={`product-form-button-group ${mode === 'create' ? 'create-mode' : ''}`}>
+        <div className= "form-actions">
+          {mode === "create" && !isEditingDraft && (
+            <button type="submit" disabled={!isFormValid}>
+              <FaPlus size={16}/> Add Piece
+            </button>
+          )}
+          {mode === "create" && isEditingDraft && (
+            <>
+              <button type="submit" disabled={!isFormValid}>
+                <FaSave size={16} /> Update
+              </button>
+              <button type="button" onClick={() => {clearImages(); if (onCancel) onCancel()}}>Cancel</button>
+            </>
+          )}
+          {mode === "edit" && (
+            <>
+              <button type="submit" disabled={!isFormValid}>
+                Save Product
+              </button>
+              {onCancel && (
+                <button type="button" onClick={onCancel}>Cancel</button>
+              )}
+            </>
+          )}
+          <button type="button" onClick={resetForm}>
+            Clear Form
           </button>
-        )}
-        {mode === "create" && isEditingDraft && (
-          <>
-            <button type="submit" disabled={!isFormValid}>
-              Update
-            </button>
-            <button type="button" onClick={() => {clearImages(); if (onCancel) onCancel()}}>Cancel</button>
-          </>
-        )}
-        {mode === "edit" && (
-          <>
-            <button type="submit" disabled={!isFormValid}>
-              Save Product
-            </button>
-            {onCancel && (
-              <button type="button" onClick={onCancel}>Cancel</button>
+        </div>
+
+        {mode === "create" && (
+          <div className="global-actions">
+            {onSaveAll && (
+              <button type="button" onClick={() => setTimeout(() => { onSaveAll() }, 0)} disabled={disableGlobalActions}>
+                <FaCheck size={16} /> Save All Pieces
+              </button>
             )}
-          </>
-        )}
-        <button type="button" onClick={resetForm}>
-          Clear Form
-        </button>
+            {onSaveAndNotify && (
+              <button type="button" onClick={onSaveAndNotify} disabled={disableGlobalActions}>
+                <FaRegEnvelope size={16} /> Save & Notify Subscribers
+              </button>
+            )}
+            {onGlobalCancel && (
+              <button type="button" onClick={onGlobalCancel}>
+                  Cancel All & Return
+                </button>
+              )}
+            </div>
+          )}
       </div>
 
       {/* Modal para nueva categoría */}
       {showCategoryModal && (
-        <div className="modal-backdrop" onClick={(e) => {
-          if (e.target === e.currentTarget) setShowCategoryModal(false);
-        }}>
+        <div className="modal-backdrop">
           <div className="modal">
             <h2>New Category</h2>
             <label>
@@ -340,12 +468,28 @@ export default function ProductForm({ mode, isEditingDraft, initialData, onSubmi
               />
             </label>
             <div className="modal-actions">
-              <button onClick={saveNewCategory} disabled={savingCategory}>
+              <button type="button" onClick={saveNewCategory} disabled={savingCategory}>
                 {savingCategory ? "Saving..." : "Save"}
               </button>
               <button onClick={() => setShowCategoryModal(false)}>Cancel</button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Toast */}
+      {message && (
+        <div
+          className={`toast-message ${visibleMessage ? "show" : "hide"}`}
+          onTransitionEnd={handleTransitionEnd}
+        >
+          {message}
+          <button
+            className="toast-close-btn"
+            onClick={() => setVisibleMessage(false)}
+          >
+            ×
+          </button>
         </div>
       )}
     </form>

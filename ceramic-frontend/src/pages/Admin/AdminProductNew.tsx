@@ -2,11 +2,12 @@ import ProductForm from "../../components/ProductForm/ProductForm";
 import { newProducto } from "../../api/productos";
 import { useNavigate } from "react-router-dom";
 import type { ProductoInputDTOWithImages } from "../../components/ProductForm/ProductoInputDTOWithImages";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { newImagen } from "../../api/imagenes";
 import "./AdminProductNew.css";
 import type { NewsletterDTO } from "../../types/newsletter.types";
 import { getPlantilla, sendNewsletter, updatePlantilla } from "../../api/newsletters";
+import type { ProductoInputDTO } from "../../types/producto.types";
 
 export default function AdminProductNew() {
   const navigate = useNavigate();
@@ -18,6 +19,22 @@ export default function AdminProductNew() {
   const [newsletter, setNewsletter] = useState<NewsletterDTO>({ asunto: "", mensaje: "" });
   const [loadingPlantilla, setLoadingPlantilla] = useState(false);
   const [sending, setSending] = useState(false);
+
+  // Toast
+  const [message, setMessage] = useState<string | null>(null);
+  const [visibleMessage, setVisibleMessage] = useState(false);
+  
+  useEffect(() => {
+    if (message) {
+      setVisibleMessage(true);
+      const timer = setTimeout(() => setVisibleMessage(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+  
+  const handleTransitionEnd = () => {
+    if (!visibleMessage) setMessage(null);
+  };
 
   const handleAddToList = (data: ProductoInputDTOWithImages) => {
     if (editingIndex !== null) {
@@ -41,23 +58,31 @@ export default function AdminProductNew() {
     }
   }
 
-  const handleSaveAll = async () => {
+  const handleSaveAll = async (toastMessage?: string) => {
     try {
       for (const draft of drafts) {
         const uploadedImages = await Promise.all(
           draft.localImages.map((image) => newImagen(image))
         );
         
-        const data = {
-          ...draft,
-          idsImagenes: uploadedImages.map((img) => img.id),
+        const productData: ProductoInputDTO = {
+          nombre: draft.nombre,
+          descripcion: draft.descripcion,
+          precio: draft.precio,
+          soldOut: draft.soldOut,
+          idCategoria: draft.idCategoria,
+          altura: draft.altura,
+          anchura: draft.anchura,
+          diametro: draft.diametro,
+          idsImagenes: [...draft.idsImagenes, ...uploadedImages.map(img => img.id)],
         };
+          
 
-        await newProducto(data);
+        await newProducto(productData);
       }
 
       setDrafts([]);
-      navigate("/pieces");
+      navigate("/pieces", { state: { toastMessage: toastMessage ?? "Products saved successfully" } });
     } catch (error) {
       console.error("Error saving drafts:", error);
     }
@@ -79,7 +104,7 @@ export default function AdminProductNew() {
   const handleUpdatePlantilla = async () => {
     try {
       await updatePlantilla(newsletter);
-      alert("Template updated successfully");
+      setMessage("Template updated successfully");
     } catch (error) {
       console.error("Error updating template:", error);
     }
@@ -89,11 +114,11 @@ export default function AdminProductNew() {
     setSending(true);
     try {
       await sendNewsletter(newsletter);
-      alert("Newsletter sent successfully");
       setShowNewsletterModal(false);
-      await handleSaveAll(); // Guardar todos los cambios tras enviar
+      await handleSaveAll("Products saved and newsletter sent successfully");
     } catch (error) {
       console.error("Error sending newsletter:", error);
+      setMessage("Error sending newsletter, please contact support");
     } finally {
       setSending(false);
     }
@@ -101,85 +126,70 @@ export default function AdminProductNew() {
 
   return (
     <div>
-      <h3>Added pieces</h3>
-      <ul>
-        {drafts.map((draft, index) => {
-          const isEditing = editingIndex === index;
-          return (
-            <li key={index} className={isEditing ? "editing" : ""}>
-              {draft.localImages?.[0] && (
-                <img
-                  src={URL.createObjectURL(draft.localImages[0])}
-                  alt={draft.nombre}
-                  className="preview-image"
-                />
-              )}
-              <strong>{draft.nombre}</strong> - ${draft.precio}
-              <button onClick={() => handleEdit(index)} disabled={isEditing}>
-                Edit
-              </button>
-              <button onClick={() => handleDelete(index)} disabled={isEditing}>
-                Delete
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-
-      <div style={{ marginTop: "1rem" }}>
-        <button className="save-button" onClick={handleSaveAll} disabled={drafts.length === 0}> 
-          Save All Pieces
-        </button>
-        <button className="save-button" onClick={handleSaveAndNotify} disabled={drafts.length === 0 || loadingPlantilla}> 
-          {loadingPlantilla ? "Loading..." : "Save & Notify Subscribers"}
-        </button>
-        <button onClick={() => navigate("/pieces")}>
-          Cancel
-        </button>
-      </div>
-
-      <hr style={{ margin: "2rem 0" }} />
-
       <ProductForm 
         mode="create" 
         isEditingDraft={editingIndex !== null}
         initialData={editingIndex !== null ? drafts[editingIndex] : undefined}
         onAddToList={handleAddToList}
         onCancel={() => setEditingIndex(null)} 
+        drafts={drafts}
+        editingIndex={editingIndex}
+        onEditDraft={handleEdit}
+        onDeleteDraft={handleDelete}
+        onSaveAll={handleSaveAll}
+        onSaveAndNotify={handleSaveAndNotify}
+        onGlobalCancel={() => navigate("/pieces")}
+        disableGlobalActions={drafts.length === 0 || editingIndex !== null || loadingPlantilla}
       />
 
       {/*Modal Newsletter */}
       {showNewsletterModal && (
         <div className="modal-backdrop">
-          <div className="modal">
-            <h2>Send a Newsletter</h2>
+        <div className="modal">
+          <h2>Send a Newsletter</h2>
             <label>
-              Subject:
-              <input
-                type="text"
-                value={newsletter.asunto}
-                onChange={(e) => setNewsletter({ ...newsletter, asunto: e.target.value })}
-              />
+            Subject:
+            <input
+              type="text"
+              value={newsletter.asunto}
+              onChange={(e) => setNewsletter({ ...newsletter, asunto: e.target.value })}
+            />
+          </label>
+          <label>
+            Message:
+            <textarea
+              rows={6}
+              value={newsletter.mensaje}
+              onChange={(e) => setNewsletter({ ...newsletter, mensaje: e.target.value })}
+            />
             </label>
-            <label>
-              Message:
-              <textarea
-                rows={6}
-                value={newsletter.mensaje}
-                onChange={(e) => setNewsletter({ ...newsletter, mensaje: e.target.value })}
-              />
-              </label>
 
-              <div className="modal-actions">
-                <button onClick={handleUpdatePlantilla}>Save current as template</button>
-                <button onClick={handleSendNewsletter} disabled={sending}>
-                  {sending ? "Sending..." : "Send Newsletter & Save Products"}
-                </button>
-                <button onClick={() => setShowNewsletterModal(false)}>Cancel</button>
-              </div>
+            <div className="modal-actions">
+              <button onClick={handleUpdatePlantilla}>Save current as template</button>
+              <button onClick={handleSendNewsletter} disabled={sending}>
+                {sending ? "Sending..." : "Send Newsletter & Save Products"}
+              </button>
+              <button onClick={() => setShowNewsletterModal(false)}>Cancel</button>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
+
+      {/* Toast */}
+      {message && (
+        <div
+          className={`toast-message ${visibleMessage ? "show" : "hide"}`}
+          onTransitionEnd={handleTransitionEnd}
+        >
+          {message}
+          <button
+            className="toast-close-btn"
+            onClick={() => setVisibleMessage(false)}
+          >
+            ×
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
