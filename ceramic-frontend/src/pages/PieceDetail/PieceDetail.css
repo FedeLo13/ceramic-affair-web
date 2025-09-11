@@ -151,7 +151,7 @@
   align-items: center;            /* centrados verticalmente */
   gap: 1rem;                      /* separación mínima por si se colapsan */
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid #eee; /* barrita ligera */
+  border-bottom: 1px solid rgba(43, 58, 100, 0.3); /* barrita ligera */
 }
 
 .product-name {
@@ -172,7 +172,7 @@
     color: #333;
     margin: 0.75rem 0;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid #eee; /* barrita ligera */
+    border-bottom: 1px solid rgba(43, 58, 100, 0.3); /* barrita ligera */
     line-height: 1.4;
     min-height: 180px;
 }
