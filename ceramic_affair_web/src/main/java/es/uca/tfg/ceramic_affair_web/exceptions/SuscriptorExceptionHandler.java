@@ -28,6 +28,7 @@ public class SuscriptorExceptionHandler {
     }
 
     private ResponseEntity<Void> redirectToFrontend(String status) {
+        // TODO: Cambiar la URL al desplegar en producción
         String frontendUrl = "http://localhost:5173/confirmation?status=" + status;
         return ResponseEntity.status(HttpStatus.FOUND)
                 .header("Location", frontendUrl)
