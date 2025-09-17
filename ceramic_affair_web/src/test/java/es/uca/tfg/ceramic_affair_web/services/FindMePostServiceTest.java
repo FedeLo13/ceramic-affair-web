@@ -19,7 +19,7 @@ import es.uca.tfg.ceramic_affair_web.repositories.FindMePostRepo;
 
 /**
  * Servicio para pruebas unitarias de FindMePostService.
- * Este servicio se utiliza para realizar pruebas sobre la lógica de negocio relacionada con las publicaciones "Encuéntrame".
+ * Este servicio se utiliza para realizar pruebas de integración sobre la lógica de negocio relacionada con las publicaciones "Encuéntrame".
  * 
  * @version 1.0
  */

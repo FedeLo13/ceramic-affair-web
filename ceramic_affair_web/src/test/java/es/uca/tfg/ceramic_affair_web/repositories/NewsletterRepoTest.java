@@ -11,7 +11,7 @@ import es.uca.tfg.ceramic_affair_web.entities.Newsletter;
 
 /**
  * Clase de prueba para el repositorio NewsletterRepo.
- * Actualmente no contiene pruebas, pero se puede extender en el futuro para incluir pruebas de integración
+ * Proporciona pruebas de integración para las operaciones CRUD en la entidad Newsletter.
  * 
  * @version 1.0
  */
