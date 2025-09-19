@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Clase de prueba para el repositorio ProductoRepo.
  * Proporciona pruebas de integración para las operaciones CRUD en la entidad Producto.
  * 
- * @version 1.0
+ * @version 1.1
  */
 @DataJpaTest
 public class ProductoRepoTest {
@@ -34,7 +34,7 @@ public class ProductoRepoTest {
     @DisplayName("Repositorio - Guardar y cargar producto")
     void testGuardarYCargarProducto() {
         // Crear y guardar un nuevo producto
-        Producto producto = new Producto("Taza", "Taza de barro", BigDecimal.valueOf(.99));
+        Producto producto = new Producto("Taza", null, "Taza de barro", 0, 0, 0, BigDecimal.valueOf(.99), false, null);
         productoRepo.save(producto);
 
         // Obtener el producto guardado por su ID
@@ -58,7 +58,7 @@ public class ProductoRepoTest {
     @DisplayName("Repositorio - Eliminar producto")
     void testEliminarProducto() {
         // Crear y guardar un nuevo producto
-        Producto producto = new Producto("Plato", "Plato de cerámica", BigDecimal.valueOf(1.99));
+        Producto producto = new Producto("Plato", null, "Plato de cerámica", 0, 0, 0, BigDecimal.valueOf(1.99), false, null);
         productoRepo.save(producto);
 
         // Eliminar el producto
@@ -74,7 +74,7 @@ public class ProductoRepoTest {
     void testRelacionConCategoria() {
         // Crear y guardar una nueva categoría y un nuevo producto
         Categoria categoria = new Categoria("Cerámica");
-        Producto producto = new Producto("Jarrón", "Jarrón de cerámica", BigDecimal.valueOf(2.99));
+        Producto producto = new Producto("Jarrón", null, "Jarrón de barro", 0, 0, 0, BigDecimal.valueOf(2.99), false, null);
         categoriaRepo.save(categoria);
 
         // Ahora sí, establecemos la relación entre el producto y la categoría

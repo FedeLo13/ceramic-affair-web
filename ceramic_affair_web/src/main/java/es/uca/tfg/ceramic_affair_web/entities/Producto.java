@@ -6,21 +6,26 @@ import java.util.ArrayList;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.math.BigDecimal;
 
-import jakarta.persistence.ElementCollection;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PreRemove;
 
 /**
  * Clase que representa un producto en el sistema
  * 
- * @version 1.0
+ * @version 1.1
  */
 
 @Entity
@@ -28,13 +33,21 @@ public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, length = 100)
     private String nombre;
+
     @Lob
     private String descripcion;
+
+    @Column(nullable = false)
     private BigDecimal precio;
+    
+    @Column(nullable = false)
     private boolean soldOut;
 
     @ManyToOne
+    @JsonBackReference
     private Categoria categoria;
 
     private float altura;
@@ -44,8 +57,9 @@ public class Producto {
     @CreationTimestamp
     private LocalDateTime fechaCreacion;
 
-    @ElementCollection
-    private List<String> imagenes = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "producto_id")
+    private List<Imagen> imagenes = new ArrayList<>();
 
     /**
      * Constructor vacío para JPA
@@ -57,14 +71,31 @@ public class Producto {
      * Constructor con parámetros para crear un producto.
      * 
      * @param nombre        el nombre del producto
+     * @param categoria    la categoría del producto
      * @param descripcion   la descripción del producto
+     * @param altura       la altura del producto
+     * @param anchura      la anchura del producto
+     * @param diametro     el diámetro del producto
      * @param precio        el precio del producto
+     * @param soldOut      indica si el producto está vendido o no
+     * @param imagenes      la lista de imágenes del producto
      */
-    public Producto(String nombre, String descripcion, BigDecimal precio) {
+    public Producto(String nombre, Categoria categoria, String descripcion, float altura, float anchura, float diametro,
+            BigDecimal precio, boolean soldOut, List<Imagen> imagenes) {
         this.nombre = nombre;
+        this.setCategoria(categoria); // Establecemos la categoría usando el setter para mantener la relación bidireccional
         this.descripcion = descripcion;
+        this.altura = altura;
+        this.anchura = anchura;
+        this.diametro = diametro;
         this.precio = precio;
-        this.soldOut = false; // por defecto no está vendido
+        this.soldOut = soldOut;
+        this.imagenes = (imagenes != null) ? imagenes : new ArrayList<>();
+
+        // Si la categoría no es nula, añadimos el producto a su lista de productos
+        if (categoria != null && !categoria.getProductos().contains(this)) {
+            categoria.getProductos().add(this);
+        }
     }
 
     /**
@@ -126,7 +157,7 @@ public class Producto {
      * 
      * @return la lista de imágenes del producto
      */
-    public List<String> getImagenes() {
+    public List<Imagen> getImagenes() {
         return imagenes;
     }
 
@@ -212,6 +243,15 @@ public class Producto {
     }
 
     /**
+     * Método para establecer la fecha de creación del producto.
+     * 
+     * @param fechaCreacion la nueva fecha de creación del producto
+     */
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    /**
      * Método para establecer la altura del producto.
      * 
      * @param altura la nueva altura del producto
@@ -248,21 +288,15 @@ public class Producto {
     }
 
     /**
-     * Método para añadir una imagen a la lista de imágenes del producto.
+     * Método para establecer la lista de imágenes del producto.
      * 
-     * @param imagen la imagen a añadir
+     * @param imagenes la nueva lista de imágenes del producto
      */
-    public void addImagen(String imagen) {
-        this.imagenes.add(imagen);
-    }
-
-    /**
-     * Método para eliminar una imagen de la lista de imágenes del producto.
-     * 
-     * @param imagen la imagen a eliminar
-     */
-    public void removeImagen(String imagen) {
-        this.imagenes.remove(imagen);
+    public void setImagenes(List<Imagen> imagenes) {
+        this.imagenes.clear();
+        if (imagenes != null) {
+            this.imagenes.addAll(imagenes);
+        }
     }
 
     /**

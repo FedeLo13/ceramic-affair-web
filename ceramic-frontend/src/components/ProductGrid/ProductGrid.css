@@ -1,8 +1,10 @@
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 columnas en pantallas grandes */
-    gap: 20px;
+    grid-template-columns: repeat(3, 300px); /* 3 columnas en pantallas grandes */
+    gap: 10px 150px;
     padding: 20px;
+    transition: all 0.3s ease;
+    justify-content: center;
 }
 
 @media (max-width: 900px) {
@@ -14,5 +16,19 @@
 @media (max-width: 600px) {
     .product-grid {
         grid-template-columns: 1fr; /* 1 columna en pantallas pequeñas */
+    }
+}
+
+/* Animación fade-in */
+.product-grid .product-card {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.4s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

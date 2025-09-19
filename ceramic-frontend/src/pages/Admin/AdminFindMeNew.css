@@ -1,0 +1,82 @@
+/* Fondo borroso detrás del modal */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw  ;
+  height: 100vh;
+  background: rgba(0,0,0,0.4); /* semitransparente */
+  backdrop-filter: blur(4px); /* desenfoque de fondo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999; /* encima de todo */
+}
+
+/* Contenedor del modal */
+.modal {
+  background-color: #fafafa;
+  border-radius: 12px;
+  padding: 20px 30px;
+  width: 600px;
+  max-width: 95%;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+/* Animación de aparición */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Inputs y textarea estilo consistente */
+.modal input,
+.modal textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  resize: none;
+  box-sizing: border-box;
+}
+
+/* Botones del modal */
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.modal-actions button {
+  padding: 0.6rem 1.4rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #2B3A64;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.modal-actions button:hover:not(:disabled) {
+  background-color: #232f52;
+}
+
+/* Diferentes estilos de botones */
+.modal-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

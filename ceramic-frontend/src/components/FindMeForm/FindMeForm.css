@@ -1,0 +1,226 @@
+/* Form container */
+.findme-form {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  background: #FAFAFA;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* Titles */
+.findme-form h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.findme-form-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.map-container {
+  width: 100%;
+  min-height: 300px;  
+  height: 300px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+@media (min-width: 768px) {
+  .findme-form {
+    max-width: 1100px;
+  }
+
+  .findme-form-layout {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 2rem;
+  }
+
+
+  .findme-form-left,
+  .findme-form-right   {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+
+  .map-container {
+    width: 100%;
+    aspect-ratio: 1/1;
+    height: auto;
+    min-height: unset;
+    flex-shrink: 0;
+    align-self: flex-start;
+  }
+}
+
+/* Form groups */
+.findme-form-group {
+  margin-bottom: 1rem;
+  position: relative; /* necesario para el dropdown */
+}
+
+.findme-form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.findme-form-group input[type="text"],
+.findme-form-group input[type="date"],
+.findme-form-group input[type="datetime-local"],
+.findme-form-group textarea {
+  width: 100%;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+  resize: none;
+}
+
+.findme-form-group input:focus,
+.findme-form-group textarea:focus {
+  border-color: #2B3A64;
+  outline: none;
+}
+
+/* Row for dates */
+.findme-form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.findme-form-row > div {
+  flex: 1;
+}
+
+/* Search results dropdown */
+.search-results {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.search-results li {
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.search-results li:hover {
+  background: #f0f0f0;
+}
+
+.leaflet-container {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+}
+
+/* Buttons */
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.button-group button {
+  padding: 0.6rem 1.4rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #2B3A64;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.button-group button:hover:not(:disabled) {
+  background-color: #232f52;
+}
+
+/* Cancel button */
+.cancel-button {
+  background-color: #2B3A64;
+}
+
+.cancel-button:hover:not(:disabled) {
+  background-color: #5a6268;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .findme-form-row {
+    flex-direction: column;
+  }
+}
+
+/* Botón flotante para colocar marcador */
+.marker-toggle-btn {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 1000;
+  background: #2B3A64;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transition: background-color 0.3s ease;
+}
+
+/* Cambiar cursor a crosshair en modo colocar marcador */
+.map-container.marker-mode .leaflet-container {
+  cursor: crosshair !important;
+}
+
+.map-container.marker-mode .leaflet-container * {
+  cursor: crosshair !important;
+}
+
+.marker-toggle-btn:hover {
+  background: #232f52;
+}
+
+/* Para que el fantasma no tenga interacciones */
+.ghost-marker {
+  filter: grayscale(100%);
+}
+
+.center-marker-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 1000;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  font-size: 1.2rem;
+}
+
+.center-marker-btn:hover {
+  background: #f0f0f0;
+}
+

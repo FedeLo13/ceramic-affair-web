@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import es.uca.tfg.ceramic_affair_web.entities.Categoria;
-import es.uca.tfg.ceramic_affair_web.entities.Producto;
 import es.uca.tfg.ceramic_affair_web.exceptions.CategoriaException;
 import es.uca.tfg.ceramic_affair_web.repositories.CategoriaRepo;
 import es.uca.tfg.ceramic_affair_web.repositories.ProductoRepo;
@@ -40,6 +39,26 @@ public class CategoriaService {
         Categoria categoria = new Categoria(nombre);
         categoriaRepo.save(categoria);
         return categoria.getId();
+    }
+
+    /**
+     * Método para modificar una categoría existente
+     * 
+     * @param id el id de la categoría a modificar
+     * @param nombre el nuevo nombre de la categoría
+     * @throws CategoriaException.NoEncontrada si no se encuentra la categoría
+     * @throws CategoriaException.YaExistente si ya existe una categoría con el nuevo nombre
+     */
+    public void modificarCategoria(Long id, String nombre) {
+        Categoria categoria = categoriaRepo.findById(id)
+            .orElseThrow(() -> new CategoriaException.NoEncontrada(id));
+        
+        if (categoriaRepo.existsByNombre(nombre)) {
+            throw new CategoriaException.YaExistente(nombre);
+        }
+        
+        categoria.setNombre(nombre);
+        categoriaRepo.save(categoria);
     }
 
     /**
@@ -81,22 +100,5 @@ public class CategoriaService {
      */
     public List<Categoria> obtenerTodas() {
         return categoriaRepo.findAll();
-    }
-
-    /**
-     * Método para eliminar todas las categorías
-     */
-    public void eliminarTodas() {
-        List<Producto> productos = productoRepo.findAll();
-
-        // Desvincular todos los productos de las categorías antes de eliminar
-        for(Producto producto : productos) {
-            if(producto.getCategoria() != null) {
-                producto.setCategoria(null);
-                productoRepo.save(producto);
-            }
-        }
-
-        categoriaRepo.deleteAll();
     }
 }

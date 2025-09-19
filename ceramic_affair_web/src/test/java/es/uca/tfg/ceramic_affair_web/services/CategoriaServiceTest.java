@@ -16,6 +16,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.uca.tfg.ceramic_affair_web.entities.Categoria;
@@ -28,7 +29,7 @@ import es.uca.tfg.ceramic_affair_web.repositories.ProductoRepo;
  * Clase de prueba para el servicio CategoriaService.
  * Proporciona pruebas de integración para las operaciones CRUD en la entidad Categoria.
  * 
- * @version 1.0
+ * @version 1.1
  */
 @SpringBootTest
 @Transactional
@@ -43,6 +44,12 @@ public class CategoriaServiceTest {
 
     @Autowired
     private ProductoRepo productoRepo;
+
+    @MockitoBean
+    private GmailEmailService gmailEmailService;
+
+    @MockitoBean
+    private RecaptchaService recaptchaService;
 
     @BeforeEach
     void setUp() {
@@ -75,7 +82,50 @@ public class CategoriaServiceTest {
         assertThatThrownBy(() -> {
             categoriaService.insertarCategoria("Cerámica");
         }).isInstanceOf(CategoriaException.YaExistente.class)
-        .hasMessageContaining("Ya existe una categoría con el nombre: Cerámica");
+        .hasMessageContaining("Category already exists with name Cerámica");
+    }
+
+    @Test
+    @DisplayName("Servicio - Modificar categoría")
+    void testModificarCategoria() {
+        // Insertar una nueva categoría
+        Long id = categoriaService.insertarCategoria("Cerámica");
+
+        // Modificar la categoría
+        categoriaService.modificarCategoria(id, "Cerámica Modificada");
+
+        // Obtener la categoría modificada
+        Categoria categoriaModificada = categoriaService.obtenerPorId(id);
+
+        // Verificar que la categoría se ha modificado correctamente
+        assertNotNull(categoriaModificada);
+        assertEquals("Cerámica Modificada", categoriaModificada.getNombre());
+    }
+
+    @Test
+    @DisplayName("Servicio - Modificar categoría (excepción no encontrada)")
+    void testModificarCategoriaInexistente() {
+        // Intentar modificar una categoría que no existe
+        assertThatThrownBy(() -> {
+            categoriaService.modificarCategoria(999L, "Cerámica Modificada");
+        }).isInstanceOf(CategoriaException.NoEncontrada.class)
+        .hasMessageContaining("Category not found with ID 999");
+    }
+
+    @Test
+    @DisplayName("Servicio - Modificar categoría (excepción ya existente)")
+    void testModificarCategoriaExistente() {
+        // Insertar una nueva categoría
+        Long id = categoriaService.insertarCategoria("Cerámica");
+
+        // Insertar otra categoría para probar la excepción
+        categoriaService.insertarCategoria("Vidrio");
+
+        // Intentar modificar la categoría a un nombre ya existente
+        assertThatThrownBy(() -> {
+            categoriaService.modificarCategoria(id, "Vidrio");
+        }).isInstanceOf(CategoriaException.YaExistente.class)
+        .hasMessageContaining("Category already exists with name Vidrio");
     }
 
     @Test
@@ -101,7 +151,7 @@ public class CategoriaServiceTest {
         assertThatThrownBy(() -> {
             categoriaService.obtenerPorId(999L);
         }).isInstanceOf(CategoriaException.NoEncontrada.class)
-        .hasMessageContaining("Categoría no encontrada con id: 999");
+        .hasMessageContaining("Category not found with ID 999");
     }
 
     @Test
@@ -109,7 +159,7 @@ public class CategoriaServiceTest {
     void testEliminarCategoria() {
         // Insertar una nueva categoría y producto
         Long idCategoria = categoriaService.insertarCategoria("Cerámica");
-        Producto producto = new Producto("Taza", "Taza de cerámica", BigDecimal.valueOf(10.0));
+        Producto producto = new Producto("Taza", null, "Taza de cerámica", 0, 0, 0, BigDecimal.valueOf(10.0), false, null);
         producto.setCategoria(categoriaService.obtenerPorId(idCategoria));
         productoRepo.save(producto);
 
@@ -129,7 +179,7 @@ public class CategoriaServiceTest {
         assertThatThrownBy(() -> {
             categoriaService.eliminarCategoria(999L);
         }).isInstanceOf(CategoriaException.NoEncontrada.class)
-        .hasMessageContaining("Categoría no encontrada con id: 999");
+        .hasMessageContaining("Category not found with ID 999");
     }
 
     @Test
@@ -143,23 +193,5 @@ public class CategoriaServiceTest {
         List<Categoria> categorias = categoriaService.obtenerTodas();
         assertNotNull(categorias);
         assertEquals(2, categorias.size());
-    }
-
-    @Test
-    @DisplayName("Servicio - Eliminar todas las categorías")
-    void testEliminarTodas() {
-        // Insertar categoría y producto
-        Long idCategoria = categoriaService.insertarCategoria("Cerámica");
-        Producto producto1 = new Producto("Taza", "Taza de cerámica", BigDecimal.valueOf(10.0));
-        producto1.setCategoria(categoriaService.obtenerPorId(idCategoria));
-        productoRepo.save(producto1);
-
-        // Eliminar todas las categorías
-        categoriaService.eliminarTodas();
-
-        // Verificar que la categoría ha sido eliminada y que el producto no tiene categoría
-        assertThat(categoriaRepo.findAll()).isEmpty();
-        Producto productoObtenido = productoRepo.findById(producto1.getId()).orElse(null);
-        assertNull(productoObtenido.getCategoria());
     }
 }

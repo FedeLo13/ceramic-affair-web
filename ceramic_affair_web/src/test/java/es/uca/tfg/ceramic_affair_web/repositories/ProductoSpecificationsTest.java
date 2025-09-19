@@ -1,8 +1,10 @@
 package es.uca.tfg.ceramic_affair_web.repositories;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Clase de prueba para las especificaciones del repositorio Producto.
  * Proporciona pruebas de integración para las operaciones de búsqueda y filtrado en la entidad Producto.
  * 
- * @version 1.0
+ * @version 1.1
  */
 @DataJpaTest
 public class ProductoSpecificationsTest {
@@ -41,15 +43,10 @@ public class ProductoSpecificationsTest {
         categoria2 = new Categoria("Tazas");
 
         // Crear productos
-        producto1 = new Producto("Jarrón de barro", "Un hermoso jarrón de barro", BigDecimal.valueOf(10.99));
-        producto1.setCategoria(categoria1);
-
-        producto2 = new Producto("Taza de cerámica", "Una taza de cerámica pintada a mano", BigDecimal.valueOf(5.49));
-        producto2.setCategoria(categoria2);
-
-        producto3 = new Producto("Cuenco de cerámica", "Un cuenco de cerámica para ensaladas", BigDecimal.valueOf(7.99));
-        producto3.setCategoria(categoria1);
-
+        producto1 = new Producto("Jarrón de barro", categoria1, "Un jarrón de barro hecho a mano", 0, 0, 0, BigDecimal.valueOf(12.99), false, null);
+        producto2 = new Producto("Taza de cerámica", categoria2, "Una taza de cerámica pintada a mano", 0, 0, 0, BigDecimal.valueOf(5.49), false, null);
+        producto3 = new Producto("Cuenco de cerámica", categoria1, "Un cuenco de cerámica esmaltado", 0, 0, 0, BigDecimal.valueOf(7.99), false, null);
+        
         // Guardar categorías y productos en la base de datos
         entityManager.persist(categoria1);
         entityManager.persist(categoria2);
@@ -57,7 +54,24 @@ public class ProductoSpecificationsTest {
         entityManager.persist(producto2);
         entityManager.persist(producto3);
         entityManager.flush();
+        entityManager.clear();
+
+        //Sobreescribir manualmente la fecha de creación para asegurar consistencia
+        producto1.setFechaCreacion(LocalDateTime.of(2025, 8, 1, 10, 0, 0));
+        producto2.setFechaCreacion(LocalDateTime.of(2025, 8, 2, 10, 0, 0));
+        producto3.setFechaCreacion(LocalDateTime.of(2025, 8, 3, 10, 0, 0));
+
+        entityManager.merge(producto1);
+        entityManager.merge(producto2);
+        entityManager.merge(producto3);
+        entityManager.flush();
     }
+
+    @AfterEach
+    void cleanUp() {
+        productoRepo.deleteAll();
+    }
+
 
     @Test
     @DisplayName("Especificación - Filtrar por categoría")
@@ -77,8 +91,7 @@ public class ProductoSpecificationsTest {
     void testFiltrarEnStock() {
         // Crear un producto en stock
         producto2.setSoldOut(true);
-        entityManager.persist(producto2);
-        entityManager.flush();
+        productoRepo.save(producto2);
 
         // Filtrar productos en stock
         Specification<Producto> spec = ProductoSpecifications.enStock(true);
@@ -100,8 +113,12 @@ public class ProductoSpecificationsTest {
         // Verificar que los productos están ordenados correctamente
         assertThat(recientes).hasSize(3);
         assertThat(viejos).hasSize(3);
-        assertThat(recientes.get(0).getNombre()).isEqualTo("Cuenco de cerámica");
-        assertThat(viejos.get(0).getNombre()).isEqualTo("Jarrón de barro");
+        
+        assertThat(recientes.get(0).getFechaCreacion()).isAfter(recientes.get(1).getFechaCreacion());
+        assertThat(recientes.get(1).getFechaCreacion()).isAfter(recientes.get(2).getFechaCreacion());
+
+        assertThat(viejos.get(0).getFechaCreacion()).isBefore(viejos.get(1).getFechaCreacion());
+        assertThat(viejos.get(1).getFechaCreacion()).isBefore(viejos.get(2).getFechaCreacion());
     }
 
     @Test

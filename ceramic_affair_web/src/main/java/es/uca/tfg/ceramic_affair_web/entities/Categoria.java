@@ -3,6 +3,9 @@ package es.uca.tfg.ceramic_affair_web.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -14,15 +17,17 @@ import jakarta.persistence.GenerationType;
  * 
  * @version 1.0
  */
-
  @Entity
 public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, length = 100)
     private String nombre;
 
     @OneToMany(mappedBy = "categoria")
+    @JsonManagedReference
     private List<Producto> productos = new ArrayList<>();
 
     /**
@@ -59,22 +64,20 @@ public class Categoria {
     }
 
     /**
+     * Método para establecer el nombre de la categoría.
+     * 
+     * @param nombre el nuevo nombre de la categoría
+     */
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    /**
      * Método para obtener la lista de productos de la categoría.
      * 
      * @return la lista de productos de la categoría
      */
     public List<Producto> getProductos() {
         return productos;
-    }
-
-    /**
-     * Método para añadir un producto a la categoría.
-     * 
-     * @param producto el producto a añadir
-     */
-    public void addProducto(Producto producto) {
-        productos.add(producto);
-        // No es necesario gestionar la relación inversa aquí, ya que se gestiona en el
-        // producto
     }
 }

@@ -1,0 +1,156 @@
+.admin-categories {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: sans-serif;
+}
+
+.admin-categories-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
+
+.admin-categories-loading {
+  text-align: center;
+  color: #777;
+}
+
+.admin-categories-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-categories-list-item {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-category-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-category-name {
+  font-weight: 600;
+}
+
+.admin-categories-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.admin-categories-edit-input {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-right: 0.5rem;
+  flex: 1;
+}
+
+.admin-categories-btn {
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  min-height: 38px;
+  transition: background 0.2s, opacity 0.2s;
+}
+
+.admin-categories-btn:hover {
+  opacity: 0.85;
+}
+
+.admin-categories-btn-edit {
+  background: #2B3A64;
+  color: white;
+}
+
+.admin-categories-btn-delete {
+  background: #2B3A64;
+  color: white;
+}
+
+.admin-categories-btn-save {
+  background: #2B3A64;;
+  color: white;
+}
+
+.admin-categories-btn-cancel {
+  background: #2B3A64;;
+  color: white;
+}
+
+.admin-categories-btn-add {
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background 0.2s, opacity 0.2s;
+  background: #FDF3ED;
+  border: none;
+  padding: 10px;
+  display: inline-flex;      /* línea flexible */
+  align-items: center;       /* centra verticalmente el contenido */
+  gap: 8px;                  /* espacio entre icono y texto */
+}
+
+/* Contenedor de mensaje tipo toast */
+.toast-message {
+  position: fixed;
+  bottom: 20px;            /* distancia desde el borde inferior */
+  right: 20px;             /* distancia desde el borde derecho */
+  background-color: #2B3A64; /* color de fondo oscuro */
+  color: #fff;              /* texto blanco */
+  padding: 12px 20px;       /* espacio interno */
+  border-radius: 8px;       /* esquinas redondeadas */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* sombra suave */
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 9999;
+  opacity: 0.95;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Botón de cerrar */
+.toast-close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+/* Animación de entrada */
+.toast-message.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Animación de salida */
+.toast-message.hide {
+  transform: translateY(20px);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.admin-categories-confirm-delete {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* espacio entre mensaje y botones */
+}
+

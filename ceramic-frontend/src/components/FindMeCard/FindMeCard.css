@@ -1,0 +1,122 @@
+.findme-card{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.findme-card-title {
+    font-weight: 100;
+    font-size: 20px;
+    margin: 15px 30px;
+}
+
+.findme-card-map {
+    min-width: 300px;
+    min-height: 300px;
+    margin: 0;
+    border-radius: 12px;
+    overflow: hidden;     /* recorta las tiles en las esquinas */
+    box-shadow: 0 6px 18px rgba(0,0,0,.08);
+}
+
+.findme-card-body {
+    display: flex;
+    align-items: stretch;
+    gap: 16px;
+}
+
+.findme-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-left: 24px;
+}
+
+.findme-card-description {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2em;
+    max-height: calc(1.2em * 11); /* 11 líneas */
+    overflow: hidden;
+    white-space: pre-line;
+}
+
+.findme-card-footer {
+    margin-top: auto;
+    padding-bottom: 12px;
+}
+
+.findme-card-map-link {
+    color: rgb(140, 140, 140);
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s, text-decoration 0.2s;
+    font-size: 15px;
+}
+
+.findme-card-map-link:hover {
+    text-decoration: underline;
+}
+
+.findme-card-map-link::before {
+    content: "← ";
+}
+
+/* 📱 Versión responsive */
+@media (max-width: 768px) {
+  .findme-card-body {
+    flex-direction: column; /* Pila vertical */
+  }
+
+  .findme-card-map {
+    width: 100%;
+    max-width: 300px; /* nunca más ancho de esto */
+    height: 220px;    /* más bajito en móvil */
+    margin: 0 auto;  /* centra horizontalmente */
+  }
+
+  .findme-card-map-link::before {
+    content: "📍 "; 
+  }
+}
+
+.findme-admin-actions {
+    margin-bottom: 8px;
+    display: flex;
+    gap: 8px;
+}
+
+.findme-admin-button-edit {
+    background-color: #2B3A64;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.6rem 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.findme-admin-button-delete {
+    background-color: #2B3A64;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.6rem 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.findme-delete-container {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* espacio entre botón y mensaje */
+  position: relative;
+}
+
+.findme-delete-confirmation {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* espacio entre botones y texto */
+}

@@ -1,0 +1,132 @@
+.image-uploader-title {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.file-upload-button {
+  display: inline-block;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #2B3A64;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+/* Contenedor de las imágenes */
+.preview-container {
+  position: relative;
+  margin-top: 10px;
+}
+
+/* Cada imagen con su botón */
+.preview-thumbs {
+  display: flex;
+  gap: 8px ;
+  overflow-x: auto;
+  white-space: nowrap;
+  max-width: 534px;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+
+/* Las imágenes, que no se salgan y mantengan proporción */
+.preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.preview-thumbs::-webkit-scrollbar {
+  display: none; /* Safari y Chrome */
+}
+
+.preview-thumb {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.preview-thumb img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  display: inline-block; /* Para que respete white-space */
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+/* Botón para eliminar la imagen */
+.preview-thumb button {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: #D72638;
+  font-size: 8px;
+  border: none;
+  color: white;
+  width: 12px;
+  height: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  text-align: center;
+  padding: 0;
+  transition: background 0.2s ease;
+}
+
+.preview-thumb button:hover {
+  background: rgba(255, 0, 0, 1);
+}
+
+.uploader-thumb-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(148, 148, 148, 0.6);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 6px;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  z-index: 10;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+.uploader-thumb-nav-btn:hover {
+  background-color: rgba(100, 100, 100, 0.8);
+}
+
+.uploader-thumb-nav-btn.left {
+  left: 0;
+}
+
+.uploader-thumb-nav-btn.right {
+  right: 0;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .preview-item {
+    width: 90px;
+    height: 90px;
+  }
+}
+
+.dropzone {
+  margin: 1rem 0;
+  padding: 1.5rem;
+  border: 2px dashed #aaa;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #2B3A64;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}

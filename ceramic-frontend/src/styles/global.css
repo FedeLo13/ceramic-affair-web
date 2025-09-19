@@ -1,0 +1,27 @@
+@import './variables.css';
+
+body {
+  font-family: var(--font-base);
+  background-color: #FDF3ED;
+  color: #2B3A64;
+  font-size: 16px;
+}
+
+/* Deshabilitar selección de texto e imágenes */
+* {
+  user-select: none;    /* Evita seleccionar texto */
+  -webkit-user-drag: none; /* Evita arrastrar imágenes */
+}
+
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* Forzar a que inputs, selects, buttons hereden */
+input,
+select,
+button,
+textarea {
+  font-family: inherit;
+}

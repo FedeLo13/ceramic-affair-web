@@ -1,18 +1,38 @@
 import ProductCard from "../ProductCard/ProductCard";
-import type { Producto } from "../../types/producto.types";
+import type { ProductoOutputDTO } from "../../types/producto.types";
+import { motion } from "framer-motion";
 import "./ProductGrid.css";
 
 interface ProductGridProps {
-  productos: Producto[];
+  productos: ProductoOutputDTO[];
+  selectionMode?: "delete" | "soldout" | null; // Modo de selección para administrador
+  selectedProductos: number[];
+  onProductClick: (productoId: number) => void;
 }
 
-export default function ProductGrid({ productos }: ProductGridProps) {
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+};
+
+export default function ProductGrid({ productos, selectionMode, selectedProductos, onProductClick }: ProductGridProps) {
     return (
-        <div className="product-grid">
-            {productos.map((producto) => (
-                <ProductCard key={producto.id} producto={producto} />
+        <motion.div
+            className="product-grid"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+        >
+           {productos.map((producto) => (
+                <ProductCard 
+                    key={producto.id} 
+                    producto={producto}
+                    selectionMode={selectionMode}
+                    selected={selectedProductos.includes(producto.id)}
+                    onClick={() => onProductClick(producto.id)}    
+                />
             ))}
-        </div>
+        </motion.div>
     );
 }
 // Este componente renderiza una cuadrícula de productos utilizando el componente ProductCard para cada producto.

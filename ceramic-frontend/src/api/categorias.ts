@@ -1,15 +1,29 @@
-import { handleFetch } from "./utils";
-import type { Categoria, CategoriaInput } from "../types/categoria.types";
+import { fetchWithAuth, handleFetch } from "./utils";
+import type { Categoria, CategoriaInputDTO } from "../types/categoria.types";
 
-
-const API_URL = 'http://localhost:8080/api/categorias';
+const API_PUBLIC = 'http://localhost:8080/api/public/categorias';
+const API_ADMIN = 'http://localhost:8080/api/admin/categorias';
 
 // Funciones para manejar las categorías
 
-//------------------ CREAR ------------------//
+//------------------ PÚBLICOS ------------------//
 
-export const newCategoria = async (categoria: CategoriaInput): Promise<Categoria> => {
-    const response = await fetch(`${API_URL}/crear`, {
+export const getCategoriaById = async (id: number): Promise<Categoria> => {
+    const response = await fetch(`${API_PUBLIC}/${id}`);
+
+    return await handleFetch<Categoria>(response, 'Error obtaining category by ID');
+};
+
+export const getAllCategorias = async (): Promise<Categoria[]> => {
+    const response = await fetch(`${API_PUBLIC}/todas`);
+
+    return await handleFetch<Categoria[]>(response, 'Error obtaining categories');
+};
+
+//------------------ ADMINISTRATIVOS ------------------//
+
+export const newCategoria = async (categoria: CategoriaInputDTO): Promise<number> => {
+    const response = await fetchWithAuth(`${API_ADMIN}/crear`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -17,41 +31,24 @@ export const newCategoria = async (categoria: CategoriaInput): Promise<Categoria
         body: JSON.stringify(categoria),
     });
 
-    return await handleFetch(response, 'Error creating category');
+    return await handleFetch<number>(response, 'Error creating category');
 };
 
-//------------------ LEER ------------------//
+export const updateCategoria = async (id: number, categoria: CategoriaInputDTO): Promise<void> => {
+    const response = await fetchWithAuth(`${API_ADMIN}/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(categoria),
+    });
 
-export const getCategoriaById = async (id: number): Promise<Categoria> => {
-    const response = await fetch(`${API_URL}/${id}`);
-
-    return await handleFetch(response, 'Error fetching category by ID');
+    return await handleFetch<void>(response, 'Error updating category');
 };
-
-export const getAllCategorias = async (): Promise<Categoria[]> => {
-    const response = await fetch(`${API_URL}/todas`);
-
-    return await handleFetch(response, 'Error fetching all categories');
-};
-
-//------------------ ELIMINAR ------------------//
 
 export const deleteCategoria = async (id: number): Promise<void> => {
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetchWithAuth(`${API_ADMIN}/${id}`, {
         method: 'DELETE',
     });
-
-    if (response.status === 204) return;
-
-    return await handleFetch(response, 'Error deleting category');
+    return await handleFetch<void>(response, 'Error deleting category');
 };
-
-export const deleteAllCategorias = async (): Promise<void> => {
-    const response = await fetch(`${API_URL}/eliminarTodas`, {
-        method: 'DELETE',
-    });
-
-    if (response.status === 204) return;
-
-    return await handleFetch(response, 'Error deleting all categories');
-}

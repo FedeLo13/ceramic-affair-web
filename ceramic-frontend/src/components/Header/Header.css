@@ -2,19 +2,214 @@ header {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   padding: 1rem 2rem;
   gap: 1rem; /* opcional: espaciado entre logo y nav */
+  margin-bottom: 50px;
 }
 
-nav {
+.left-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebar-toggle {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 50px;           /* ancho del marcapáginas */
+  height: 50px;          /* alto visible */
+  background: #FAFAFA;
+  border: none;
+  border-radius: 0 8px 8px 0; /* borde redondeado en la derecha */
+  cursor: pointer;
   display: flex;
-  gap: 1.5rem;
+  align-items: center;
   justify-content: center;
-  flex-wrap: wrap; /* por si se encogen en móvil */
+  z-index: 1100; /* para que esté por encima de otros elementos */
+  transition: transform 0.3s ease;
+}
+
+/* Cuando la sidebar está abierta, empujar el botón */
+.sidebar.open ~ .sidebar-toggle {
+  transform: translateX(250px);
+}
+
+header nav a,
+header nav .active {
+  color: inherit; /* hereda el color del texto padre */
+  text-decoration: none; /* quita el subrayado */
+}
+
+header nav a:hover {
+  color: #555; /* color al pasar el mouse, opcional */
 }
 
 .logo img {
   height: 150px; /* o el tamaño que tú veas */
   object-fit: contain;
   display: block;
+  margin-top: 20px;
+  margin-bottom: 20px;
+} 
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 75px; /* espacio entre los enlaces */
+}
+
+/* icono a la derecha */
+.nav-container .instagram-icon {
+  margin-left: auto;
+  color: inherit;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.nav-links a:hover,
+.instagram-icon:hover {
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    gap: 15px; /* menos espacio entre enlaces */
+    font-size: 16px; /* enlaces más pequeños */
+  }
+
+  .nav-container {
+    gap: 10px; /* icono más pegado aún */
+  }
+}
+
+/* Sidebar oculto inicialmente */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100%;
+    background: #FAFAFA;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+    transform: translateX(-100%);
+    display: flex;
+    border-bottom-right-radius: 4px;
+    overflow: hidden;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+    z-index: 1001;
+}
+
+/* Sidebar visible */
+.sidebar.open {
+  transform: translateX(0);
+}
+
+.sidebar-img {
+  width: 100%;           /* ocupa todo el ancho de la sidebar */
+  flex-shrink: 0;        /* evita que se reduzca en layouts flex */
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.sidebar-img img {
+  width: 70%;           /* la imagen ocupa todo el ancho */
+  height: auto;          /* mantiene la proporción */
+  display: block;        /* elimina espacio inferior */
+  margin: 0 auto;     /* centra la imagen */
+}
+
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  flex: 1;
+}
+
+/* Overlay */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+/* Ajustes de navegación dentro del sidebar */
+.sidebar a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Evitar estilos de link predeterminados */
+.sidebar a:hover {
+    color: #000;
+}
+
+.admin-menu {
+    position: relative;
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.sidebar-admin-dropdown {
+  position: absolute;
+  top: 100%;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  z-index: 999;
+}
+
+.sidebar-admin-dropdown a,
+.admin-menu .logout-btn {
+  padding: 8px 10px;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.sidebar-admin-dropdown a:hover,
+.admin-menu .logout-btn:hover {
+  background: #f0f0f0;
+}
+
+.logout-btn {
+  color: inherit;
+  font-weight: bold;
+}
+
+.sidebar .privacy-policy-link {
+  margin-top: auto;
+  font-size: 14px;
+  color: #888;
+  text-align: center;
+}
+
+.sidebar .privacy-policy-link:hover {
+  color: #555;
+}
+
+/* Evita scroll vertical e horizontal */
+.no-scroll {
+  overflow: hidden;
+  height: 100%;
 }

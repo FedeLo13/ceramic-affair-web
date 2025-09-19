@@ -1,11 +1,8 @@
 package es.uca.tfg.ceramic_affair_web.entities;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.math.BigDecimal;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +11,7 @@ import org.junit.jupiter.api.Test;
  * Clase de prueba para la entidad Categoria.
  * Proporciona pruebas unitarias para verificar el correcto funcionamiento de los métodos de la clase Categoria.
  * 
- * @version 1.0
+ * @version 1.1
  */
 public class CategoriaTest {
 
@@ -45,14 +42,12 @@ public class CategoriaTest {
     }
 
     @Test
-    @DisplayName("Categoria - Agregar producto")
-    public void testAddProducto() {
-        Categoria categoria = new Categoria("Cerámica");
-        Producto producto = new Producto("Taza", "Taza de cerámica", new BigDecimal(10.99));
-        categoria.addProducto(producto);
+    @DisplayName("Categoria - Getters y Setters")
+    public void testGettersYSetters() {
+        Categoria categoria = new Categoria();
+        categoria.setNombre("Cerámica");
 
-        assertNotNull(categoria.getProductos()); // Verifica que la lista de productos no sea nula
-        assertEquals(1, categoria.getProductos().size()); // Verifica que la lista de productos tenga un elemento
-        assertTrue(categoria.getProductos().contains(producto)); // Verifica que el producto se haya añadido correctamente
+        assertNotNull(categoria.getNombre()); // Verifica que el nombre no sea nulo
+        assertTrue(categoria.getNombre().equals("Cerámica")); // Verifica que el nombre sea el esperado
     }
 }
