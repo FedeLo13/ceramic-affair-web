@@ -29,7 +29,6 @@
     box-shadow: 0 1px 1px rgba(0,0,0,0.1);
 }
 
-/* Botón cerrar */
 .modal-close-btn {
     position: fixed;
     top: 20px;
@@ -52,7 +51,6 @@
   background: rgba(255,255,255,0.2);
 }
 
-/* Flechas de navegación */
 .nav-btn {
     position: fixed;
     top: 50%;
@@ -87,7 +85,6 @@
   right: 20px;
 }
 
-/* Estilo por defecto (desktop) */
 .nav-btn {
     position: fixed;
     top: 50%;
@@ -128,7 +125,6 @@
   right: 20px;
 }
 
-/* Ajustes móviles */
 @media (max-width: 768px) {
   .nav-btn {
     background: rgba(0,0,0,0.3);

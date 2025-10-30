@@ -1,13 +1,11 @@
-/* Contenedor general */
 .admin-login {
   display: flex;
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
-  padding-top: 2rem;        /* distancia desde arriba */
+  padding-top: 2rem;
 }
 
-/* Caja del formulario */
 .admin-login-form {
   background: #FAFAFA;
   padding: 2.5rem;
@@ -21,7 +19,6 @@
   gap: 1.2rem;
 }
 
-/* Grupo de inputs */
 .login-form-group {
   display: flex;
   flex-direction: column;
@@ -42,7 +39,7 @@
   font-size: 0.95rem;
   line-height: 1.4;
   outline: none;
-  box-sizing: border-box; /* 🔑 asegura que padding y borde no cambien el tamaño */
+  box-sizing: border-box;
   transition: all 0.2s ease;
 }
 
@@ -52,7 +49,6 @@
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
 }
 
-/* Botón */
 .login-button {
   padding: 0.9rem;
   background: #2B3A64;
@@ -71,7 +67,6 @@
   transform: translateY(-1px);
 }
 
-/* Mensaje de error */
 .error-message {
   color: #D72638;
   background: #F9DCDE;

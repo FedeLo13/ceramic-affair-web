@@ -1,7 +1,7 @@
 .piece-detail-container {
-    max-width: 800px;   /* ancho máximo del detalle */
-    margin: 0 auto;      /* centra horizontalmente */
-    padding: 1rem;       /* separación interna */
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem;
 }
 
 .breadcrumb {
@@ -26,8 +26,8 @@
 }
 
 .gallery {
-    flex: 0 0 auto; /* No crecer ni encoger */
-    max-width: 450px; /* Ancho máximo de la galería */
+    flex: 0 0 auto;
+    max-width: 450px;
 }
 
 .details {
@@ -36,15 +36,14 @@
   max-width: 600px;
 }
 
-/* Responsivo: en pantallas pequeñas se apilan */
 @media (max-width: 768px) {
   .piece-detail-content {
     flex-direction: column;
-    align-items: center; /* centra galería y detalles */
+    align-items: center;
   }
 
   .gallery {
-    max-width: 100%;     /* en móvil puede usar todo el ancho */
+    max-width: 100%;
   }
 
   .details {
@@ -58,10 +57,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    aspect-ratio: 4 / 5;    /* relación fija 4/5 */
-    max-width: 450px;       /* ancho máximo de la galería */
-    max-height: 400px;      /* altura máxima */
-    overflow: hidden;       /* que no se salga nada */
+    aspect-ratio: 4 / 5;
+    max-width: 450px;
+    max-height: 400px;
+    overflow: hidden;
 }
 
 .thumbs-container {
@@ -91,7 +90,7 @@
   border-radius: 4px;
   cursor: pointer;
   border: 2px solid transparent;
-  display: inline-block; /* Para que respete white-space */
+  display: inline-block;
   transition: border-color 0.2s, transform 0.2s;
 }
 
@@ -106,7 +105,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(148, 148, 148, 0.6); /* semitransparente */
+  background-color: rgba(148, 148, 148, 0.6);
   color: white;
   border: none;
   border-radius: 4px;
@@ -131,7 +130,7 @@
 
 .nav-btn-prev {
   position: absolute;
-  left: -40px; /* Fuera de la imagen a la izquierda */
+  left: -40px;
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
@@ -139,7 +138,7 @@
 
 .nav-btn-next {
   position: absolute;
-  right: -40px; /* Fuera de la imagen a la derecha */
+  right: -40px;
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
@@ -147,23 +146,23 @@
 
 .product-header {
   display: flex;
-  justify-content: space-between; /* nombre a la izquierda, precio a la derecha */
-  align-items: center;            /* centrados verticalmente */
-  gap: 1rem;                      /* separación mínima por si se colapsan */
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid rgba(43, 58, 100, 0.3); /* barrita ligera */
+  border-bottom: 1px solid rgba(43, 58, 100, 0.3);
 }
 
 .product-name {
   font-size: 1.2rem;
   font-weight: 600;
-  margin: 0; /* evita que el h2 meta márgenes raros */
+  margin: 0;
 }
 
 .product-price {
   font-size: 1.2rem;
   font-weight: 600;
-  margin: 0; /* evita que el h2 meta márgenes raros */
+  margin: 0;
 }
 
 .product-description {
@@ -172,10 +171,10 @@
     color: #333;
     margin: 0.75rem 0;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid rgba(43, 58, 100, 0.3); /* barrita ligera */
+    border-bottom: 1px solid rgba(43, 58, 100, 0.3);
     line-height: 1.4;
     min-height: 180px;
-    white-space: pre-line; /* respeta saltos de línea */
+    white-space: pre-line;
 }
 
 .sizes {
@@ -207,8 +206,8 @@
     position: relative;
     display: inline-block;
     cursor: zoom-in;
-    border-radius: 8px; /* Igual que la imagen */
-    overflow: hidden; /* Importante para que el zoom no sobresalga */
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 @media (max-width: 768px) {
@@ -229,21 +228,19 @@
 .zoom-container.hover {
     background-repeat: no-repeat;
     background-size: 200%;
-    border-radius: 8px; /* Igual que la imagen */
+    border-radius: 8px;
 }
 
 .zoom-container.hover .zoom-image {
     opacity: 0;
 }
 
-/* Contenedor de acciones de administrador */
 .admin-actions {
-  margin-top: 0.5rem;     /* 👈 separación desde lo anterior */
+  margin-top: 0.5rem;
   display: flex;
-  gap: 0.75rem;           /* espacio entre botones */
+  gap: 0.75rem;
 }
 
-/* Botón editar */
 .edit-button {
   background-color: #2B3A64;
   color: white;
@@ -255,7 +252,6 @@
   transition: background 0.2s ease;
 }
 
-/* Botón eliminar */
 .delete-button {
   background-color: #2B3A64;
   color: white;
@@ -270,12 +266,12 @@
 .piece-delete-container {
   display: flex;
   align-items: center;
-  gap: 10px; /* espacio entre botón y mensaje */
+  gap: 10px;
   position: relative;
 }
 
 .piece-delete-confirmation {
   display: flex;
   align-items: center;
-  gap: 10px; /* espacio entre botones y texto */
+  gap: 10px;
 }

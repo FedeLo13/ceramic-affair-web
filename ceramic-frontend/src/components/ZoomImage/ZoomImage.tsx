@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 
 interface ZoomImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
-    enableZoom?: boolean; // Prop to control zoom functionality
+    enableZoom?: boolean;
 }
 
 export default function ZoomImage({ src, alt, enableZoom, ...rest }: ZoomImageProps) {

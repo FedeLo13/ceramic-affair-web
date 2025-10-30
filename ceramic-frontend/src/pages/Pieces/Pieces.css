@@ -1,4 +1,3 @@
-/* Animación para fade-in */
 .pieces-page .product-card {
     opacity: 0;
     transform: translateY(20px);
@@ -12,19 +11,15 @@
     }
 }
 
-/* Loader invisible pero detectable */
 .loader-trigger {
     height: 1px;
 }
 
-/* Contenedor principal del menú */
 .admin-menu {
     position: relative;
     display: inline-block;
     margin-left: 1rem;
 }
-
-/* Botón para abrir/cerrar el menú */
 .admin-toggle {
     background-color: #FAFAFA;
     border: 1px solid #ddd;
@@ -44,7 +39,6 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-/* Dropdown */
 .admin-dropdown {
     position: absolute;
     left: 0;
@@ -59,13 +53,11 @@
     animation: fadeIn 0.2s ease-out;
 }
 
-/* Animación */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-4px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Botones dentro del dropdown */
 .admin-dropdown button {
     background: none;
     border: none;
@@ -118,7 +110,6 @@
   cursor: not-allowed;
 }
 
-/* Contenedor de filtros como flex */
 .filters {
     display: flex;
     justify-content: center;
@@ -128,7 +119,6 @@
     margin-bottom: 1.5rem;
 }
 
-/* Wrapper relativo para la flecha */
 .select-wrapper {
     position: relative;
     flex: 0 1 auto;
@@ -137,7 +127,6 @@
     margin: 0 5px;
 }
 
-/* Estilo minimalista para todos los selects */
 .minimal-select {
     width: 100%;
     padding: 8px 32px 8px 12px;
@@ -147,20 +136,18 @@
     background-color: #FAFAFA;
     color: #2B3A64;
     cursor: pointer;
-    appearance: none; /* Quita estilo por defecto del navegador */
+    appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
     outline: none;
     transition: background-color 0.2s ease;
 }
 
-/* Fondo al hacer focus */
 .minimal-select:focus {
     background-color: #ffffff;
     box-shadow: 0 0 0 2px rgba(0,123,255,0.2);
 }
 
-/* Flecha personalizada */
 .select-wrapper::after {
     content: '▼';
     position: absolute;
@@ -172,17 +159,15 @@
     font-size: 0.7rem;
 }
 
-/* Wrapper para la barra de búsqueda con lupa */
 .filters .search-wrapper {
     display: flex;
     align-items: center;
     background-color: #FAFAFA;
     border-radius: 8px;
-    padding: 0 12px; /* solo horizontal */
+    padding: 0 12px;
     max-width: 600px;
 }
 
-/* Barra de búsqueda */
 .filters .search-bar {
     flex: 1;
     padding: 8px 32px 8px 12px;
@@ -193,32 +178,28 @@
     outline: none;
 }
 
-/* Escritorio */
 @media (min-width: 601px) {
     .filters .search-wrapper {
-        flex: 1 1 250px; /* se expande horizontalmente */
-        height: auto;    /* no limita altura en escritorio */
+        flex: 1 1 250px;
+        height: auto;
     }
 }
 
-/* Móvil */
 @media (max-width: 600px) {
     .filters .search-wrapper {
-        width: 90%;        /* ocupa casi toda la pantalla */
-        max-width: 400px;  /* límite para no verse gigante */
-        margin: 0 auto;    /* centrado */
+        width: 90%;
+        max-width: 400px;
+        margin: 0 auto;
         flex: none;
     }
 }
 
-/* Icono de lupa */
 .filters .search-icon {
     font-size: 18px;
     color: #999;
     pointer-events: none;
 }
 
-/* Responsive: en pantallas pequeñas los filtros ocupan 100% y se apilan */
 @media (max-width: 600px) {
     .filters {
         flex-direction: column;
@@ -232,7 +213,6 @@
     }
 }
 
-/* Spinner y contenedor */
 .loader-container {
   display: flex;
   flex-direction: column;
