@@ -23,7 +23,8 @@ export default function PieceDetail() {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const { isAuthenticated } = useAuth(); // Hook de autenticación
     const [isMobile, setIsMobile] = useState(false);
-    const [showDeleteMessage, setShowDeleteMessage] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const thumbsRef = useRef<HTMLDivElement>(null);
 
@@ -132,13 +133,29 @@ export default function PieceDetail() {
     };
 
     const handleDeleteClick = async () => {
+        if (!producto) return;
+
+        setIsDeleting(true);
+
         try {
             await deleteProducto(producto.id);
             navigate("/pieces");
         } catch (error) {
             console.error("Error deleting product:", error);
+            setIsDeleting(false);
+        } finally {
+            setIsDeleting(false);
+            setShowDeleteModal(false);
         }
     };
+
+    const handleOpenDeleteModal = () => {
+        setShowDeleteModal(true);
+    }
+
+    const handleCloseDeleteModal = () => {
+        setShowDeleteModal(false);
+    }
 
     return (
         <div className="piece-detail-container">
@@ -230,10 +247,10 @@ export default function PieceDetail() {
                     
                     {/* Tamaños */}
                     <div className="sizes">
-                        <h3>Tamaños</h3>
-                        {producto.altura > 0 && <p>Alto: {producto.altura} cm</p>}
-                        {producto.anchura > 0 && <p>Ancho: {producto.anchura} cm</p>}
-                        {producto.diametro > 0 && <p>Diámetro: {producto.diametro} cm</p>}
+                        <h3>Sizes</h3>
+                        {producto.altura > 0 && <p>Height: {producto.altura} cm</p>}
+                        {producto.anchura > 0 && <p>Width: {producto.anchura} cm</p>}
+                        {producto.diametro > 0 && <p>Diameter: {producto.diametro} cm</p>}
                     </div>
 
                     {/* Sold out */}
@@ -254,36 +271,50 @@ export default function PieceDetail() {
                             </button>
 
                             <div className="piece-delete-container">
-                                {!showDeleteMessage && (
-                                    <button 
-                                        className="delete-button"
-                                        onClick={() => setShowDeleteMessage(true)}
-                                    >
-                                        <FaTrash /> Delete
-                                    </button>
-                                )}
-                                {showDeleteMessage && (
-                                    <div className="piece-delete-confirmation">
-                                        <button 
-                                            onClick={handleDeleteClick}
-                                            className="delete-button"
-                                        >
-                                            Confirm Delete
-                                        </button>
-                                        <button 
-                                            onClick={() => setShowDeleteMessage(false)}
-                                            className="delete-button"
-                                        >
-                                            Cancel
-                                        </button>
-                                        <span>Are you sure you want to delete this piece?</span>
-                                    </div>
-                                )}
+                                <button 
+                                    className="delete-button"
+                                    onClick={handleOpenDeleteModal}
+                                >
+                                    <FaTrash /> Delete
+                                </button>
                             </div>
                         </div>
                     )}
                 </div>
             </div>
+            
+            {/* Modal de confirmación de eliminación */}
+            {showDeleteModal && (
+                <div className="delete-modal-overlay" onClick={handleCloseDeleteModal}>
+                    <div 
+                    className="delete-modal" 
+                    onClick={(e) => e.stopPropagation()}
+                    >
+                    <h3>Confirm Deletion</h3>
+                    <p>
+                        Are you sure you want to delete <strong>{producto.nombre}</strong>? 
+                        This action cannot be undone.
+                    </p>
+
+                    <div className="delete-modal-actions">
+                        <button 
+                        onClick={handleCloseDeleteModal} 
+                        className="modal-btn cancel"
+                        disabled={isDeleting}
+                        >
+                        Cancel
+                        </button>
+                        <button 
+                        onClick={handleDeleteClick} 
+                        className="modal-btn confirm"
+                        disabled={isDeleting}
+                        >
+                        {isDeleting ? "Deleting..." : "Confirm Delete"}
+                        </button>
+                    </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
