@@ -1,5 +1,6 @@
 package es.uca.tfg.ceramic_affair_web.exceptions;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,11 +12,14 @@ import es.uca.tfg.ceramic_affair_web.controllers.common.SuscriptorController;
 /**
  * Clase para manejar específicamente las excepciones relacionadas con los suscriptores.
  * 
- * @version 1.0
+ * @version 1.1
  */
 @ControllerAdvice(assignableTypes = SuscriptorController.class)
 @Order(1)
 public class SuscriptorExceptionHandler {
+
+    @Value("${app.frontend.url}")
+    private String frontendUrl;
 
     @ExceptionHandler(SuscriptorException.NoEncontrado.class)
     private ResponseEntity<Void> handleNoEncontrado() {
@@ -28,10 +32,9 @@ public class SuscriptorExceptionHandler {
     }
 
     private ResponseEntity<Void> redirectToFrontend(String status) {
-        // TODO: Cambiar la URL al desplegar en producción
-        String frontendUrl = "http://localhost:5173/confirmation?status=" + status;
+        String enlace = frontendUrl + "/confirmation?status=" + status;
         return ResponseEntity.status(HttpStatus.FOUND)
-                .header("Location", frontendUrl)
+                .header("Location", enlace)
                 .build();
     }
 }

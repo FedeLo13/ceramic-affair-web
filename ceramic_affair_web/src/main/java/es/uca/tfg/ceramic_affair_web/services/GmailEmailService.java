@@ -2,6 +2,7 @@ package es.uca.tfg.ceramic_affair_web.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -13,7 +14,7 @@ import jakarta.mail.internet.MimeMessage;
 /**
  * Implementación del servicio de envío de correos electrónicos utilizando Gmail.
  * 
- * @version 1.0
+ * @version 1.1
  */
 @Service
 @Primary
@@ -22,6 +23,9 @@ public class GmailEmailService implements EmailService {
     private static final Logger logger = LoggerFactory.getLogger(GmailEmailService.class.getName());
 
     private final JavaMailSender mailSender;
+
+    @Value("${spring.mail.username}")
+    private String fromEmail;
 
     public GmailEmailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
@@ -36,7 +40,7 @@ public class GmailEmailService implements EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
             helper.setTo(to);
             helper.setSubject(subject);
-            helper.setFrom("fedevlopez17@gmail.com", "Ceramic Affair");
+            helper.setFrom(fromEmail, "Ceramic Affair");
             helper.setText(body, true);
 
             mailSender.send(message);

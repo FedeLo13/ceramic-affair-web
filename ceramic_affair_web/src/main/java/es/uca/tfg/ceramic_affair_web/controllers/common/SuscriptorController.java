@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +33,7 @@ import jakarta.validation.Valid;
  * Controlador para los endpoints públicos relacionados con los suscriptores.
  * Proporciona endpoints para gestionar suscriptores, como la creación y verificación de suscriptores.
  * 
- * @version 1.0
+ * @version 1.1
  */
 @RestController
 @RequestMapping("/api/public/suscriptores")
@@ -47,6 +48,12 @@ public class SuscriptorController {
 
     @Autowired
     private RecaptchaService recaptchaService;
+
+    @Value("${app.backend.url}")
+    private String backendUrl;
+
+    @Value("${app.frontend.url}")
+    private String frontendUrl;
 
     @PostMapping("/suscribir")
     @Operation(summary = "Suscribir un nuevo suscriptor", description = "Crea un nuevo suscriptor y envía un correo electrónico de verificación", tags = { "Suscriptores" })
@@ -148,8 +155,7 @@ public class SuscriptorController {
     }
 
     private void enviarCorreoVerificacion(Suscriptor suscriptor) {
-        // TODO: Cambiar la URL de origen a la de producción cuando esté disponible
-        String enlace = "http://localhost:8080/api/public/suscriptores/verificar?token=" + suscriptor.getTokenVerificacion();
+        String enlace = backendUrl + "/api/public/suscriptores/verificar?token=" + suscriptor.getTokenVerificacion();
         String cuerpo = "<p>Hello,</p>"
                       + "<p>Thank you for subscribing to our newsletter. To complete your subscription, please verify your email address by clicking the link below:</p>"
                       + "<p><a href=\"" + enlace + "\">Verify my email address</a></p>"
@@ -164,10 +170,9 @@ public class SuscriptorController {
     }
 
     private ResponseEntity<Void> redirectToFrontend(String status) {
-        // TODO: Cambiar la URL de origen a la de producción cuando esté disponible
-        String frontendUrl = "http://localhost:5173/confirmation?status=" + status;
+        String enlace = frontendUrl + "/confirmation?status=" + status;
         return ResponseEntity.status(HttpStatus.FOUND)
-                .header("Location", frontendUrl)
+                .header("Location", enlace)
                 .build();
     }
 }

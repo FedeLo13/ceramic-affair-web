@@ -1,5 +1,6 @@
 package es.uca.tfg.ceramic_affair_web.security;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -8,11 +9,13 @@ import java.util.stream.Collectors;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import es.uca.tfg.ceramic_affair_web.entities.Usuario;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.MacAlgorithm;
 import io.jsonwebtoken.jackson.io.JacksonDeserializer;
 
@@ -21,36 +24,25 @@ import io.jsonwebtoken.jackson.io.JacksonDeserializer;
  * Clase utilitaria para manejar JWT (JSON Web Tokens).
  * Esta clase se encargará de generar, validar y extraer información de los JWT utilizados en la aplicación.
  * 
- * @version 1.0
+ * @version 1.1
  */
 @Component
+@ConfigurationProperties(prefix = "jwt")
 public class JwtUtils {
 
-    // TODO: En producción, cargar la clave secreta desde variable de entorno o properties.
-    private final MacAlgorithm ALGORITHM;
+    private final MacAlgorithm ALGORITHM = Jwts.SIG.HS256;
 
-    private final SecretKey SECRET_KEY;
+    private String secret;
+    private long expiration;
+    private SecretKey SECRET_KEY;
 
-    private final long EXPIRATION_TIME;
-    
-    /**
-     * Constructor sin parámetros de la clase JwtUtils.
-     * 
-     */
-    public JwtUtils() {
-        this.ALGORITHM = Jwts.SIG.HS256;
-        this.SECRET_KEY = ALGORITHM.key().build();
-        this.EXPIRATION_TIME = 3600000; // 1 hora en milisegundos
+    public void setSecret(String secret) {
+        this.secret = secret;
+        this.SECRET_KEY = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    /**
-     * Constructor de la clase JwtUtils (para tests)
-     * Inicializa los parámetros necesarios para la generación y validación de JWT.
-     */
-    public JwtUtils(SecretKey secretKey, long expirationTime) {
-        this.ALGORITHM = Jwts.SIG.HS256;
-        this.SECRET_KEY = secretKey;
-        this.EXPIRATION_TIME = expirationTime;
+    public void setExpiration(long expiration) {
+        this.expiration = expiration;
     }
 
     /**
@@ -65,7 +57,7 @@ public class JwtUtils {
             .claims()
                 .subject(usuario.getEmail())
                 .issuedAt(new Date(now))
-                .expiration(new Date(now + EXPIRATION_TIME))
+                .expiration(new Date(now + expiration))
                 .add("userId", usuario.getId())
                 .add("roles", usuario.getRoles()
                     .stream()

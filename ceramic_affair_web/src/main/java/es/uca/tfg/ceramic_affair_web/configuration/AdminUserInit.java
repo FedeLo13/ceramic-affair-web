@@ -2,6 +2,7 @@ package es.uca.tfg.ceramic_affair_web.configuration;
 
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -15,14 +16,19 @@ import es.uca.tfg.ceramic_affair_web.security.Rol;
  * Clase de configuración para inicializar el usuario administrador.
  * Implementa CommandLineRunner para ejecutar código al inicio de la aplicación.
  * 
- * @version 1.0
+ * @version 1.1
  */
 @Component
-//TODO: Cambiar el email y la contraseña del administrador a valores seguros en producción.
 public class AdminUserInit implements CommandLineRunner {
 
     private final UsuarioRepo usuarioRepo;
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${admin.email}")
+    private String emailAdmin;
+
+    @Value("${admin.password}")
+    private String passwordAdmin;
 
     public AdminUserInit(UsuarioRepo usuarioRepo, PasswordEncoder passwordEncoder) {
         this.usuarioRepo = usuarioRepo;
@@ -32,10 +38,6 @@ public class AdminUserInit implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
-        
-        String emailAdmin = "tepigfe@gmail.com";
-        String passwordAdmin = "admin123";
-
         if (!usuarioRepo.existsByEmail(emailAdmin)) {
             Usuario admin = new Usuario(emailAdmin, passwordEncoder.encode(passwordAdmin), Set.of(Rol.ADMIN));
             usuarioRepo.save(admin);
