@@ -1,9 +1,10 @@
 import { fetchWithAuth, handleFetch } from "./utils";
 import type { ProductoInputDTO, ProductoOutputDTO, ProductoStockDTO } from "../types/producto.types";
 import type { PageResponse } from "./page.response";
+import { API_BASE_ADMIN, API_BASE_PUBLIC } from "./api";
 
-const API_PUBLIC = 'http://localhost:8080/api/public/productos';
-const API_ADMIN = 'http://localhost:8080/api/admin/productos';
+const API_PUBLIC = `${API_BASE_PUBLIC}/productos`;
+const API_ADMIN = `${API_BASE_ADMIN}/productos`;
 
 // Funciones para manejar los productos
 

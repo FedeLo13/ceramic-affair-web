@@ -14,7 +14,6 @@ import es.uca.tfg.ceramic_affair_web.DTOs.RecaptchaResponse;
  * 
  * @version 1.0
  */
-// TODO: Poner el dominio de producción en la configuración de reCAPTCHA
 @Service
 public class RecaptchaService {
 

@@ -3,6 +3,7 @@ import { getImagenById } from "../../api/imagenes";
 import type { ProductoOutputDTO } from "../../types/producto.types";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { API_BASE } from "../../api/api";
 import "./ProductCard.css";
 
 interface ProductCardProps {
@@ -23,7 +24,7 @@ export default function ProductCard({ producto, selectionMode, selected = false,
 
     const [imageURL, setImageURL] = useState<string>("images/1068302.png");
 
-    const BASE_IMAGE_URL = "http://localhost:8080/uploads/";
+    const BASE_IMAGE_URL = `${API_BASE}/uploads/`;
 
     useEffect(() => {
 

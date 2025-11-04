@@ -1,8 +1,9 @@
 import { fetchWithAuth, handleFetch } from "./utils";
 import type { Categoria, CategoriaInputDTO } from "../types/categoria.types";
+import { API_BASE_ADMIN, API_BASE_PUBLIC } from "./api";
 
-const API_PUBLIC = 'http://localhost:8080/api/public/categorias';
-const API_ADMIN = 'http://localhost:8080/api/admin/categorias';
+const API_PUBLIC = `${API_BASE_PUBLIC}/categorias`;
+const API_ADMIN = `${API_BASE_ADMIN}/categorias`;
 
 // Funciones para manejar las categorías
 

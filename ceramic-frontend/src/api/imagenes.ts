@@ -1,8 +1,9 @@
 import type { Imagen } from "../types/imagen.types";
 import { fetchWithAuth, handleFetch } from "./utils";
+import { API_BASE_ADMIN, API_BASE_PUBLIC } from "./api";
 
-const API_PUBLIC = 'http://localhost:8080/api/public/imagenes';
-const API_ADMIN = 'http://localhost:8080/api/admin/imagenes';
+const API_PUBLIC = `${API_BASE_PUBLIC}/imagenes`;
+const API_ADMIN = `${API_BASE_ADMIN}/imagenes`;
 
 // Funciones para manejar las imágenes
 

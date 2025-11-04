@@ -11,8 +11,10 @@ import ImageModal from "../../components/ImageModal/ImageModal";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useSwipeable } from "react-swipeable";
+import { API_BASE } from "../../api/api";
 
-const BASE_IMAGE_URL = "http://localhost:8080/uploads/";
+
+const BASE_IMAGE_URL = `${API_BASE}/uploads/`;
 
 export default function PieceDetail() {
     const navigate = useNavigate();

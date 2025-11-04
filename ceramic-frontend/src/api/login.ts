@@ -1,7 +1,8 @@
 import { handleFetch } from "./utils";
 import type { LoginDTO, LoginResponse } from "../types/login.types";
+import { API_BASE_PUBLIC } from "./api";
 
-const API_URL = 'http://localhost:8080/api/public/login';
+const API_URL = `${API_BASE_PUBLIC}/login`;
 
 export const login = async (data: LoginDTO): Promise<LoginResponse> => {
     const response = await fetch(`${API_URL}/login`, {

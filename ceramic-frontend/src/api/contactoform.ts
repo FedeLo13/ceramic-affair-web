@@ -1,7 +1,8 @@
 import type { ContactoFormDTO } from "../types/contactoform.types";
 import { handleFetch } from "./utils";
+import { API_BASE_PUBLIC } from "./api";
 
-const API_URL = 'http://localhost:8080/api/public/contacto';
+const API_URL = `${API_BASE_PUBLIC}/contacto`;
 
 export const sendContactoForm = async (form: ContactoFormDTO): Promise<void> => {
     const response = await fetch(`${API_URL}/enviar`, {

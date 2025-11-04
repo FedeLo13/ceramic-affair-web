@@ -3,8 +3,9 @@ import type { Imagen } from "../../types/imagen.types";
 import "./ImageUploader.css";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import ImageCropper from "./ImageCropper";
+import { API_BASE } from "../../api/api";
 
-const BASE_IMAGE_URL = "http://localhost:8080/uploads/";
+const BASE_IMAGE_URL = `${API_BASE}/uploads/`;
 
 interface Props {
   existingImages: Imagen[];
