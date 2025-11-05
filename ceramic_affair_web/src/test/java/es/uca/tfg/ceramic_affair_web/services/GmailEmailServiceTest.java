@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import jakarta.mail.internet.MimeMessage;
 
@@ -33,7 +34,8 @@ public class GmailEmailServiceTest {
 
     @BeforeEach
     public void setUp() {
-        Mockito.when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
+        Mockito.lenient().when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
+        ReflectionTestUtils.setField(gmailEmailService, "fromEmail", "test@ceramic-affair.com");
     }
 
     @Test
@@ -55,7 +57,8 @@ public class GmailEmailServiceTest {
     @DisplayName("Servicio - Enviar correo electrónico (excepción)")
     void testEnviarCorreoElectronicoExcepcion() throws Exception {
         // Simular una excepción al enviar el correo electrónico
-        Mockito.doThrow(new RuntimeException("Error al enviar el correo")).when(mailSender).send(Mockito.any(MimeMessage.class));
+        Mockito.lenient().doThrow(new RuntimeException("Error al enviar el correo"))
+            .when(mailSender).send(Mockito.any(MimeMessage.class));
 
         // Verificar que se lanza una excepción al intentar enviar el correo electrónico
         Assertions.assertThatThrownBy(() -> {
