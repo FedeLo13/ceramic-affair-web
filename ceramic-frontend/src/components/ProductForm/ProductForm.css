@@ -1,4 +1,3 @@
-/* Form container */
 .product-form {
   max-width: 700px;
   margin: 0 auto;
@@ -8,7 +7,6 @@
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-/* Titles */
 .product-form h2 {
   text-align: center;
   margin-bottom: 1rem;
@@ -41,7 +39,6 @@
   }
 }
 
-/* Form groups */
 .product-form-group {
   margin-bottom: 1rem;
 }
@@ -80,7 +77,6 @@
   opacity: 0.6;
 }
 
-/* Form row for width, height, diameter */
 .product-form-row {
   display: flex;
   gap: 1rem;
@@ -90,14 +86,12 @@
   flex: 1;
 }
 
-/* Checkbox styling */
 .product-form-group input[type="checkbox"] {
   transform: scale(1.2);
   margin-left: 0.3rem;
   cursor: pointer;
 }
 
-/* Form row for width, height, diameter */
 .product-form-price-soldout {
   display: flex;
   gap: 1rem;
@@ -110,10 +104,9 @@
 .product-form-price-soldout > div:last-child {
   display: flex;
   flex-direction: column;
-  align-items: center; /* centra horizontalmente el checkbox */
+  align-items: center;
 }
 
-/* Buttons container */
 .product-form-button-group {
   margin-top: 1.5rem;
 }
@@ -167,7 +160,6 @@
   background-color: #0056b3;
 }
 
-/* Disabled buttons */
 .product-form-button-group button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -179,7 +171,6 @@
   gap: 1rem;
 }
 
-/* Images container inside ImageUploader (assumed class .image-list) */
 .image-list {
   display: flex;
   flex-wrap: wrap;
@@ -188,9 +179,9 @@
 }
 
 .image-list img {
-  width: 120px;    /* ajusta a un tamaño razonable */
+  width: 120px;
   height: 120px;
-  object-fit: cover; /* recorta y mantiene proporción */
+  object-fit: cover;
   border-radius: 6px;
   border: 1px solid #ccc;
   box-shadow: 0 1px 4px rgba(0,0,0,0.1);
@@ -202,7 +193,6 @@
   transform: scale(1.05);
 }
 
-/* Responsive adjustments */
 @media (max-width: 480px) {
   .product-form-row {
     flex-direction: column;
@@ -222,7 +212,7 @@
   display: grid;
   grid-template-columns: 80px 1fr 150px 100px;
   padding: 0.5rem;
-  border-bottom: 1px solid #ddd; /* más visible */
+  border-bottom: 1px solid #ddd;
 }
 
 .added-pieces-body {
@@ -238,7 +228,7 @@
   grid-template-columns: 80px 1fr 150px 100px;
   align-items: center;
   padding: 0.5rem;
-  border-bottom: 1px solid #ddd; /* más visible */
+  border-bottom: 1px solid #ddd;
 }
 
 .pieces-row.editing {
@@ -283,13 +273,13 @@
 @media (max-width: 768px) {
   .added-pieces-table-header,
   .pieces-row {
-    grid-template-columns: 60px 1fr 100px 70px; /* compactamos */
+    grid-template-columns: 60px 1fr 100px 70px;
     padding: 0.3rem;
-    gap: 0.3rem; /* reduce el espacio interno */
+    gap: 0.3rem;
   }
 
   .preview-image {
     width: 40px;
-    height: 40px; /* miniatura más pequeña en móviles */
+    height: 40px;
   }
 }

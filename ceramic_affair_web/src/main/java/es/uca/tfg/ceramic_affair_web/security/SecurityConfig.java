@@ -2,6 +2,7 @@ package es.uca.tfg.ceramic_affair_web.security;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,7 +21,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
  * Esta clase se encarga de definir las reglas de seguridad y autenticación
  * para la aplicación web.
  * 
- * @version 1.0
+ * @version 1.1
  */
 @Configuration
 @EnableWebSecurity
@@ -29,6 +30,9 @@ public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
 
     private final JwtAuthEntryPoint jwtAuthEntryPoint;
+
+    @Value("${app.frontend.url}")
+    private String frontendUrl;
 
     public SecurityConfig(JwtAuthFilter jwtAuthFilter, JwtAuthEntryPoint jwtAuthEntryPoint) {
         this.jwtAuthFilter = jwtAuthFilter;
@@ -41,11 +45,14 @@ public class SecurityConfig {
      * 
      * @return UrlBasedCorsConfigurationSource configurado.
      */
-    // TODO: Cambiar la URL de origen a la de producción cuando esté disponible
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // Permitir solicitudes desde el frontend en desarrollo
+        configuration.setAllowedOriginPatterns(List.of(
+            frontendUrl, // URL del frontend en local
+            "http://localhost:3000", // URL del frontend en local con contenedores
+            "http://localhost" // URL necesaria para nginx en producción
+        ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")); // Permitir todos los métodos HTTP
         configuration.setAllowedHeaders(List.of("*")); // Permitir todos los encabezados
         configuration.setAllowCredentials(true); // Permitir credenciales
@@ -67,7 +74,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // Desactivar CSRF para simplificar las pruebas
+            .csrf(csrf -> csrf.disable()) // Desactivar CSRF para JWT
             .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Configurar CORS
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Usar sesiones sin estado

@@ -3,7 +3,7 @@ export interface PageResponse<T> {
   totalPages: number;
   totalElements: number;
   size: number;
-  number: number; // Página actual (0-based)
+  number: number;
   first: boolean;
   last: boolean;
 }

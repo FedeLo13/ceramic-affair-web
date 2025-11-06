@@ -4,7 +4,7 @@ header {
   align-items: center;
   justify-content: space-between;
   padding: 1rem 2rem;
-  gap: 1rem; /* opcional: espaciado entre logo y nav */
+  gap: 1rem;
   margin-bottom: 50px;
 }
 
@@ -18,16 +18,16 @@ header {
   position: fixed;
   top: 0;
   left: 0;
-  width: 50px;           /* ancho del marcapáginas */
-  height: 50px;          /* alto visible */
+  width: 50px;
+  height: 50px;
   background: #FAFAFA;
   border: none;
-  border-radius: 0 8px 8px 0; /* borde redondeado en la derecha */
+  border-radius: 0 8px 8px 0;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1100; /* para que esté por encima de otros elementos */
+  z-index: 1100;
   transition: transform 0.3s ease;
 }
 
@@ -38,16 +38,16 @@ header {
 
 header nav a,
 header nav .active {
-  color: inherit; /* hereda el color del texto padre */
-  text-decoration: none; /* quita el subrayado */
+  color: inherit;
+  text-decoration: none;
 }
 
 header nav a:hover {
-  color: #555; /* color al pasar el mouse, opcional */
+  color: #555;
 }
 
 .logo img {
-  height: 150px; /* o el tamaño que tú veas */
+  height: 150px;
   object-fit: contain;
   display: block;
   margin-top: 20px;
@@ -63,10 +63,9 @@ header nav a:hover {
 
 .nav-links {
   display: flex;
-  gap: 75px; /* espacio entre los enlaces */
+  gap: 75px;
 }
 
-/* icono a la derecha */
 .nav-container .instagram-icon {
   margin-left: auto;
   color: inherit;
@@ -82,16 +81,15 @@ header nav a:hover {
 
 @media (max-width: 768px) {
   .nav-links {
-    gap: 15px; /* menos espacio entre enlaces */
-    font-size: 16px; /* enlaces más pequeños */
+    gap: 15px;
+    font-size: 16px;
   }
 
   .nav-container {
-    gap: 10px; /* icono más pegado aún */
+    gap: 10px;
   }
 }
 
-/* Sidebar oculto inicialmente */
 .sidebar {
     position: fixed;
     top: 0;
@@ -109,23 +107,22 @@ header nav a:hover {
     z-index: 1001;
 }
 
-/* Sidebar visible */
 .sidebar.open {
   transform: translateX(0);
 }
 
 .sidebar-img {
-  width: 100%;           /* ocupa todo el ancho de la sidebar */
-  flex-shrink: 0;        /* evita que se reduzca en layouts flex */
+  width: 100%;
+  flex-shrink: 0;
   margin-top: 15px;
   margin-bottom: 15px;
 }
 
 .sidebar-img img {
-  width: 70%;           /* la imagen ocupa todo el ancho */
-  height: auto;          /* mantiene la proporción */
-  display: block;        /* elimina espacio inferior */
-  margin: 0 auto;     /* centra la imagen */
+  width: 70%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
 }
 
 .sidebar-content {
@@ -136,7 +133,6 @@ header nav a:hover {
   flex: 1;
 }
 
-/* Overlay */
 .overlay {
     position: fixed;
     top: 0;
@@ -147,13 +143,11 @@ header nav a:hover {
     z-index: 1000;
 }
 
-/* Ajustes de navegación dentro del sidebar */
 .sidebar a {
     text-decoration: none;
     color: inherit;
 }
 
-/* Evitar estilos de link predeterminados */
 .sidebar a:hover {
     color: #000;
 }
@@ -208,7 +202,6 @@ header nav a:hover {
   color: #555;
 }
 
-/* Evita scroll vertical e horizontal */
 .no-scroll {
   overflow: hidden;
   height: 100%;

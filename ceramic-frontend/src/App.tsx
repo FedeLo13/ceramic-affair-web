@@ -27,7 +27,7 @@ function App() {
         <Route path="search" element={<Pieces showFilters={true} />} />
         <Route path="pieces/:id" element={<PieceDetail />} />
         <Route path="contact" element={
-          <GoogleReCaptchaProvider reCaptchaKey='6Ley9IwrAAAAANfsyFpChaZHQLShQWdi7UwYBWxR'>
+          <GoogleReCaptchaProvider reCaptchaKey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}>
             <Contact />
           </GoogleReCaptchaProvider>
         } />

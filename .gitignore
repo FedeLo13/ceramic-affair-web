@@ -1,2 +1,5 @@
 ### Archivos de configuración de Visual Studio Code ###
 .vscode/
+
+### Entornos y configuraciones locales ###
+.env

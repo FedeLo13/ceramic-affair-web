@@ -19,7 +19,6 @@
     }
 }
 
-/* Animación fade-in */
 .product-grid .product-card {
     opacity: 0;
     transform: translateY(20px);

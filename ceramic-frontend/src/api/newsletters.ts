@@ -1,8 +1,9 @@
 import type { NewsletterDTO } from "../types/newsletter.types";
 import { fetchWithAuth, handleFetch } from "./utils";
+import { API_BASE_ADMIN } from "./api";
 
-const API_NEWSLETTER = 'http://localhost:8080/api/admin/newsletter';
-const API_PLANTILLA = 'http://localhost:8080/api/admin/plantilla';
+const API_NEWSLETTER = `${API_BASE_ADMIN}/newsletter`;
+const API_PLANTILLA = `${API_BASE_ADMIN}/plantilla`;
 
 // Funciones para manejar newsletter y plantillas
 

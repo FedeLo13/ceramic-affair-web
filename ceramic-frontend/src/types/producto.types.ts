@@ -10,8 +10,8 @@ export interface Producto {
   altura: number;
   anchura: number;
   diametro: number;
-  fechaCreacion: string; // ISO string (ej. "2024-05-22T14:00:00")
-  imagenes: Imagen[]; // Array de objetos Imagen
+  fechaCreacion: string; // ISO string (Ejemplo: "2024-05-22T14:00:00")
+  imagenes: Imagen[];
 }
 
 export interface ProductoInputDTO {
@@ -23,7 +23,7 @@ export interface ProductoInputDTO {
   altura: number;
   anchura: number;
   diametro: number;
-  idsImagenes: number[]; // IDs de las imágenes asociadas
+  idsImagenes: number[];
 }
 
 export interface ProductoOutputDTO {

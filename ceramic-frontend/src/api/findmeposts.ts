@@ -1,8 +1,9 @@
 import type { FindMePostInputDTO, FindMePostOutputDTO } from "../types/findmepost.types";
 import { fetchWithAuth, handleFetch } from "./utils";
+import { API_BASE_ADMIN, API_BASE_PUBLIC } from "./api";
 
-const API_PUBLIC = 'http://localhost:8080/api/public/find-me-posts';
-const API_ADMIN = 'http://localhost:8080/api/admin/find-me-posts';
+const API_PUBLIC = `${API_BASE_PUBLIC}/find-me-posts`;
+const API_ADMIN = `${API_BASE_ADMIN}/find-me-posts`;
 
 // Funciones para manejar los posts de "Encuéntrame"
 

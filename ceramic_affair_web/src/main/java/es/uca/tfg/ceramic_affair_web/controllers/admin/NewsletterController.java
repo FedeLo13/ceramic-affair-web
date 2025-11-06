@@ -3,6 +3,7 @@ package es.uca.tfg.ceramic_affair_web.controllers.admin;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +27,7 @@ import jakarta.validation.Valid;
  * Controlador para la entidad Newsletter en el panel de administración.
  * Proporciona endpoints para enviar newsletters a los suscriptores.
  * 
- * @version 1.0
+ * @version 1.1
  */
 @RestController
 @RequestMapping("/api/admin/newsletter")
@@ -41,6 +42,9 @@ public class NewsletterController {
 
     @Autowired
     private EmailService emailService;
+
+    @Value("${app.backend.url}")
+    private String backendUrl;
 
     @PostMapping("/enviar")
     @Operation(summary = "Enviar newsletter", description = "Envía una newsletter a todos los suscriptores registrados", tags = { "Newsletter Admin" })
@@ -59,7 +63,7 @@ public class NewsletterController {
 
         // Enviar la newsletter a cada suscriptor
         for (Suscriptor suscriptor : suscriptores) {
-            String enlaceDesuscripcion = "http://localhost:8080/api/public/suscriptores/desuscribir?token=" + suscriptor.getTokenDesuscripcion();
+            String enlaceDesuscripcion = backendUrl + "/api/public/suscriptores/desuscribir?token=" + suscriptor.getTokenDesuscripcion();
 
             String mensaje = "<html><body>"
                 + "<div>" + newsletterDTO.getMensaje() + "</div>"
