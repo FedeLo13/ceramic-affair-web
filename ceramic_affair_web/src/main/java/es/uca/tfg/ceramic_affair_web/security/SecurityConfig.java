@@ -48,7 +48,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of(frontendUrl)); // Permitir solicitudes desde el frontend
+        configuration.setAllowedOriginPatterns(List.of(
+            frontendUrl, // URL del frontend en local
+            "http://localhost:3000", // URL del frontend en local con contenedores
+            "http://localhost" // URL necesaria para nginx en producción
+        ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")); // Permitir todos los métodos HTTP
         configuration.setAllowedHeaders(List.of("*")); // Permitir todos los encabezados
         configuration.setAllowCredentials(true); // Permitir credenciales
