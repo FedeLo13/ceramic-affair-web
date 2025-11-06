@@ -36,6 +36,9 @@ services:
 
       JWT_SECRET: ${JWT_SECRET}
 
+      BACKEND_URL: ${BACKEND_URL}
+      FRONTEND_URL: ${FRONTEND_URL}
+
     ports:
       - "8080:8080"
     volumes:
