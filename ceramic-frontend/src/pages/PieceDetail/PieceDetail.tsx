@@ -113,7 +113,12 @@ export default function PieceDetail() {
     }, [swipeRef]);
 
     if (!producto) {
-        return <p>Loading...</p>;
+        return (
+            <div className="loader-container">
+              <div className="spinner"></div>
+              <p>Loading product...</p>
+            </div>
+          );
     }
 
     const handlePrev = () => {
