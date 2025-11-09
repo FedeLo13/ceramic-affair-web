@@ -30,6 +30,7 @@ export default function PieceDetail() {
 
     const thumbsRef = useRef<HTMLDivElement>(null);
 
+    // Asegura que la miniatura activa esté visible al cambiar la imagen actual
     useEffect(() => {
         if (!thumbsRef.current) return;
 
@@ -52,7 +53,23 @@ export default function PieceDetail() {
         }
     }, [currentImageIndex]);
 
+    // Bloquea el scroll del body cuando el modal está abierto
+    useEffect(() => {
+        if (showModal) {
+            // Bloquea scroll
+            document.body.style.overflow = "hidden";
+        } else {
+            // Restablece scroll
+            document.body.style.overflow = "";
+        }
 
+        // Limpia si el componente se desmonta mientras está abierto
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [showModal]);
+
+    // Obtener datos del producto e imágenes al montar
     useEffect(() => {
         const fetchProducto = async () => {
             if (id) {
@@ -73,6 +90,7 @@ export default function PieceDetail() {
         fetchProducto();
     }, [id]);
 
+    // Detectar si es móvil o no
     useEffect(() => {
         const handleResize = () => {
             setIsMobile(window.innerWidth < 768);
