@@ -53,7 +53,7 @@ export default function Header() {
                     <NavLink to="/search" onClick={() => setSidebarOpen(false)}>Search</NavLink>
                     <NavLink to="/contact" onClick={() => setSidebarOpen(false)}>Contact</NavLink>
                     <NavLink to="/find-me" onClick={() => setSidebarOpen(false)}>Find Me</NavLink>
-                    <a href="https://www.instagram.com/ceramic_affair/" target="_blank" rel="noopener noreferrer" className="instagram-icon" onClick={() => setSidebarOpen(false)}>
+                    <a href="https://www.instagram.com/ceramic_affair/" target="_blank" rel="noopener noreferrer" className="instagram-icon" aria-label="Instagram" onClick={() => setSidebarOpen(false)}>
                         <FaInstagram size={24} />
                     </a>
 
@@ -82,7 +82,7 @@ export default function Header() {
             </div>
 
             {/*Botón de barra lateral */}
-            <button className="sidebar-toggle" onClick={() => setSidebarOpen(!sidebarOpen)}>
+            <button className="sidebar-toggle" onClick={() => setSidebarOpen(!sidebarOpen)} aria-label="Toggle Sidebar">
                 <FaBars size={24} />
             </button>
 
