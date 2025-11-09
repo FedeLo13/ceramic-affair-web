@@ -192,8 +192,7 @@ export default function PieceDetail() {
                                 <ZoomImage
                                     src={`${BASE_IMAGE_URL}${imagenes[currentImageIndex].ruta}`}
                                     alt={producto.nombre}
-                                    onDoubleClick={() => !isMobile && setShowModal(true)}
-                                    onClick={() => isMobile && setShowModal(true)}
+                                    onClick={() => setShowModal(true)}
                                     enableZoom={!isMobile}
                                 />
                                 {showModal && (
