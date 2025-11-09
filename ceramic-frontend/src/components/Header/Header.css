@@ -58,7 +58,6 @@ header nav a:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 40px;
 }
 
 .nav-links {
@@ -66,12 +65,9 @@ header nav a:hover {
   gap: 75px;
 }
 
-.nav-container .instagram-icon {
-  margin-left: auto;
+.instagram-icon {
   color: inherit;
   text-decoration: none;
-  display: flex;
-  align-items: center;
 }
 
 .nav-links a:hover,
@@ -83,10 +79,6 @@ header nav a:hover {
   .nav-links {
     gap: 15px;
     font-size: 16px;
-  }
-
-  .nav-container {
-    gap: 10px;
   }
 }
 

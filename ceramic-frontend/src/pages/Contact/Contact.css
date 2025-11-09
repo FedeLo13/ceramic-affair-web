@@ -1,5 +1,5 @@
 .contact-page {
-  margin: 0 auto;
+  margin: 0 300px;
 }
 
 .contact-form-section {
@@ -15,7 +15,6 @@ h1, h2 {
 }
 
 .contact-text {
-    text-align: center;
     margin-bottom: 1rem;
     font-size: 14px;
 }
@@ -150,4 +149,10 @@ h1, h2 {
     max-width: 700px;
     gap: 1rem;
     margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .contact-page {
+    margin: 0 1rem;
+  }
 }

@@ -34,10 +34,7 @@ export default function Header() {
                         <NavLink to="/search">Search</NavLink>
                         <NavLink to="/contact">Contact</NavLink>
                         <NavLink to="/find-me">Find Me</NavLink>
-                    </nav>
-                    <a href="https://www.instagram.com/ceramic_affair/" target="_blank" rel="noopener noreferrer" className="instagram-icon">
-                        <FaInstagram size={24} />
-                    </a>
+                    </nav>  
                 </div>
             </header>
 
@@ -85,6 +82,13 @@ export default function Header() {
             <button className="sidebar-toggle" onClick={() => setSidebarOpen(!sidebarOpen)} aria-label="Toggle Sidebar">
                 <FaBars size={24} />
             </button>
+
+            {/* Iconos del header */}
+            <div className="header-icons">
+                    <a href="https://www.instagram.com/ceramic_affair/" target="_blank" rel="noopener noreferrer" className="instagram-icon">
+                        <FaInstagram size={24} />
+                    </a>
+            </div>
 
             {/* Overlay */}
             {sidebarOpen && <div className="overlay" onClick={() => setSidebarOpen(false)} />}
