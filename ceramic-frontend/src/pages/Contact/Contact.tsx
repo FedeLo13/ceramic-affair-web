@@ -119,9 +119,10 @@ export default function Contact() {
     return (
         <div className="contact-page">
             {/* Formulario de contacto */}
-            <p className='contact-text'>If you have any questions about the process, please don’t hesitate to get in touch. I’ll get back to you as soon as possible to answer your inquiries.</p>
-            <p className='contact-text'>You can also subscribe to my newsletter below the form to receive updates and exclusive content.</p>
-
+            <div className='contact-text-block'>
+                <p className='contact-text'>If you have any questions about the process, please don’t hesitate to get in touch. I’ll get back to you as soon as possible to answer your inquiries.</p>
+                <p className='contact-text'>You can also subscribe to my newsletter below the form to receive updates and exclusive content.</p>
+            </div>
             <section className="contact-form-section">
                 <h2 className='contact-title'>Send a Message</h2>
                 <form className="contact-form" onSubmit={handleSubmit}>

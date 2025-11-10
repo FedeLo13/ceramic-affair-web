@@ -1,5 +1,7 @@
 .contact-page {
-  margin: 0 300px;
+  max-width: 1200px; /* o 1000px si te gusta más compacto */
+  margin: 0 auto;
+  padding: 0 2rem; /* crea margen proporcional */
 }
 
 .contact-form-section {
@@ -14,9 +16,19 @@ h1, h2 {
     text-align: center;
 }
 
+.contact-text-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2rem auto;
+  max-width: 700px;
+}
+
 .contact-text {
-    margin-bottom: 1rem;
-    font-size: 14px;
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+  margin-bottom: 1rem;
 }
 
 .contact-title {
@@ -153,6 +165,6 @@ h1, h2 {
 
 @media (max-width: 1200px) {
   .contact-page {
-    margin: 0 1rem;
+    padding: 0 1rem;
   }
 }
