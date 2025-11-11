@@ -50,8 +50,8 @@ services:
     restart: always
     depends_on:
       - backend
-    ports:
-      - "3000:80"
+    # ports:
+    #   - "3000:80"
 
 volumes:
   mysql_data:
