@@ -1,6 +1,25 @@
 version: "3.9"
 
 services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    command: 
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.httpChallenge.entryPoint=web"
+      - "--certificatesresolvers.myresolver.acme.email=fedevlopez17@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8081:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./letsencrypt:/letsencrypt"
+
   db:
     image: mysql:8.0
     container_name: ceramic-db
@@ -8,8 +27,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ceramic_affair_db
-    ports:
-      - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
 
@@ -39,8 +56,13 @@ services:
       BACKEND_URL: ${BACKEND_URL}
       FRONTEND_URL: ${FRONTEND_URL}
 
-    ports:
-      - "8080:8080"
+    expose:
+      - "8080"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ceramic-backend.rule=Host(`api.ceramic-affair.me`)"
+      - "traefik.http.routers.ceramic-backend.entrypoints=websecure"
+      - "traefik.http.routers.ceramic-backend.tls.certresolver=myresolver"
     volumes:
       - uploads_data:/app/uploads
 
@@ -50,9 +72,15 @@ services:
     restart: always
     depends_on:
       - backend
-    ports:
-      - "80:80"
+    expose:
+      - "80"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`ceramic-affair.me`,`www.ceramic-affair.me`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls.certresolver=myresolver"
 
 volumes:
   mysql_data:
   uploads_data:
+  letsencrypt:
