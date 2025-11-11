@@ -64,7 +64,7 @@ export default function ImageCropper({ imageSrc, onCancel, onCropComplete }: Ima
     <div className="modal-backdrop">
       <div className="modal">
         <h2>Crop Image</h2>
-        <div className="cropper-container">
+        <div style={{ position: "relative", width: "100%", height: 400 }}>
           <Cropper
             image={imageSrc}
             crop={crop}
