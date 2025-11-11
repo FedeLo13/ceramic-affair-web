@@ -79,7 +79,8 @@ services:
       - "traefik.http.routers.frontend.rule=Host(`ceramic-affair.me`) || Host(`www.ceramic-affair.me`)"
       - "traefik.http.routers.frontend.entrypoints=websecure"
       - "traefik.http.routers.frontend.tls.certresolver=myresolver"
-      - "traefik.http.routers.frontend.loadbalancer.server.port=80"
+      - "traefik.http.routers.frontend.service=ceramic-frontend"
+      - "traefik.http.services.ceramic-frontend.loadbalancer.server.port=80"
 
 volumes:
   mysql_data:
