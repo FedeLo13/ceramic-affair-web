@@ -122,6 +122,8 @@ export default function Contact() {
             <div className='contact-text-block'>
                 <p className='contact-text'>If you have any questions about the process, please don’t hesitate to get in touch. I’ll get back to you as soon as possible to answer your inquiries.</p>
                 <p className='contact-text'>You can also subscribe to my newsletter below the form to receive updates and exclusive content.</p>
+                <p className='contact-text'>Si tienes alguna pregunta sobre el proceso, no dudes en ponerte en contacto conmigo. Te responderé lo antes posible para resolver tus dudas.</p>
+                <p className='contact-text'>También puedes suscribirte a mi newsletter debajo del formulario para recibir actualizaciones y contenido exclusivo.</p>
             </div>
             <section className="contact-form-section">
                 <h2 className='contact-title'>Send a Message</h2>
