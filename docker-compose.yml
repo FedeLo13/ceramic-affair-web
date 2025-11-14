@@ -57,6 +57,7 @@ services:
 
       BACKEND_URL: ${BACKEND_URL}
       FRONTEND_URL: ${FRONTEND_URL}
+      FRONTEND_WWW_URL: ${FRONTEND_WWW_URL}
 
     expose:
       - "8080"

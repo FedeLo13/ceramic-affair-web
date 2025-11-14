@@ -34,6 +34,9 @@ public class SecurityConfig {
     @Value("${app.frontend.url}")
     private String frontendUrl;
 
+    @Value("${app.frontend.www.url}")
+    private String frontendWwwUrl;
+
     public SecurityConfig(JwtAuthFilter jwtAuthFilter, JwtAuthEntryPoint jwtAuthEntryPoint) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.jwtAuthEntryPoint = jwtAuthEntryPoint;
@@ -50,6 +53,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOriginPatterns(List.of(
             frontendUrl, // URL del frontend en local
+            frontendWwwUrl, // URL del frontend en producción
             "http://localhost:3000", // URL del frontend en local con contenedores
             "http://localhost" // URL necesaria para nginx en producción
         ));
