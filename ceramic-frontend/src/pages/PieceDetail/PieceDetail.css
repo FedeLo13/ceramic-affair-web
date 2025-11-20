@@ -1,5 +1,5 @@
 .piece-detail-container {
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 1rem;
 }
@@ -154,25 +154,23 @@
 }
 
 .product-name {
-  font-size: 1.2rem;
   font-weight: 600;
   margin: 0;
 }
 
 .product-price {
-  font-size: 1.2rem;
   font-weight: 600;
   margin: 0;
 }
 
 .product-description {
-    font-size: 0.95rem;
+    font-size: 1.1rem;
     font-weight: 500;
     color: #333;
     margin: 0.75rem 0;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid rgba(43, 58, 100, 0.3);
-    line-height: 1.4;
+    line-height: 1.6;
     min-height: 180px;
     white-space: pre-line;
 }
@@ -182,14 +180,13 @@
 }
 
 .sizes h3 {
-    font-size: 1.1rem;
     font-weight: bold;
     margin-bottom: 8px;
 }
 
 .sizes p {
     margin: 4px 0;
-    font-size: 0.95rem;
+    font-size: 1.1rem;
 }
 
 .sold-out {

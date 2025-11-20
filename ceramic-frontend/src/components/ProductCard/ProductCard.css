@@ -52,13 +52,13 @@
 }
 
 .product-card-name {
-    font-size: 1rem;
+    font-size: 1.1rem;
     margin: 8px 0 2px 0;
     text-align: left;
 }
 
 .product-card-price {
-    font-size: 1rem;
+    font-size: 1.1rem;
     text-align: left;
     margin: 0;
 }

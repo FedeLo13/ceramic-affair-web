@@ -63,6 +63,7 @@ header nav a:hover {
 .nav-links {
   display: flex;
   gap: 75px;
+  font-size: 1.1rem;
 }
 
 .instagram-icon {
@@ -138,6 +139,7 @@ header nav a:hover {
 .sidebar a {
     text-decoration: none;
     color: inherit;
+    font-size: 1.1rem;
 }
 
 .sidebar a:hover {
@@ -185,7 +187,7 @@ header nav a:hover {
 
 .sidebar .privacy-policy-link {
   margin-top: auto;
-  font-size: 14px;
+  font-size: 1rem;
   color: #888;
   text-align: center;
 }
