@@ -1,0 +1,27 @@
+.footer {
+    width: 100%;
+    padding: 20px 0;
+    background-color: #FAFAFA;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid #ddd;
+}
+
+.footer-links {
+    display: flex;
+    gap: 100px; /* espacio entre enlaces */
+    align-items: center;
+}
+
+.footer-link {
+    text-decoration: none;
+    color: inherit;
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.footer-link:hover {
+    color: #555; /* color al pasar el mouse */
+}

@@ -71,6 +71,11 @@ header nav a:hover {
   text-decoration: none;
 }
 
+.newsletter-icon {
+  color: inherit;
+  text-decoration: none;
+}
+
 .nav-links a:hover,
 .instagram-icon:hover {
   opacity: 0.7;

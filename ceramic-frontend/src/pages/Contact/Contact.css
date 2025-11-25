@@ -153,7 +153,10 @@ h1, h2 {
   align-items: center;
   border-radius: 4px;
   max-width: 1000px;
-  padding: 2rem;
+  padding-bottom: 2rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-top: 0;
 }
 
 .newsletter-form {
@@ -163,6 +166,15 @@ h1, h2 {
     max-width: 800px;
     gap: 1rem;
     margin-top: 1rem;
+}
+
+.success-message {
+  color: #2B3A64;
+  background: #f0f4ff;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  text-align: center;
 }
 
 @media (max-width: 1200px) {

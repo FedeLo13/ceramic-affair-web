@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { sendContactoForm } from '../../api/contactoform';
 import { subscribe } from '../../api/suscriptores';
 import { ValidationError } from '../../api/utils';
+import { useLocation } from 'react-router-dom';
 
 export default function Contact() {
     const { executeRecaptcha } = useGoogleReCaptcha();
@@ -18,6 +19,21 @@ export default function Contact() {
     const [toastMessage, setToastMessage] = useState<string | null>(null);
     const [visibleToast, setVisibleToast] = useState(false);
 
+    const location = useLocation();
+
+    // Scroll a la sección de newsletter si el hash está presente en la URL
+    useEffect(() => {
+        if (location.hash === '#newsletter') {
+            const newsletterSection = document.getElementById('newsletter');
+            if (newsletterSection) {
+                setTimeout(() => {
+                    newsletterSection.scrollIntoView({ behavior: 'smooth' });
+                }, 200);
+            }
+        }
+    }, [location]);
+
+    // Lógica para mostrar y ocultar toasts
     useEffect(() => {
         if (toastMessage) {
             setVisibleToast(true);
@@ -158,8 +174,13 @@ export default function Contact() {
                 </form>
             </section>
 
+            <div className='contact-text-block'>
+                <p className='contact-text'>Enter your email down below to subscribe to my newsletter and receive emails about new collections, events, and exclusive content.</p>
+                <p className='contact-text'>Introduce tu correo electrónico abajo para suscribirte a mi newsletter y recibir emails sobre nuevas colecciones, eventos y contenido exclusivo.</p>
+            </div>
+
             {/* Newsletter */}
-            <section className="newsletter-section">
+            <section id="newsletter" className="newsletter-section">
                 <h2 className='newsletter-title'>Newsletter</h2>
                 <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
                     <div className="form-group">
