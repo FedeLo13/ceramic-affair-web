@@ -322,10 +322,10 @@ export default function Pieces({ showFilters: defaultShowFilters = true }: Piece
                     {loading ? (
                         <>
                             <div className="spinner"></div>
-                            <p>Cargando productos...</p>
+                            <p>Loading products...</p>
                         </>
                     ) : (
-                        <p>No se encontraron productos</p>
+                        <p>No products found</p>
                     )}
                 </div>
             ) : (

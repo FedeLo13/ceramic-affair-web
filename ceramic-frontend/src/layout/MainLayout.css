@@ -1,0 +1,15 @@
+/* MainLayout.css */
+html, body, #root {
+    height: 100%; /* aseguramos que toda la ventana ocupe altura */
+    margin: 0;
+}
+
+.main-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* altura mínima de la pantalla */
+}
+
+.main-content {
+    flex: 1; /* ocupa todo el espacio restante entre header y footer */
+}

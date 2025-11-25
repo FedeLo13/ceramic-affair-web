@@ -10,8 +10,18 @@
 
 .footer-links {
     display: flex;
-    gap: 100px; /* espacio entre enlaces */
+    gap: 100px;
     align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Responsive: en pantallas pequeñas apilar verticalmente */
+@media (max-width: 768px) {
+    .footer-links {
+        flex-direction: column;
+        gap: 15px;
+    }
 }
 
 .footer-link {
@@ -23,5 +33,5 @@
 }
 
 .footer-link:hover {
-    color: #555; /* color al pasar el mouse */
+    color: #555;
 }
